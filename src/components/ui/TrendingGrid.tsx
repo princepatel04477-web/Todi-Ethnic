@@ -88,13 +88,13 @@ export default function TrendingGrid() {
             className="group flex flex-col bg-white dark:bg-zinc-950 rounded-xl overflow-hidden border border-neutral-100 dark:border-neutral-900 transition-all duration-300 hover:shadow-luxury-hover hover-lift"
           >
             {/* Image Container with hover effects */}
-            <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100 dark:bg-neutral-900">
+            <div className="relative aspect-[3/4] overflow-hidden bg-neutral-50 dark:bg-zinc-900/50">
               <Link href={`/product/${product.slug}`} className="block w-full h-full">
                 <Image
                   src={product.image}
                   alt={product.title}
                   fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  className="object-contain p-2 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
               </Link>

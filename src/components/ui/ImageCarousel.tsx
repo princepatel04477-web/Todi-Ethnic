@@ -64,7 +64,7 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
     <div className="flex flex-col space-y-4 select-none">
       {/* Main Image Container */}
       <div 
-        className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-900 shadow-luxury group"
+        className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-neutral-50 dark:bg-zinc-900/50 border border-neutral-100 dark:border-neutral-900 shadow-luxury group"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -74,7 +74,7 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
           alt={`${title} - view ${activeIndex + 1}`}
           fill
           priority={activeIndex === 0}
-          className="object-cover"
+          className="object-contain p-4"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
 
