@@ -73,8 +73,15 @@ CREATE TABLE IF NOT EXISTS inquiries (
     customer_phone TEXT NOT NULL,
     items JSONB NOT NULL,
     status TEXT DEFAULT 'pending' NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT now() NOT NULL
+    created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
+
+-- Attach update_at trigger to inquiries
+CREATE TRIGGER trigger_update_inquiries_updated_at
+    BEFORE UPDATE ON inquiries
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
 
 
 ---------------------------------------------------------
@@ -108,30 +115,30 @@ CREATE POLICY "Allow public select on categories"
 CREATE POLICY "Allow admin CRUD on categories"
     ON categories FOR ALL
     TO authenticated
-    USING (true)
-    WITH CHECK (true);
+    USING (auth.jwt() ->> 'email' = 'admin@todicreation.com')
+    WITH CHECK (auth.jwt() ->> 'email' = 'admin@todicreation.com');
 
 -- Policies for products
 CREATE POLICY "Allow public select for active products"
     ON products FOR SELECT
-    USING (deleted_at IS NULL OR auth.role() = 'authenticated');
+    USING (deleted_at IS NULL OR auth.jwt() ->> 'email' = 'admin@todicreation.com');
 
 CREATE POLICY "Allow admin CRUD on products"
     ON products FOR ALL
     TO authenticated
-    USING (true)
-    WITH CHECK (true);
+    USING (auth.jwt() ->> 'email' = 'admin@todicreation.com')
+    WITH CHECK (auth.jwt() ->> 'email' = 'admin@todicreation.com');
 
 -- Policies for inquiries
 CREATE POLICY "Allow public insert on inquiries"
     ON inquiries FOR INSERT
-    WITH CHECK (true);
+    WITH CHECK (status = 'pending');
 
 CREATE POLICY "Allow admin select, update, delete on inquiries"
     ON inquiries FOR ALL
     TO authenticated
-    USING (true)
-    WITH CHECK (true);
+    USING (auth.jwt() ->> 'email' = 'admin@todicreation.com')
+    WITH CHECK (auth.jwt() ->> 'email' = 'admin@todicreation.com');
 
 
 ---------------------------------------------------------
@@ -147,18 +154,18 @@ CREATE POLICY "Allow public read access to product-images"
     ON storage.objects FOR SELECT
     USING (bucket_id = 'product-images');
 
-CREATE POLICY "Allow authenticated users to upload to product-images"
+CREATE POLICY "Allow authenticated admin to upload to product-images"
     ON storage.objects FOR INSERT
     TO authenticated
-    WITH CHECK (bucket_id = 'product-images');
+    WITH CHECK (bucket_id = 'product-images' AND auth.jwt() ->> 'email' = 'admin@todicreation.com');
 
-CREATE POLICY "Allow authenticated users to update product-images"
+CREATE POLICY "Allow authenticated admin to update product-images"
     ON storage.objects FOR UPDATE
     TO authenticated
-    USING (bucket_id = 'product-images')
-    WITH CHECK (bucket_id = 'product-images');
+    USING (bucket_id = 'product-images' AND auth.jwt() ->> 'email' = 'admin@todicreation.com')
+    WITH CHECK (bucket_id = 'product-images' AND auth.jwt() ->> 'email' = 'admin@todicreation.com');
 
-CREATE POLICY "Allow authenticated users to delete from product-images"
+CREATE POLICY "Allow authenticated admin to delete from product-images"
     ON storage.objects FOR DELETE
     TO authenticated
-    USING (bucket_id = 'product-images');
+    USING (bucket_id = 'product-images' AND auth.jwt() ->> 'email' = 'admin@todicreation.com');
