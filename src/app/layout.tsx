@@ -1,6 +1,8 @@
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import { BagProvider } from "@/context/BagContext";
+import BagDrawer from "@/components/ui/BagDrawer";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -29,9 +31,16 @@ export default function RootLayout({
       className={`${outfit.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <BagProvider>{children}</BagProvider>
+        <BagProvider>
+          {children}
+          <Suspense fallback={null}>
+            <BagDrawer />
+          </Suspense>
+        </BagProvider>
       </body>
     </html>
   );
 }
+
+
 

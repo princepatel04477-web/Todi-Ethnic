@@ -56,7 +56,7 @@ const trendingProducts: Product[] = [
 ];
 
 export default function TrendingGrid() {
-  const { addItem, toggleDrawer } = useBag();
+  const { addItem } = useBag();
   const [addedItems, setAddedItems] = useState<Record<string, boolean>>({});
 
   const handleAddToBag = (product: Product) => {

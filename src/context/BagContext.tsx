@@ -39,11 +39,13 @@ export const BagProvider = ({ children }: { children: React.ReactNode }) => {
     const savedBag = localStorage.getItem("todi_creation_bag");
     if (savedBag) {
       try {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setItems(JSON.parse(savedBag));
       } catch (e) {
         console.error("Failed to parse bag from localStorage:", e);
       }
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoaded(true);
   }, []);
 
