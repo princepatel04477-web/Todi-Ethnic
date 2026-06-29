@@ -1,6 +1,6 @@
 # Task Tracking List
 
-- [ ] Task 1: Setup Configuration and Tailwind Styling
+- [x] Task 1: Setup Configuration and Tailwind Styling
 - [ ] Task 2: Setup Supabase Database Schema
 - [ ] Task 3: Supabase Clients and Middleware Setup
 - [ ] Task 4: Base Layout & State Management (Shopping Bag)
