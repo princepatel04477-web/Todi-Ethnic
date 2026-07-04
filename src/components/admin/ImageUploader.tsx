@@ -2,8 +2,12 @@
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
-import { Upload, X, Image as ImageIcon, Loader2, ArrowUpCircle } from "lucide-react";
+import { Upload, X, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+
+const generateUniqueFileName = (fileExt: string) => {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+};
 
 interface ImageUploaderProps {
   value: string[];
@@ -28,10 +32,6 @@ export default function ImageUploader({
   const [queue, setQueue] = useState<UploadQueueItem[]>([]);
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const isPlaceholderMode = 
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("placeholder") ||
-    !process.env.NEXT_PUBLIC_SUPABASE_URL;
 
   // Compress image on client side using Canvas API to convert to WebP
   const compressImageToWebp = (file: File): Promise<Blob> => {
@@ -132,29 +132,13 @@ export default function ImageUploader({
     // 2. Uploading State
     updateItemStatus(item.id, { status: "uploading", progress: 60 });
 
-    // Mock Upload Logic for Sandbox Development
-    if (isPlaceholderMode) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      updateItemStatus(item.id, { status: "success", progress: 100 });
-      
-      // Use local preview data url or mock image path as publicUrl
-      const mockUrl = item.previewUrl;
-      onChange([...value, mockUrl]);
-      
-      // Remove from queue after success delay
-      setTimeout(() => {
-        setQueue((prev) => prev.filter((q) => q.id !== item.id));
-      }, 1500);
-      return;
-    }
-
     // Real Supabase storage bucket upload
     try {
       const supabase = createClient();
       const fileExt = "webp";
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+      const fileName = generateUniqueFileName(fileExt);
 
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from("product-images")
         .upload(fileName, imageBlob, {
           contentType: "image/webp",
@@ -180,9 +164,10 @@ export default function ImageUploader({
       setTimeout(() => {
         setQueue((prev) => prev.filter((q) => q.id !== item.id));
       }, 1500);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Upload failed:", err);
-      updateItemStatus(item.id, { status: "error", error: err.message || "Upload failed" });
+      const errMsg = err instanceof Error ? err.message : "Upload failed";
+      updateItemStatus(item.id, { status: "error", error: errMsg });
     }
   };
 
@@ -273,7 +258,7 @@ export default function ImageUploader({
             {queue.map((item) => (
               <div key={item.id} className="flex items-center gap-3 text-xs bg-zinc-950/40 p-2.5 rounded-lg border border-zinc-900">
                 <div className="relative w-8 aspect-[3/4] rounded overflow-hidden flex-shrink-0">
-                  <img src={item.previewUrl} alt="Preview" className="object-cover w-full h-full" />
+                  <Image src={item.previewUrl} alt="Preview" fill className="object-cover" unoptimized />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center text-[10px] mb-1.5">

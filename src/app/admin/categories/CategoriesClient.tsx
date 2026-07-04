@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Plus, 
   Edit, 
@@ -29,6 +29,18 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
   const [deleteCategoryId, setDeleteCategoryId] = useState<string | null>(null);
 
+  // Handle ESC key to close modals
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (isModalOpen) setIsModalOpen(false);
+        if (isDeleteConfirmOpen) setIsDeleteConfirmOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen, isDeleteConfirmOpen]);
+
   // Form states
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -39,10 +51,6 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
   // UX states
   const [isProcessing, setIsProcessing] = useState(false);
   const [notification, setNotification] = useState<{ message: string; type: "success" | "error" } | null>(null);
-
-  const isPlaceholderMode = 
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("placeholder") ||
-    !process.env.NEXT_PUBLIC_SUPABASE_URL;
 
   const showNotification = (message: string, type: "success" | "error" = "success") => {
     setNotification({ message, type });
@@ -72,9 +80,10 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
   };
 
   // Auto-generate slug from name (only if not editing and not manually changed)
-  React.useEffect(() => {
+  const handleNameChange = (val: string) => {
+    setName(val);
     if (!activeCategory && !isSlugManuallyEdited) {
-      const generatedSlug = name
+      const generatedSlug = val
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, "")
         .trim()
@@ -82,7 +91,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
         .replace(/-+/g, "-");
       setSlug(generatedSlug);
     }
-  }, [name, activeCategory, isSlugManuallyEdited]);
+  };
 
   // Form submission handler
   const handleSaveCategory = async (e: React.FormEvent) => {
@@ -97,33 +106,6 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
       description: description.trim() || null,
       image_url: imageUrl.length > 0 ? imageUrl[0] : null,
     };
-
-    if (isPlaceholderMode) {
-      setTimeout(() => {
-        if (activeCategory) {
-          // Edit local state
-          setCategories((prev) =>
-            prev.map((c) =>
-              c.id === activeCategory.id ? { ...c, ...payload, updated_at: new Date().toISOString() } : c
-            )
-          );
-          showNotification("Category details updated successfully.");
-        } else {
-          // Add local state
-          const newCat: Category = {
-            id: Math.random().toString(36).substring(2, 9),
-            ...payload,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          };
-          setCategories((prev) => [...prev, newCat]);
-          showNotification("New category created successfully.");
-        }
-        setIsProcessing(false);
-        setIsModalOpen(false);
-      }, 500);
-      return;
-    }
 
     try {
       const supabase = createClient();
@@ -178,15 +160,6 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
     setIsDeleteConfirmOpen(false);
     setDeleteCategoryId(null);
     setIsProcessing(true);
-
-    if (isPlaceholderMode) {
-      setTimeout(() => {
-        setCategories((prev) => prev.filter((c) => c.id !== id));
-        setIsProcessing(false);
-        showNotification("Category deleted successfully.");
-      }, 500);
-      return;
-    }
 
     try {
       const supabase = createClient();
@@ -244,7 +217,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
       {categories.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => {
-            const cover = category.image_url || "/images/hero_banarasi_saree.jpg";
+            const cover = category.image_url || "/images/hero_banarasi_lengha.jpg";
             return (
               <div 
                 key={category.id} 
@@ -321,10 +294,15 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
       {/* Add / Edit Category Dialog Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-950/80 backdrop-blur-sm animate-fade-in select-none">
-          <div className="w-full max-w-lg bg-zinc-900 border border-zinc-850 rounded-xl overflow-hidden shadow-2xl flex flex-col">
+          <div
+            className="w-full max-w-lg bg-zinc-900 border border-zinc-850 rounded-xl overflow-hidden shadow-2xl flex flex-col"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="category-dialog-title"
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-850">
-              <h3 className="text-sm font-heading font-bold uppercase tracking-wider text-white">
+              <h3 id="category-dialog-title" className="text-sm font-heading font-bold uppercase tracking-wider text-white">
                 {activeCategory ? "Edit Category Details" : "Create New Category"}
               </h3>
               <button
@@ -346,9 +324,9 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                   id="cat-name"
                   type="text"
                   required
-                  placeholder="e.g. Designer Lehengas"
+                  placeholder="e.g. Designer Lenghas"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => handleNameChange(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-lg border border-zinc-800 bg-zinc-950/40 focus:outline-none focus:border-primary text-xs font-body text-white transition-colors placeholder-zinc-650"
                 />
               </div>
@@ -362,7 +340,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                   id="cat-slug"
                   type="text"
                   required
-                  placeholder="e.g. designer-lehengas"
+                  placeholder="e.g. designer-lenghas"
                   value={slug}
                   onChange={(e) => {
                     setSlug(e.target.value);
@@ -425,13 +403,18 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
       {/* Delete Confirmation Modal */}
       {isDeleteConfirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-950/80 backdrop-blur-sm animate-fade-in select-none">
-          <div className="w-full max-w-sm bg-zinc-900 border border-zinc-850 p-6 rounded-xl space-y-6 shadow-2xl">
+          <div
+            className="w-full max-w-sm bg-zinc-900 border border-zinc-850 p-6 rounded-xl space-y-6 shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-cat-dialog-title"
+          >
             <div className="flex gap-3.5 items-start">
               <div className="p-2 bg-rose-500/10 rounded text-rose-500 flex-shrink-0">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-sm font-heading font-bold uppercase tracking-wider text-white">
+                <h3 id="delete-cat-dialog-title" className="text-sm font-heading font-bold uppercase tracking-wider text-white">
                   Confirm Delete Category
                 </h3>
                 <p className="text-xs text-zinc-400 font-body leading-relaxed font-light">

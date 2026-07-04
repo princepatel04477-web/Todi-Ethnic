@@ -10,7 +10,10 @@ import {
   ExternalLink, 
   LogOut, 
   Menu, 
-  X
+  X,
+  MessageSquare,
+  Sun,
+  Moon
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -23,10 +26,11 @@ interface MobileHeaderProps {
   isMobileOpen: boolean;
   setIsMobileOpen: (open: boolean) => void;
   handleLogout: () => void;
+  theme: "light" | "dark";
+  toggleTheme: () => void;
 }
 
-function AdminMobileHeader({ isMobileOpen, setIsMobileOpen, handleLogout }: MobileHeaderProps) {
-  const pathname = usePathname(); // Dynamic hook inside Suspense boundary
+function AdminMobileHeader({ isMobileOpen, setIsMobileOpen, handleLogout, theme, toggleTheme }: MobileHeaderProps) {
   
   return (
     <header className="md:hidden h-16 border-b border-zinc-900 bg-zinc-900/60 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-40 w-full select-none">
@@ -39,21 +43,31 @@ function AdminMobileHeader({ isMobileOpen, setIsMobileOpen, handleLogout }: Mobi
       </button>
 
       <div className="flex flex-col items-center">
-        <span className="text-sm font-heading font-semibold tracking-[0.25em] text-white">
+        <span className="text-base font-bold tracking-[0.25em] text-white">
           TODI CREATION
         </span>
-        <span className="text-[7px] font-heading tracking-[0.4em] text-primary uppercase -mt-0.5">
+        <span className="text-[9px] tracking-[0.4em] text-primary uppercase mt-0.5">
           Admin Panel
         </span>
       </div>
 
-      <button
-        onClick={handleLogout}
-        className="p-1 rounded text-zinc-400 hover:text-rose-400 transition-colors cursor-pointer"
-        aria-label="Logout"
-      >
-        <LogOut className="w-5 h-5" />
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={toggleTheme}
+          type="button"
+          className="p-1 rounded text-zinc-400 hover:text-white transition-colors cursor-pointer"
+          aria-label="Toggle Theme"
+        >
+          {theme === "dark" ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-indigo-400" />}
+        </button>
+        <button
+          onClick={handleLogout}
+          className="p-1 rounded text-zinc-400 hover:text-rose-400 transition-colors cursor-pointer"
+          aria-label="Logout"
+        >
+          <LogOut className="w-5 h-5" />
+        </button>
+      </div>
     </header>
   );
 }
@@ -63,15 +77,18 @@ interface SidebarProps {
   isMobileOpen: boolean;
   adminEmail: string;
   handleLogout: () => void;
+  theme: "light" | "dark";
+  toggleTheme: () => void;
 }
 
-function AdminSidebar({ isMobileOpen, adminEmail, handleLogout }: SidebarProps) {
+function AdminSidebar({ isMobileOpen, adminEmail, handleLogout, theme, toggleTheme }: SidebarProps) {
   const pathname = usePathname(); // Dynamic hook inside Suspense boundary
   
   const navLinks = [
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { label: "Products", href: "/admin/products", icon: ShoppingBag },
     { label: "Categories", href: "/admin/categories", icon: Layers },
+    { label: "Contact Info", href: "/admin/contact", icon: MessageSquare },
   ];
 
   return (
@@ -82,11 +99,11 @@ function AdminSidebar({ isMobileOpen, adminEmail, handleLogout }: SidebarProps) 
     >
       <div className="select-none">
         {/* Sidebar Header branding */}
-        <div className="h-20 border-b border-zinc-900 flex flex-col justify-center px-8">
-          <span className="text-lg font-heading font-semibold tracking-[0.3em] text-white">
+        <div className="h-24 border-b border-zinc-900 flex flex-col justify-center px-8">
+          <span className="text-2xl font-bold tracking-[0.3em] text-white">
             TODI CREATION
           </span>
-          <span className="text-[9px] font-heading tracking-[0.45em] text-primary uppercase -mt-0.5">
+          <span className="text-xs tracking-[0.45em] text-primary uppercase mt-0.5 font-medium">
             Admin Desk
           </span>
         </div>
@@ -135,6 +152,24 @@ function AdminSidebar({ isMobileOpen, adminEmail, handleLogout }: SidebarProps) 
         </div>
 
         <div className="space-y-2.5">
+          <button
+            onClick={toggleTheme}
+            type="button"
+            className="w-full flex items-center justify-center gap-2 py-2.5 border border-zinc-800 hover:border-zinc-700 rounded-lg text-[10px] font-heading font-semibold tracking-wider uppercase text-zinc-400 hover:text-white transition-colors cursor-pointer"
+          >
+            {theme === "dark" ? (
+              <>
+                <Sun className="w-3.5 h-3.5 text-amber-500" />
+                <span>Light Theme</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Dark Theme</span>
+              </>
+            )}
+          </button>
+
           <Link
             href="/"
             target="_blank"
@@ -161,35 +196,47 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [adminEmail, setAdminEmail] = useState("admin@todicreation.com");
+  const [adminEmail, setAdminEmail] = useState("princepatel01258@gmail.com");
   const [isClient, setIsClient] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
+    const savedTheme = localStorage.getItem("todi_admin_theme");
+    if (savedTheme === "light" || savedTheme === "dark") {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("todi_admin_theme", nextTheme);
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
 
     const checkAuth = async () => {
-      // Check dev bypass
-      const devBypass = localStorage.getItem("todi_admin_bypass") === "true";
-      const isPlaceholder = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("placeholder") || !process.env.NEXT_PUBLIC_SUPABASE_URL;
+      // Check dev bypass (only in development)
+      const devBypass = localStorage.getItem("todi_admin_bypass") === "true" && process.env.NODE_ENV !== "production";
 
-      if (isPlaceholder && !devBypass) {
-        router.push("/login");
-        return;
-      }
-
-      if (!isPlaceholder) {
-        try {
-          const supabase = createClient();
-          const { data: { user } } = await supabase.auth.getUser();
-          if (!user || user.email !== "admin@todicreation.com") {
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        const allowedEmails = ["princepatel01258@gmail.com", "varunyatechnologies@gmail.com"];
+        if (!user || !allowedEmails.includes(user.email || "")) {
+          if (!devBypass) {
             router.push("/login");
           } else {
-            setAdminEmail(user.email);
+            setAdminEmail("Dev Admin");
           }
-        } catch (err) {
-          console.error("Auth check failed:", err);
-          if (!devBypass) router.push("/login");
+        } else {
+          setAdminEmail(user.email || "Administrator");
         }
+      } catch (err) {
+        console.error("Auth check failed:", err);
+        if (!devBypass) router.push("/login");
       }
     };
 
@@ -199,11 +246,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const handleLogout = async () => {
     localStorage.removeItem("todi_admin_bypass");
     try {
-      const isPlaceholder = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("placeholder") || !process.env.NEXT_PUBLIC_SUPABASE_URL;
-      if (!isPlaceholder) {
-        const supabase = createClient();
-        await supabase.auth.signOut();
-      }
+      const supabase = createClient();
+      await supabase.auth.signOut();
     } catch (err) {
       console.error("Error signing out:", err);
     }
@@ -212,19 +256,22 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   // Close mobile navigation drawer on path changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobileOpen(false);
   }, [pathname]);
 
   if (!isClient) return null;
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col md:flex-row font-body">
+    <div className={`min-h-screen flex flex-col md:flex-row font-body admin-panel admin-theme-${theme}`}>
       {/* Mobile Header Bar - Wrapped in Suspense */}
       <Suspense fallback={<div className="h-16 md:hidden bg-zinc-900 border-b border-zinc-950" />}>
         <AdminMobileHeader 
           isMobileOpen={isMobileOpen} 
           setIsMobileOpen={setIsMobileOpen} 
           handleLogout={handleLogout} 
+          theme={theme}
+          toggleTheme={toggleTheme}
         />
       </Suspense>
 
@@ -234,6 +281,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           isMobileOpen={isMobileOpen} 
           adminEmail={adminEmail} 
           handleLogout={handleLogout} 
+          theme={theme}
+          toggleTheme={toggleTheme}
         />
       </Suspense>
 

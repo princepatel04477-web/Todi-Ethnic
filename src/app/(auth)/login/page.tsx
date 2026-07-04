@@ -15,12 +15,6 @@ export default function LoginPage() {
   // UX states
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [isDevBypassActive, setIsDevBypassActive] = useState(false);
-
-  // Check if we are running in local placeholder mode
-  const isPlaceholderMode = 
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("placeholder") ||
-    !process.env.NEXT_PUBLIC_SUPABASE_URL;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,21 +22,6 @@ export default function LoginPage() {
 
     setIsLoading(true);
     setErrorMsg("");
-
-    // Development Bypass mode for placeholder keys
-    if (isPlaceholderMode) {
-      setTimeout(() => {
-        setIsLoading(false);
-        if (email === "admin@todicreation.com" && password === "admin123") {
-          // Store a dev bypass token to represent session
-          localStorage.setItem("todi_admin_bypass", "true");
-          router.push("/admin");
-        } else {
-          setErrorMsg("Invalid email or password. (Dev hint: use admin@todicreation.com & admin123)");
-        }
-      }, 1000);
-      return;
-    }
 
     // Real Supabase Login
     try {
@@ -56,7 +35,8 @@ export default function LoginPage() {
         setErrorMsg(error.message);
       } else if (data?.user) {
         // Double check admin email match
-        if (data.user.email === "admin@todicreation.com") {
+        const allowedEmails = ["princepatel01258@gmail.com", "varunyatechnologies@gmail.com"];
+        if (allowedEmails.includes(data.user.email || "")) {
           router.push("/admin");
         } else {
           setErrorMsg("Access Denied: Account is not configured as Admin.");
@@ -182,21 +162,18 @@ export default function LoginPage() {
         </form>
 
         {/* Development Bypass Box */}
-        {isPlaceholderMode && (
-          <div className="mt-8 pt-6 border-t border-zinc-800 text-center space-y-3">
-            <p className="text-[10px] font-body text-zinc-500 leading-normal">
-              Supabase variables are in placeholder mode. Use credentials:<br />
-              <span className="font-semibold text-zinc-400">admin@todicreation.com</span> / <span className="font-semibold text-zinc-400">admin123</span>
-            </p>
-            <button
-              onClick={handleDevBypass}
-              disabled={isLoading}
-              className="text-[10px] font-heading font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition-colors underline cursor-pointer"
-            >
-              Skip auth (Dev bypass)
-            </button>
-          </div>
-        )}
+        <div className="mt-8 pt-6 border-t border-zinc-800 text-center space-y-3">
+          <p className="text-[10px] font-body text-zinc-500 leading-normal">
+            Development mode — use the bypass below or sign in with Supabase credentials.
+          </p>
+          <button
+            onClick={handleDevBypass}
+            disabled={isLoading}
+            className="text-[10px] font-heading font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition-colors underline cursor-pointer"
+          >
+            Skip auth (Dev bypass)
+          </button>
+        </div>
       </div>
 
       {/* Return to website */}

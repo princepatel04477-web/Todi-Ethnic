@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -12,7 +12,6 @@ import {
   SlidersHorizontal,
   ChevronDown,
   AlertTriangle,
-  ArrowRightLeft,
   CheckCircle,
   Eye,
   AlertCircle
@@ -31,14 +30,20 @@ export default function ProductsClient({ initialProducts, categories }: Products
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [deleteProductId, setDeleteProductId] = useState<string | null>(null);
   
+  // Handle ESC key to close delete confirmation modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && deleteProductId) {
+        setDeleteProductId(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [deleteProductId]);
+
   // UX feedback states
   const [notification, setNotification] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
-
-  // Check if we are running in local placeholder mode
-  const isPlaceholderMode = 
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("placeholder") ||
-    !process.env.NEXT_PUBLIC_SUPABASE_URL;
 
   const showNotification = (message: string, type: "success" | "error" = "success") => {
     setNotification({ message, type });
@@ -49,17 +54,6 @@ export default function ProductsClient({ initialProducts, categories }: Products
   const handleToggleFeatured = async (id: string, currentStatus: boolean) => {
     setIsProcessing(`featured-${id}`);
     const nextStatus = !currentStatus;
-
-    if (isPlaceholderMode) {
-      setTimeout(() => {
-        setProducts((prev) =>
-          prev.map((p) => (p.id === id ? { ...p, featured: nextStatus } : p))
-        );
-        setIsProcessing(null);
-        showNotification(`Product featured status ${nextStatus ? "activated" : "deactivated"}.`);
-      }, 500);
-      return;
-    }
 
     try {
       const supabase = createClient();
@@ -91,17 +85,6 @@ export default function ProductsClient({ initialProducts, categories }: Products
 
     setIsProcessing(`stock-${id}`);
 
-    if (isPlaceholderMode) {
-      setTimeout(() => {
-        setProducts((prev) =>
-          prev.map((p) => (p.id === id ? { ...p, stock: nextStock } : p))
-        );
-        setIsProcessing(null);
-        showNotification("Stock count updated successfully.");
-      }, 300);
-      return;
-    }
-
     try {
       const supabase = createClient();
       const { error } = await supabase
@@ -132,15 +115,6 @@ export default function ProductsClient({ initialProducts, categories }: Products
     const id = deleteProductId;
     setDeleteProductId(null);
     setIsProcessing(`delete-${id}`);
-
-    if (isPlaceholderMode) {
-      setTimeout(() => {
-        setProducts((prev) => prev.filter((p) => p.id !== id));
-        setIsProcessing(null);
-        showNotification("Design successfully moved to trash (soft deleted).");
-      }, 500);
-      return;
-    }
 
     try {
       const supabase = createClient();
@@ -256,7 +230,6 @@ export default function ProductsClient({ initialProducts, categories }: Products
                   <th className="py-4 px-6">Image</th>
                   <th className="py-4 px-4">Design details</th>
                   <th className="py-4 px-4">Fabric</th>
-                  <th className="py-4 px-4">Price</th>
                   <th className="py-4 px-4">Stock</th>
                   <th className="py-4 px-4 text-center">Featured</th>
                   <th className="py-4 px-6 text-right">Actions</th>
@@ -266,7 +239,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                 {filteredProducts.map((product) => {
                   const firstImg = product.image_urls && product.image_urls.length > 0
                     ? product.image_urls[0]
-                    : "/images/hero_banarasi_saree.jpg";
+                    : "/images/hero_banarasi_lengha.jpg";
                   
                   const isFeaturedBusy = isProcessing === `featured-${product.id}`;
                   const isStockBusy = isProcessing === `stock-${product.id}`;
@@ -299,11 +272,6 @@ export default function ProductsClient({ initialProducts, categories }: Products
                       {/* Fabric type */}
                       <td className="py-4 px-4 uppercase tracking-wider font-heading font-semibold text-primary text-[10px]">
                         {product.fabric}
-                      </td>
-
-                      {/* Price */}
-                      <td className="py-4 px-4 font-heading font-bold text-zinc-200">
-                        ₹{product.price.toLocaleString("en-IN")}
                       </td>
 
                       {/* Stock count */}
@@ -394,13 +362,18 @@ export default function ProductsClient({ initialProducts, categories }: Products
       {/* Delete Confirmation Modal */}
       {deleteProductId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-950/80 backdrop-blur-sm animate-fade-in select-none">
-          <div className="w-full max-w-sm bg-zinc-900 border border-zinc-850 p-6 rounded-xl space-y-6 shadow-2xl">
+          <div
+            className="w-full max-w-sm bg-zinc-900 border border-zinc-850 p-6 rounded-xl space-y-6 shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-dialog-title"
+          >
             <div className="flex gap-3.5 items-start">
               <div className="p-2 bg-rose-500/10 rounded text-rose-500 flex-shrink-0">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-sm font-heading font-bold uppercase tracking-wider text-white">
+                <h3 id="delete-dialog-title" className="text-sm font-heading font-bold uppercase tracking-wider text-white">
                   Confirm Soft Delete
                 </h3>
                 <p className="text-xs text-zinc-400 font-body leading-relaxed font-light">

@@ -8,7 +8,6 @@ import {
   Plus, 
   ArrowRight,
   ExternalLink,
-  MessageCircle,
   Clock
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -29,8 +28,8 @@ const mockInquiries = [
     status: "pending",
     created_at: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
     items: [
-      { title: "Varanasi Rajat Brocade Saree", quantity: 5 },
-      { title: "Zardozi Empress Lehenga", quantity: 2 }
+      { title: "Varanasi Rajat Brocade Lengha", quantity: 5 },
+      { title: "Zardozi Empress Lengha", quantity: 2 }
     ]
   },
   {
@@ -40,7 +39,7 @@ const mockInquiries = [
     status: "pending",
     created_at: new Date(Date.now() - 3600000 * 18).toISOString(), // 18 hours ago
     items: [
-      { title: "Amber Aura Fusion Saree", quantity: 1 }
+      { title: "Amber Aura Fusion Lengha", quantity: 1 }
     ]
   }
 ];
@@ -211,7 +210,7 @@ export default async function AdminDashboardPage() {
                       </td>
                       <td className="py-4 px-4">
                         <div className="space-y-0.5 max-w-[260px] truncate text-zinc-400">
-                          {inq.items.map((item: any, idx: number) => (
+                          {inq.items.map((item: { title: string; quantity: number }, idx: number) => (
                             <div key={idx} className="truncate">
                               • {item.title} ({item.quantity} pcs)
                             </div>

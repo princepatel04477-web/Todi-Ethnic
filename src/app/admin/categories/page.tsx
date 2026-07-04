@@ -5,10 +5,10 @@ import { Category } from "@/lib/services/products";
 
 // Fallback mocks for dev sandbox mode
 const mockCategories: Category[] = [
-  { id: "cat-1", name: "Banarasi Sarees", slug: "banarasi-sarees", description: "Luxury Banarasi silk sarees direct from Surat weavers featuring silver and gold zari brocades.", image_url: "/images/hero_banarasi_saree.jpg", created_at: "", updated_at: "" },
-  { id: "cat-2", name: "Bridal Georgette", slug: "bridal-georgette", description: "Premium wedding collection sarees in fine georgette featuring handworked stone borders and zari embellishments.", image_url: "/images/category_bridal_georgette.jpg", created_at: "", updated_at: "" },
-  { id: "cat-3", name: "Silk Cotton", slug: "silk-cotton", description: "Comfortable and elegant fusion wear combining light cotton fibers with the sheen of pure silk.", image_url: "/images/category_silk_cotton.jpg", created_at: "", updated_at: "" },
-  { id: "cat-4", name: "Designer Lehengas", slug: "designer-lehengas", description: "Opulent wedding and ceremonial lehengas direct from our manufacturing facility.", image_url: "/images/category_lehenga.jpg", created_at: "", updated_at: "" },
+  { id: "cat-1", name: "Bridal Lengha", slug: "bridal-lengha", description: "Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.", image_url: "/images/categories/Bridal-cc.png", created_at: "", updated_at: "" },
+  { id: "cat-2", name: "Sider Lengha", slug: "sider-lengha", description: "Elegant festive silhouettes designed for bridesmaids, celebrations and modern occasions.", image_url: "/images/categories/Sider-cc.png", created_at: "", updated_at: "" },
+  { id: "cat-3", name: "Farsi Lengha", slug: "farsi-lengha", description: "Classic heritage-inspired designs featuring graceful flares and intricate artisan detailing.", image_url: "/images/categories/Farsi.png", created_at: "", updated_at: "" },
+  { id: "cat-4", name: "Indo-Western", slug: "indo-western", description: "Contemporary fusion couture combining modern fashion with traditional elegance.", image_url: "/images/categories/Indo-Western.png", created_at: "", updated_at: "" },
 ];
 
 export default async function AdminCategoriesPage() {
