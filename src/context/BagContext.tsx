@@ -6,7 +6,6 @@ export interface BagItem {
   id: string;
   title: string;
   slug: string;
-  price: number;
   sku: string;
   fabric: string;
   image: string;
@@ -23,6 +22,7 @@ export interface BagContextType {
   addItem: (item: BagItem) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
+  updateNotes: (id: string, notes: string) => void;
   clearBag: () => void;
   toggleDrawer: () => void;
 }
@@ -45,7 +45,6 @@ export const BagProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Failed to parse bag from localStorage:", e);
       }
     }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoaded(true);
   }, []);
 
@@ -94,6 +93,14 @@ export const BagProvider = ({ children }: { children: React.ReactNode }) => {
     );
   }, []);
 
+  const updateNotes = useCallback((id: string, notes: string) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, notes } : item
+      )
+    );
+  }, []);
+
   const clearBag = useCallback(() => {
     setItems([]);
   }, []);
@@ -116,6 +123,7 @@ export const BagProvider = ({ children }: { children: React.ReactNode }) => {
     addItem,
     removeItem,
     updateQuantity,
+    updateNotes,
     clearBag,
     toggleDrawer,
   }), [
@@ -126,6 +134,7 @@ export const BagProvider = ({ children }: { children: React.ReactNode }) => {
     addItem,
     removeItem,
     updateQuantity,
+    updateNotes,
     clearBag,
     toggleDrawer
   ]);

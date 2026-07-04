@@ -1,16 +1,28 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Star, Info, Loader2 } from "lucide-react";
 import Link from "next/link";
 import ImageUploader from "./ImageUploader";
 import { Category, Product } from "@/lib/services/products";
 
+export interface ProductFormData {
+  title: string;
+  slug: string;
+  sku: string;
+  category_id: string | null;
+  fabric: string;
+  image_urls: string[];
+  featured: boolean;
+  stock: number;
+  description: string;
+}
+
 interface ProductFormProps {
   initialData?: Product;
   categories: Category[];
-  onSubmit: (formData: any) => Promise<{ success: boolean; error?: string }>;
+  onSubmit: (formData: ProductFormData) => Promise<{ success: boolean; error?: string }>;
   titleText: string;
 }
 
@@ -18,7 +30,7 @@ const fabricSuggestions = [
   "Banarasi Silk",
   "Bridal Georgette",
   "Silk Cotton",
-  "Designer Lehenga",
+  "Designer Lengha",
   "Georgette Crepe",
   "Organza Silk",
   "Kanchipuram Silk",
@@ -39,7 +51,6 @@ export default function ProductForm({
   const [title, setTitle] = useState(initialData?.title || "");
   const [slug, setSlug] = useState(initialData?.slug || "");
   const [sku, setSku] = useState(initialData?.sku || "");
-  const [price, setPrice] = useState(initialData?.price ? String(initialData.price) : "");
   const [categoryId, setCategoryId] = useState(initialData?.category_id || "");
   const [fabric, setFabric] = useState(initialData?.fabric || "");
   const [imageUrls, setImageUrls] = useState<string[]>(initialData?.image_urls || []);
@@ -50,10 +61,11 @@ export default function ProductForm({
   // Tracks if the user has manually edited the slug field
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
-  // Auto-generate slug from title (only when creating, i.e., no initialData, and when not manually edited)
-  useEffect(() => {
+  // Auto-generate slug from title in title change handler instead of useEffect
+  const handleTitleChange = (newTitle: string) => {
+    setTitle(newTitle);
     if (!initialData && !isSlugManuallyEdited) {
-      const generatedSlug = title
+      const generatedSlug = newTitle
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, "") // remove special characters
         .trim()
@@ -61,7 +73,7 @@ export default function ProductForm({
         .replace(/-+/g, "-"); // remove double hyphens
       setSlug(generatedSlug);
     }
-  }, [title, initialData, isSlugManuallyEdited]);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,9 +84,6 @@ export default function ProductForm({
     if (!slug.trim()) return setErrorMsg("Slug is required.");
     if (!sku.trim()) return setErrorMsg("SKU code is required.");
     if (!fabric.trim()) return setErrorMsg("Fabric type is required.");
-    if (!price.trim() || isNaN(Number(price)) || Number(price) <= 0) {
-      return setErrorMsg("Price must be a valid number greater than 0.");
-    }
     if (!stock.trim() || isNaN(Number(stock)) || Number(stock) < 0) {
       return setErrorMsg("Stock count must be 0 or greater.");
     }
@@ -88,7 +97,6 @@ export default function ProductForm({
       title: title.trim(),
       slug: slug.trim().toLowerCase(),
       sku: sku.trim().toUpperCase(),
-      price: Number(price),
       category_id: categoryId || null,
       fabric: fabric.trim(),
       image_urls: imageUrls,
@@ -148,9 +156,9 @@ export default function ProductForm({
               id="title"
               type="text"
               required
-              placeholder="e.g. Varanasi Gold Brocade Saree"
+              placeholder="e.g. Varanasi Gold Brocade Lengha"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => handleTitleChange(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border border-zinc-800 bg-zinc-950/40 focus:outline-none focus:border-primary text-xs font-body text-white transition-colors placeholder-zinc-600"
             />
           </div>
@@ -188,22 +196,6 @@ export default function ProductForm({
                 placeholder="e.g. TC-BAN-005"
                 value={sku}
                 onChange={(e) => setSku(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-zinc-800 bg-zinc-950/40 focus:outline-none focus:border-primary text-xs font-body text-white transition-colors placeholder-zinc-600"
-              />
-            </div>
-
-            {/* Price */}
-            <div className="space-y-2">
-              <label htmlFor="price" className="text-[10px] font-heading font-bold uppercase tracking-wider text-zinc-500 block">
-                Trade Price (₹ INR) *
-              </label>
-              <input
-                id="price"
-                type="text"
-                required
-                placeholder="e.g. 7500"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-zinc-800 bg-zinc-950/40 focus:outline-none focus:border-primary text-xs font-body text-white transition-colors placeholder-zinc-600"
               />
             </div>

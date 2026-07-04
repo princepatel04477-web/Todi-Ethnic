@@ -203,6 +203,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   useEffect(() => {
     const savedTheme = localStorage.getItem("todi_admin_theme");
     if (savedTheme === "light" || savedTheme === "dark") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme(savedTheme);
     }
   }, []);

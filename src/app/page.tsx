@@ -6,149 +6,219 @@ import SEOJsonLd from "@/components/seo/SEOJsonLd";
 import LuxuryHero from "@/components/ui/LuxuryHero";
 import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
-import TrendingGrid from "@/components/ui/TrendingGrid";
+import OurCatalogue from "@/components/ui/OurCatalogue";
+import RevealSection from "@/components/ui/RevealSection";
 
 const categories = [
   {
-    name: "Banarasi Silk",
-    subtitle: "Royal Weaves & Zari Borders",
-    image: "/images/hero_banarasi_saree.jpg",
-    link: "/catalog?fabric=Banarasi+Silk",
-    count: "120+ Designs",
+    name: "Bridal Lengha",
+    subtitle: "Heavy hand-embroidery & classic royal motifs",
+    image: "/images/categories/Bridal-cc.png",
+    link: "/catalog?category=Bridal+Lengha",
+    count: "01",
+    translateClass: "md:translate-y-0",
   },
   {
-    name: "Bridal Georgette",
-    subtitle: "Heavy Handwork & Embroidery",
-    image: "/images/category_bridal_georgette.jpg",
-    link: "/catalog?category=Bridal+Georgette",
-    count: "85+ Designs",
+    name: "Sider Lengha",
+    subtitle: "Intricate modern designs for bridesmaids & festivals",
+    image: "/images/categories/Sider.png",
+    link: "/catalog?category=Sider+Lengha",
+    count: "02",
+    translateClass: "md:translate-y-8",
   },
   {
-    name: "Silk Cotton",
-    subtitle: "Elegant Daily & Festive Comfort",
-    image: "/images/category_silk_cotton.jpg",
-    link: "/catalog?fabric=Silk+Cotton",
-    count: "95+ Designs",
+    name: "Farsi Lengha",
+    subtitle: "Graceful trail and traditional vintage textures",
+    image: "/images/categories/Farsi.png",
+    link: "/catalog?category=Farsi+Lengha",
+    count: "03",
+    translateClass: "md:-translate-y-4",
   },
   {
-    name: "Designer Lehengas",
-    subtitle: "Exquisite Bridal & Party Silhouettes",
-    image: "/images/category_lehenga.jpg",
-    link: "/catalog?category=Designer+Lehenga",
-    count: "60+ Designs",
+    name: "Indo Western",
+    subtitle: "Contemporary cuts and fusion bridal aesthetics",
+    image: "/images/categories/Indo-Western.png",
+    link: "/catalog?category=Indo+Western",
+    count: "04",
+    translateClass: "md:translate-y-4",
   },
 ];
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#fbfcfa] text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50 transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-ivory text-charcoal transition-colors duration-300">
       {/* SEO Schema Markup */}
       <SEOJsonLd renderOrganization renderLocalBusiness />
 
       {/* Header Navigation */}
       <Header />
 
+      {/* Premium B2B Signal Banner (Above the fold) (Order II) */}
+      <div className="bg-aubergine-black text-ivory border-y border-antique-gold/15 select-none text-center">
+        <div className="max-w-7xl mx-auto px-4 py-2.5 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-center items-center divide-x divide-antique-gold/10 text-[9px] sm:text-xs">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5">
+              <span className="font-heading font-bold uppercase tracking-wider text-antique-gold">Wholesale Manufacturer</span>
+              <span className="opacity-60 text-[9px]">Since 1998</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5 border-l border-antique-gold/10 md:border-l-0">
+              <span className="font-heading font-bold uppercase tracking-wider text-antique-gold">Low Custom MOQ</span>
+              <span className="opacity-60 text-[9px]">Surat Direct</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5 border-l border-antique-gold/10 md:border-l-0">
+              <span className="font-heading font-bold uppercase tracking-wider text-antique-gold">Worldwide Shipping</span>
+              <span className="opacity-60 text-[9px]">Export Service</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5 border-l border-antique-gold/10 md:border-l-0">
+              <span className="font-heading font-bold uppercase tracking-wider text-antique-gold">Who We Serve</span>
+              <span className="opacity-60 text-[8px] sm:text-[9px]">Boutiques & Exporters</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <main className="flex-grow">
         {/* Luxury Hero Slider */}
         <LuxuryHero />
 
         {/* Brand Statement Section */}
-        <section className="py-16 sm:py-24 px-6 sm:px-12 md:px-20 max-w-5xl mx-auto text-center select-none">
-          <span className="text-xs uppercase tracking-[0.25em] text-primary font-heading font-semibold mb-3 block">
-            Crafting Heritage
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-heading font-medium tracking-tight mb-6 leading-tight text-neutral-950 dark:text-white">
-            Surat&apos;s Finest Designer Ethnic Wear & Sarees
-          </h2>
-          <p className="text-sm sm:text-base text-neutral-500 dark:text-neutral-400 font-body leading-relaxed max-w-3xl mx-auto font-light">
-            For decades, Todi Creation has stood as a beacon of artisanal luxury in Surat. 
-            We specialize in manufacturing exquisite Banarasi silk sarees, bridal georgettes, 
-            and designer lehengas that blend authentic Indian heritage with contemporary fashion sensibilities. 
-            Every drape tells a story of meticulous detail and quality craftsmanship.
-          </p>
-        </section>
+        <RevealSection delay={0.1}>
+          <section className="py-20 bg-ivory text-center px-6 sm:px-12 md:px-20 border-b border-antique-gold/15 select-none">
+            <span className="text-xs uppercase tracking-[0.25em] text-deep-maroon font-heading font-semibold mb-3 block">
+              Surat&apos;s Finest Designer Ethnic Wear
+            </span>
+            <h1 className="text-3xl sm:text-5xl font-heading font-light tracking-tight text-deep-maroon mb-6 max-w-4xl mx-auto leading-tight text-shadow-luxury">
+              Crafting Luxury Heritage for Modern Boutiques
+            </h1>
+            <p className="text-sm sm:text-base text-charcoal/80 leading-relaxed max-w-2xl mx-auto font-light">
+              We manufacture premium bridal lenghas, traditional lenghas, delicate hand-worked options, 
+              and Indo Western designs that blend authentic Indian heritage with contemporary fashion sensibilities. 
+              Every drape tells a story of meticulous detail and quality craftsmanship.
+            </p>
+          </section>
+        </RevealSection>
 
         {/* Featured Categories Section */}
-        <section className="py-16 bg-neutral-50 dark:bg-neutral-900/40 border-t border-b border-neutral-100 dark:border-neutral-900 px-6 sm:px-12 md:px-20">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
-              <div className="select-none">
-                <span className="text-xs uppercase tracking-[0.25em] text-primary font-heading font-semibold mb-2 block">
-                  Curated Collections
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-heading font-medium tracking-tight text-neutral-950 dark:text-white">
-                  Shop by Category
-                </h2>
-              </div>
-              <Link
-                href="/catalog"
-                className="inline-flex items-center gap-1.5 text-sm font-heading font-semibold tracking-wider text-primary hover:text-primary-hover dark:hover:text-primary-hover uppercase mt-4 sm:mt-0 transition-colors hover-underline"
-              >
-                Browse All Collections
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-
-            {/* Asymmetric Elegant Categories Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {categories.map((category, index) => (
+        <RevealSection delay={0.2}>
+          <section className="py-24 bg-ivory border-t border-b border-antique-gold/15 px-6 sm:px-12 md:px-20">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16">
+                <div className="select-none">
+                  <span className="text-xs uppercase tracking-[0.3em] text-deep-maroon font-heading font-semibold mb-2 block">
+                    Curated Collections
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-heading font-light tracking-tight text-deep-maroon text-shadow-luxury">
+                    Explore Categories
+                  </h2>
+                </div>
                 <Link
-                  key={index}
-                  href={category.link}
-                  className="group relative h-[380px] rounded-xl overflow-hidden shadow-luxury hover-lift cursor-pointer flex flex-col justify-end p-6 border border-neutral-200/20 dark:border-neutral-800/20 bg-neutral-900"
+                  href="/catalog"
+                  className="inline-flex items-center gap-1.5 text-sm font-heading font-semibold tracking-wider text-deep-maroon hover:text-deep-maroon/80 uppercase mt-4 sm:mt-0 transition-colors hover-underline"
                 >
-                  {/* Category Image */}
-                  <Image
-                    src={category.image}
-                    alt={category.name}
-                    fill
-                    className="object-cover opacity-80 group-hover:opacity-60 transition-all duration-700 ease-out group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  />
-                  
-                  {/* Glassmorphic Card Overlay for Content */}
-                  <div className="relative z-10 glass-card bg-white/10 dark:bg-black/25 backdrop-blur-md border-white/20 dark:border-white/10 p-5 rounded-lg select-none">
-                    <span className="text-[10px] font-heading font-medium tracking-widest text-primary uppercase block mb-1">
-                      {category.count}
-                    </span>
-                    <h3 className="text-base font-heading font-semibold text-white tracking-wide mb-1">
-                      {category.name}
-                    </h3>
-                    <p className="text-[11px] font-body text-neutral-300 font-light line-clamp-1">
-                      {category.subtitle}
-                    </p>
-                  </div>
+                  Browse All Collections
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Trending Products Section */}
-        <section className="py-16 sm:py-24 px-6 sm:px-12 md:px-20">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
-              <div className="select-none">
-                <span className="text-xs uppercase tracking-[0.25em] text-primary font-heading font-semibold mb-2 block">
-                  Customer Favorites
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-heading font-medium tracking-tight text-neutral-950 dark:text-white">
-                  Trending Sarees & Lehengas
-                </h2>
               </div>
-              <Link
-                href="/catalog"
-                className="inline-flex items-center gap-1.5 text-sm font-heading font-semibold tracking-wider text-primary hover:text-primary-hover dark:hover:text-primary-hover uppercase mt-4 sm:mt-0 transition-colors hover-underline"
-              >
-                View Catalog
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
 
-            {/* Trending Products Grid (Interactive Component) */}
-            <TrendingGrid />
-          </div>
-        </section>
+              {/* Asymmetric Elegant Categories Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 md:pb-12">
+                {categories.map((category, index) => (
+                  <div
+                    key={index}
+                    className={`w-full aspect-[2/3] ${category.translateClass} transition-transform duration-500`}
+                  >
+                    <Link
+                      href={category.link}
+                      className="group relative w-full h-full flex flex-col justify-end p-4 sm:p-6 overflow-hidden border border-antique-gold/15 bg-[#FDF9F3] rounded-[20px] shadow-card transition-all duration-300 ease-out hover:translate-y-[-8px] hover:scale-[1.02] hover:shadow-card-hover focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-antique-gold/50 cursor-pointer"
+                      role="group"
+                      aria-label={`Explore Category: ${category.name}`}
+                    >
+                      {/* Category Image */}
+                      <div className="absolute inset-0">
+                        <Image
+                          src={category.image}
+                          alt={category.name}
+                          fill
+                          loading="lazy"
+                          className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
+                        />
+                        {/* Gradient Editorial Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-deep-maroon/50 via-deep-maroon/10 to-transparent opacity-90 group-hover:opacity-95 transition-opacity duration-500" />
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="relative z-10 text-ivory select-none transform transition-transform duration-500 group-hover:-translate-y-1">
+                        <span className="text-[8px] sm:text-[10px] font-heading tracking-[0.25em] text-antique-gold uppercase block mb-1">
+                          Collection {category.count}
+                        </span>
+                        <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-heading tracking-wide mb-1 font-medium leading-tight text-shadow-luxury">
+                          {category.name}
+                        </h3>
+                        <p className="text-[9px] sm:text-[11px] font-body opacity-80 font-light line-clamp-2">
+                          {category.subtitle}
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </RevealSection>
+
+        {/* Manufacturing Excellence & Trust Section (Order IV — Social Proof stays) */}
+        <RevealSection>
+          <section className="py-24 bg-ivory border-t border-antique-gold/15 px-6 sm:px-12 md:px-20">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center max-w-2xl mx-auto mb-16 select-none">
+                <span className="text-xs uppercase tracking-[0.3em] text-deep-maroon font-heading font-semibold mb-3 block">
+                  Trusted Partnership
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-heading font-light tracking-tight text-deep-maroon text-shadow-luxury">
+                  Why Boutiques Choose Us
+                </h2>
+                <p className="text-sm text-warm-grey mt-3 font-light">
+                  Direct-from-manufacturer quality, loved by boutiques worldwide.
+                </p>
+              </div>
+
+              {/* Key Trust Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-12 divide-y md:divide-y-0 md:divide-x divide-antique-gold/15">
+                <div className="pt-6 md:pt-0">
+                  <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">200+</span>
+                  <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Boutique Partners</span>
+                </div>
+                <div className="pt-6 md:pt-0">
+                  <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">15+</span>
+                  <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Countries Exported</span>
+                  <span className="text-[9px] text-warm-grey block mt-1">UK, USA, UAE, Canada, Australia</span>
+                </div>
+                <div className="pt-6 md:pt-0">
+                  <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">25+</span>
+                  <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Years of Heritage</span>
+                </div>
+              </div>
+
+              {/* CTA to wholesale page */}
+              <div className="text-center">
+                <Link
+                  href="/wholesale"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-royal-maroon hover:bg-wine-red text-warm-ivory text-xs font-heading font-semibold uppercase tracking-wider rounded-none transition-all duration-300 active-press hover-lift"
+                >
+                  Partner With Us — Wholesale Inquiry
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </section>
+        </RevealSection>
+
+        {/* Our Catalogue Introduction Section */}
+        <RevealSection>
+          <OurCatalogue />
+        </RevealSection>
+
       </main>
 
       {/* Footer Navigation */}

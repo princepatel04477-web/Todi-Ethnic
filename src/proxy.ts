@@ -4,11 +4,51 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next();
 
+  // Resolve client IP address
+  const clientIp = request.headers.get('x-real-ip') || 
+                   request.headers.get('x-forwarded-for')?.split(',')[0].trim();
+  
+  const allowedIps = [
+    '49.36.91.88', 
+    '2405:201:200d:2822', 
+    '192.168.29.142', 
+    '192.168.29.82', 
+    '127.0.0.1', 
+    '::1'
+  ];
+  const isIpAllowed = allowedIps.some(allowed => 
+    clientIp === allowed || 
+    clientIp?.includes(allowed) || 
+    clientIp === 'localhost'
+  );
+
+  // Set IP access cookie for client components (like Footer)
+  if (isIpAllowed) {
+    response.cookies.set('todi_admin_ip', 'true', { path: '/', maxAge: 86400 * 30, httpOnly: false });
+  } else {
+    response.cookies.set('todi_admin_ip', 'false', { path: '/', maxAge: 86400 * 30, httpOnly: false });
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("placeholder")) {
-    // Allow bypassing in dev if needed, or throw error. Let's make it robust.
+  // Only allow placeholder bypass in local development
+  const isPlaceholder = 
+    (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("placeholder")) &&
+    process.env.NODE_ENV !== "production";
+
+  if (isPlaceholder) {
+    return response;
+  }
+
+  // If Supabase keys are missing in production, block access to admin
+  if (!supabaseUrl || !supabaseAnonKey) {
+    if (request.nextUrl.pathname.startsWith('/admin')) {
+      const redirectUrl = new URL('/login', request.url);
+      const redirectResponse = NextResponse.redirect(redirectUrl);
+      redirectResponse.cookies.set('todi_admin_ip', isIpAllowed ? 'true' : 'false', { path: '/', maxAge: 86400 * 30, httpOnly: false });
+      return redirectResponse;
+    }
     return response;
   }
 
@@ -28,6 +68,12 @@ export async function proxy(request: NextRequest) {
             response = NextResponse.next({
               request,
             });
+            // Re-apply our admin IP cookie to the new response object
+            if (isIpAllowed) {
+              response.cookies.set('todi_admin_ip', 'true', { path: '/', maxAge: 86400 * 30, httpOnly: false });
+            } else {
+              response.cookies.set('todi_admin_ip', 'false', { path: '/', maxAge: 86400 * 30, httpOnly: false });
+            }
             cookiesToSet.forEach(({ name, value, options }) => {
               response.cookies.set(name, value, options);
             });
@@ -43,18 +89,38 @@ export async function proxy(request: NextRequest) {
 
     // Protect admin routes
     if (request.nextUrl.pathname.startsWith('/admin')) {
+      if (!isIpAllowed) {
+        console.warn(`Blocked admin access request from unauthorized IP: ${clientIp}`);
+        // Send to home page if IP is not allowed
+        const redirectUrl = new URL('/', request.url);
+        const redirectResponse = NextResponse.redirect(redirectUrl);
+        redirectResponse.cookies.set('todi_admin_ip', 'false', { path: '/', maxAge: 86400 * 30, httpOnly: false });
+        return redirectResponse;
+      }
+
+      const allowedEmails = ['princepatel01258@gmail.com', 'varunyatechnologies@gmail.com'];
       if (!user) {
         // Unauthenticated: Send to login page
         const redirectUrl = new URL('/login', request.url);
-        return NextResponse.redirect(redirectUrl);
-      } else if (user.email !== 'admin@todicreation.com') {
+        const redirectResponse = NextResponse.redirect(redirectUrl);
+        redirectResponse.cookies.set('todi_admin_ip', 'true', { path: '/', maxAge: 86400 * 30, httpOnly: false });
+        return redirectResponse;
+      } else if (!allowedEmails.includes(user.email || '')) {
         // Authenticated but unauthorized: Send to home to avoid redirect loops
         const redirectUrl = new URL('/', request.url);
-        return NextResponse.redirect(redirectUrl);
+        const redirectResponse = NextResponse.redirect(redirectUrl);
+        redirectResponse.cookies.set('todi_admin_ip', 'true', { path: '/', maxAge: 86400 * 30, httpOnly: false });
+        return redirectResponse;
       }
     }
   } catch (error) {
     console.error("Auth proxy check failed:", error);
+    if (request.nextUrl.pathname.startsWith('/admin')) {
+      const redirectUrl = new URL('/login', request.url);
+      const redirectResponse = NextResponse.redirect(redirectUrl);
+      redirectResponse.cookies.set('todi_admin_ip', isIpAllowed ? 'true' : 'false', { path: '/', maxAge: 86400 * 30, httpOnly: false });
+      return redirectResponse;
+    }
   }
 
   return response;

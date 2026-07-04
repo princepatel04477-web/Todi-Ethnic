@@ -31,6 +31,25 @@ export interface Product {
   description: string;
 }
 
+export interface RawProduct {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  sku: string;
+  price: number;
+  category_id: string | null;
+  fabric: string;
+  image_urls: string[];
+  featured: boolean;
+  new_arrival: boolean | null;
+  stock: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  categories: Category | null;
+}
+
 export interface ProductFilters {
   category?: string | string[];
   fabric?: string | string[];
@@ -160,7 +179,7 @@ export async function fetchProducts(filters: ProductFilters): Promise<Product[]>
       return [];
     }
 
-    const mapped = (data || []).map((p: any) => ({
+    const mapped = (data as unknown as RawProduct[] || []).map((p) => ({
       ...p,
       name: p.title,
       category: p.categories?.name || "Designer Wear",
@@ -243,7 +262,7 @@ export async function fetchRelatedProducts(
       return [];
     }
 
-    return (data || []).map((p: any) => ({
+    return (data as unknown as RawProduct[] || []).map((p) => ({
       ...p,
       name: p.title,
       category: p.categories?.name || "Designer Wear",

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Maximize2, X, ZoomIn, ZoomOut } from "lucide-react";
 
@@ -17,12 +17,9 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
   const touchEndX = useRef(0);
 
   // Fallback if no images are provided
-  const images = imageUrls && imageUrls.length > 0 ? imageUrls : ["/images/hero_banarasi_saree.jpg"];
+  const images = imageUrls && imageUrls.length > 0 ? imageUrls : ["/images/hero_banarasi_lengha.jpg"];
 
-  // Reset lightbox zoom when active index changes or lightbox is closed
-  useEffect(() => {
-    setZoomLevel(1);
-  }, [activeIndex, isLightboxOpen]);
+
 
   // Touch Swipe handlers
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -46,10 +43,12 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setZoomLevel(1);
   };
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setZoomLevel(1);
   };
 
   const handleZoomIn = () => {
@@ -121,7 +120,10 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
           {images.map((url, index) => (
             <button
               key={index}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => {
+                setActiveIndex(index);
+                setZoomLevel(1);
+              }}
               className={`relative flex-shrink-0 w-20 aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all duration-300 cursor-pointer ${
                 activeIndex === index
                   ? "border-primary scale-[0.98] shadow-glow"
@@ -166,7 +168,10 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
                 <ZoomIn className="w-5 h-5" />
               </button>
               <button
-                onClick={() => setIsLightboxOpen(false)}
+                onClick={() => {
+                  setIsLightboxOpen(false);
+                  setZoomLevel(1);
+                }}
                 className="p-2 rounded-full hover:bg-white/10 text-white transition-colors cursor-pointer"
                 aria-label="Close view"
               >
@@ -178,7 +183,10 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
           {/* Lightbox Image Stage */}
           <div 
             className="flex-1 relative flex items-center justify-center p-4 overflow-hidden"
-            onClick={() => setIsLightboxOpen(false)}
+            onClick={() => {
+              setIsLightboxOpen(false);
+              setZoomLevel(1);
+            }}
           >
             <div 
               className="relative w-full max-w-2xl aspect-[3/4] transition-transform duration-300 ease-out"
@@ -202,7 +210,10 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
                 {images.map((_, index) => (
                   <button
                     key={index}
-                    onClick={() => setActiveIndex(index)}
+                    onClick={() => {
+                      setActiveIndex(index);
+                      setZoomLevel(1);
+                    }}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
                       activeIndex === index ? "w-6 bg-primary" : "w-1.5 bg-neutral-600"
                     }`}

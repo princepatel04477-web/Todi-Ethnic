@@ -17,7 +17,6 @@ export interface SEOJsonLdProps {
     description: string;
     images: string[];
     sku: string;
-    price: number;
     category?: string;
     fabric?: string;
     inStock: boolean;
@@ -97,7 +96,6 @@ export default function SEOJsonLd({
   const productDesc = productData?.description;
   const productImagesSerialized = productData?.images?.join(",");
   const productSku = productData?.sku;
-  const productPrice = productData?.price;
   const productCategory = productData?.category;
   const productFabric = productData?.fabric;
   const productInStock = productData?.inStock;
@@ -170,11 +168,6 @@ export default function SEOJsonLd({
         offers: {
           "@type": "Offer",
           url: productUrl || domainUrl,
-          priceCurrency: "INR",
-          price: productPrice || 0,
-          priceValidUntil: new Date(new Date().getFullYear() + 1, 11, 31)
-            .toISOString()
-            .split("T")[0],
           itemCondition: "https://schema.org/NewCondition",
           availability: productInStock
             ? "https://schema.org/InStock"
@@ -228,7 +221,6 @@ export default function SEOJsonLd({
     productImages,
     productDesc,
     productSku,
-    productPrice,
     productInStock,
     productUrl,
     productCategory,

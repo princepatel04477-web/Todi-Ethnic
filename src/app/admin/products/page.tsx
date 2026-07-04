@@ -6,7 +6,6 @@ import { Product, Category } from "@/lib/services/products";
 export default async function AdminProductsPage() {
   let products: Product[] = [];
   let categories: Category[] = [];
-  let error: string | null = null;
 
   try {
     const supabase = await createClient();
@@ -23,8 +22,12 @@ export default async function AdminProductsPage() {
         .order("name", { ascending: true })
     ]);
 
-    if (productsRes.error) error = productsRes.error.message;
-    if (categoriesRes.error) error = categoriesRes.error.message;
+    if (productsRes.error) {
+      console.error("Error fetching products:", productsRes.error.message);
+    }
+    if (categoriesRes.error) {
+      console.error("Error fetching categories:", categoriesRes.error.message);
+    }
 
     if (productsRes.data) {
       products = productsRes.data.map(p => ({
@@ -39,7 +42,6 @@ export default async function AdminProductsPage() {
     categories = categoriesRes.data || [];
   } catch (err) {
     console.error("Database connection error:", err);
-    error = "Database connection failed";
   }
 
   return (

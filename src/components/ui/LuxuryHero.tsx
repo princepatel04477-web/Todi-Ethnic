@@ -4,37 +4,40 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Slide {
-  title: string;
-  subtitle: string;
-  image: string;
-  ctaText: string;
+  desktopImage: string;
+  mobileImage: string;
   link: string;
+  title: string;
 }
 
 const slides: Slide[] = [
   {
-    title: "Exquisite Banarasi Silk",
-    subtitle: "Timeless heritage hand-woven in pure silk and metallic gold zari.",
-    image: "/images/hero_banarasi_saree.jpg",
-    ctaText: "Explore Collection",
-    link: "/catalog?fabric=Banarasi+Silk",
+    desktopImage: "/images/hero/Carousel_1_.png",
+    mobileImage: "/images/hero/mobile_bridal.jpeg",
+    link: "/catalog",
+    title: "Todi Creation Signature Collection",
   },
   {
-    title: "Bridal Georgette Elegance",
-    subtitle: "Intricate hand embroidery and luxurious drapes for your special day.",
-    image: "/images/category_bridal_georgette.jpg",
-    ctaText: "View Bridal Wear",
-    link: "/catalog?category=Bridal+Georgette",
+    desktopImage: "/images/hero/Indowestern_1.png",
+    mobileImage: "/images/hero/mobile_indowestern.jpeg",
+    link: "/catalog?category=Indo+Western",
+    title: "Indo Western Catalog",
   },
   {
-    title: "Designer Lehengas",
-    subtitle: "Contemporary silhouettes blended with traditional Surat craftsmanship.",
-    image: "/images/category_lehenga.jpg",
-    ctaText: "Discover Lehengas",
-    link: "/catalog?category=Designer+Lehenga",
+    desktopImage: "/images/hero/Sider.png",
+    mobileImage: "/images/hero/mobile_sider.jpeg",
+    link: "/catalog?category=Sider+Lengha",
+    title: "Sider Lengha Collections",
+  },
+  {
+    desktopImage: "/images/hero/farsi.png",
+    mobileImage: "/images/hero/mobile_farsi.jpeg",
+    link: "/catalog?category=Farsi+Lengha",
+    title: "Farsi Lengha Custom Designs",
   },
 ];
 
@@ -43,12 +46,9 @@ export default function LuxuryHero() {
   const [autoplay, setAutoplay] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const buttonRef = useRef<HTMLDivElement>(null);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Swipe gesture detection with vertical scroll protection
+  // Swipe gesture variables
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
@@ -63,7 +63,7 @@ export default function LuxuryHero() {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  // Autoplay functionality
+  // Autoplay handler (6-second cycle)
   useEffect(() => {
     if (autoplay) {
       autoplayTimerRef.current = setInterval(() => {
@@ -77,32 +77,19 @@ export default function LuxuryHero() {
     };
   }, [autoplay, currentSlide]);
 
-  // GSAP animations for transitions
+  // GSAP Ken Burns Slow Zoom Transition
   useEffect(() => {
     const ctx = gsap.context((self) => {
-      // Staggered entry for copy elements
-      gsap.fromTo(
-        [titleRef.current, subtitleRef.current, buttonRef.current],
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: "power3.out",
-        }
-      );
-
-      // Target only the active slide's image container using GSAP selector scoped to containerRef
-      const activeImage = self.selector?.(".opacity-100 .hero-image-container");
+      const activeImage = self.selector?.(".opacity-100 .hero-image");
       if (activeImage && activeImage.length > 0) {
+        // Subtle slow zoom scaling from 1.04 down to 1.00 over 6s
         gsap.fromTo(
           activeImage,
-          { scale: 1.08 },
+          { scale: 1.04 },
           {
             scale: 1,
             duration: 6,
-            ease: "power1.out",
+            ease: "sine.out",
           }
         );
       }
@@ -111,14 +98,23 @@ export default function LuxuryHero() {
     return () => ctx.revert();
   }, [currentSlide]);
 
-  // Pause autoplay on user touch/drag/button interaction
-  const stopAutoplayTemporarily = () => {
-    setAutoplay(false);
-  };
+  // Keyboard navigation support
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (document.activeElement !== containerRef.current) return;
+      if (e.key === "ArrowLeft") {
+        prevSlide();
+      } else if (e.key === "ArrowRight") {
+        nextSlide();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
-  // Touch handlers
+  // Gesture Touch Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
-    stopAutoplayTemporarily();
+    setAutoplay(false);
     setTouchEndX(null);
     setTouchEndY(null);
     setTouchStartX(e.targetTouches[0].clientX);
@@ -131,11 +127,11 @@ export default function LuxuryHero() {
   };
 
   const handleTouchEnd = () => {
+    setAutoplay(true);
     if (touchStartX === null || touchStartY === null || touchEndX === null || touchEndY === null) return;
     const diffX = touchStartX - touchEndX;
     const diffY = touchStartY - touchEndY;
 
-    // Trigger next/prev slide only if horizontal move is greater than vertical move
     if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipeDistance) {
       if (diffX > 0) {
         nextSlide();
@@ -148,119 +144,123 @@ export default function LuxuryHero() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[65vh] sm:h-[80vh] md:h-[90vh] bg-neutral-950 overflow-hidden select-none"
+      tabIndex={0}
+      className="group/hero relative w-full aspect-[1536/2752] sm:aspect-[1536/1024] bg-aubergine-black overflow-hidden select-none focus:outline-none focus:ring-1 focus:ring-antique-gold/30"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onMouseEnter={() => setAutoplay(false)}
+      onMouseLeave={() => setAutoplay(true)}
+      onFocus={() => setAutoplay(false)}
+      onBlur={() => setAutoplay(true)}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Todi Creation B2B Collections Showcase"
     >
-      {/* Slides Background Images - All always mounted to support smooth cross-fade */}
+      {/* Slides Viewports */}
       <div className="absolute inset-0 w-full h-full">
         {slides.map((slide, index) => {
           const isActive = index === currentSlide;
           return (
-            <div
+            <motion.div
               key={index}
-              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-                isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-              }`}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
+              style={{
+                pointerEvents: isActive ? "auto" : "none",
+                zIndex: isActive ? 10 : 0,
+              }}
+              className="absolute inset-0 w-full h-full"
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`Slide ${index + 1} of ${slides.length}: ${slide.title}`}
+              aria-hidden={!isActive}
             >
-              <div className="relative w-full h-full hero-image-container">
-                <Image
-                  src={slide.image}
-                  alt={slide.title}
-                  fill
-                  priority={index === 0}
-                  className="object-cover"
-                  sizes="100vw"
-                />
-                {/* Elegant overlay for readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/80 via-neutral-950/40 to-transparent sm:bg-gradient-to-t sm:from-neutral-950/90 sm:via-neutral-950/50 sm:to-neutral-950/20" />
-              </div>
-            </div>
+              <Link href={slide.link} className="block relative w-full h-full cursor-pointer focus:outline-none">
+                <div className="relative w-full h-full overflow-hidden transform-gpu">
+                  {/* Desktop / Laptop Viewport Banner */}
+                  <Image
+                    src={slide.desktopImage}
+                    alt={slide.title}
+                    fill
+                    priority={index === 0}
+                    className="hero-image hidden sm:block object-cover object-center transform-gpu"
+                    sizes="100vw"
+                  />
+                  {/* Mobile / Tablet Viewport Banner */}
+                  <Image
+                    src={slide.mobileImage}
+                    alt={slide.title}
+                    fill
+                    priority={index === 0}
+                    className="hero-image block sm:hidden object-cover object-center transform-gpu"
+                    sizes="100vw"
+                  />
+                </div>
+              </Link>
+            </motion.div>
           );
         })}
       </div>
 
-      {/* Copy & Navigation Overlay Content */}
-      <div className="absolute inset-0 z-20 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-12 md:px-20 max-w-7xl mx-auto w-full">
-        <div className="max-w-2xl text-left text-neutral-50">
-          <div className="overflow-hidden mb-2">
-            <span className="inline-block text-xs uppercase tracking-[0.25em] text-primary font-heading font-semibold">
-              Todi Creation Surat
-            </span>
-          </div>
-
-          <h1
-            ref={titleRef}
-            className="text-3xl sm:text-5xl md:text-6xl font-heading font-medium tracking-tight mb-4 leading-tight sm:leading-none text-white"
-          >
-            {slides[currentSlide].title}
-          </h1>
-
-          <p
-            ref={subtitleRef}
-            className="text-sm sm:text-base md:text-lg font-body text-neutral-300 mb-8 max-w-lg leading-relaxed font-light"
-          >
-            {slides[currentSlide].subtitle}
-          </p>
-
-          <div ref={buttonRef}>
-            <Link
-              href={slides[currentSlide].link}
-              onClick={stopAutoplayTemporarily}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-primary text-primary hover:text-white bg-transparent hover:bg-primary rounded-full transition-all duration-300 font-heading text-sm uppercase tracking-wider font-semibold hover-lift active-press"
-            >
-              {slides[currentSlide].ctaText}
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Clickable Overlay Navigation Arrows - Hidden on small devices for clean aesthetics, visible on md+ */}
-      <div className="hidden md:block absolute inset-y-0 left-6 z-30 flex items-center">
+      {/* Desktop Glass Navigation Arrows (Hidden on Mobile) */}
+      <div className="hidden md:block absolute left-4 inset-y-0 z-20 flex items-center">
         <button
-          onClick={() => {
-            stopAutoplayTemporarily();
+          onClick={(e) => {
+            e.stopPropagation();
             prevSlide();
           }}
-          className="p-3 bg-neutral-900/30 hover:bg-neutral-900/60 border border-white/10 rounded-full text-white/70 hover:text-white backdrop-blur-sm transition-all hover-scale active-press"
+          className="w-16 h-32 flex items-center justify-center bg-transparent border-0 opacity-0 group-hover/hero:opacity-100 transition-opacity duration-300 focus:opacity-100 focus:outline-none cursor-pointer"
           aria-label="Previous slide"
         >
-          <ChevronLeft className="w-6 h-6" />
+          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-ivory/10 hover:bg-ivory/20 border border-ivory/15 backdrop-blur-md text-ivory/70 hover:text-ivory transition-all duration-300 shadow-sm active:scale-95">
+            <ChevronLeft className="w-5 h-5" />
+          </div>
         </button>
       </div>
 
-      <div className="hidden md:block absolute inset-y-0 right-6 z-30 flex items-center">
+      <div className="hidden md:block absolute right-4 inset-y-0 z-20 flex items-center">
         <button
-          onClick={() => {
-            stopAutoplayTemporarily();
+          onClick={(e) => {
+            e.stopPropagation();
             nextSlide();
           }}
-          className="p-3 bg-neutral-900/30 hover:bg-neutral-900/60 border border-white/10 rounded-full text-white/70 hover:text-white backdrop-blur-sm transition-all hover-scale active-press"
+          className="w-16 h-32 flex items-center justify-center bg-transparent border-0 opacity-0 group-hover/hero:opacity-100 transition-opacity duration-300 focus:opacity-100 focus:outline-none cursor-pointer"
           aria-label="Next slide"
         >
-          <ChevronRight className="w-6 h-6" />
+          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-ivory/10 hover:bg-ivory/20 border border-ivory/15 backdrop-blur-md text-ivory/70 hover:text-ivory transition-all duration-300 shadow-sm active:scale-95">
+            <ChevronRight className="w-5 h-5" />
+          </div>
         </button>
       </div>
 
-      {/* Thumb-reachable indicators dots at the bottom center */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              stopAutoplayTemporarily();
-              setCurrentSlide(index);
-            }}
-            className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-              index === currentSlide
-                ? "w-8 bg-primary"
-                : "w-2.5 bg-neutral-500 hover:bg-neutral-300"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+      {/* Apple-style Capsule Progress Indicators */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
+        {slides.map((_, index) => {
+          const isActive = index === currentSlide;
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                setCurrentSlide(index);
+              }}
+              className={`relative h-1.5 rounded-full overflow-hidden transition-all duration-500 cursor-pointer ${
+                isActive ? "w-16 bg-ivory/20" : "w-1.5 bg-ivory/40 hover:bg-ivory/70"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            >
+              {isActive && (
+                <span
+                  className="absolute left-0 top-0 h-full bg-antique-gold animate-slide-progress"
+                  style={{
+                    animationPlayState: autoplay ? "running" : "paused",
+                  }}
+                />
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

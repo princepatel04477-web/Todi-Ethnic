@@ -46,7 +46,6 @@ CREATE TABLE IF NOT EXISTS products (
     slug TEXT UNIQUE NOT NULL,
     description TEXT NOT NULL,
     sku TEXT UNIQUE NOT NULL,
-    price NUMERIC NOT NULL,
     category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
     fabric TEXT NOT NULL,
     image_urls TEXT[] DEFAULT '{}'::TEXT[] NOT NULL,

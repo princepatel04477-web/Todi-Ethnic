@@ -39,10 +39,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const firstImage = product.image_urls && product.image_urls.length > 0
     ? product.image_urls[0]
-    : "https://todicreation.com/images/hero_banarasi_saree.jpg";
+    : "https://todicreation.com/images/hero_banarasi_lengha.jpg";
 
   return {
-    title: `${product.title} - ${product.fabric} Saree | Todi Creation`,
+    title: `${product.title} - ${product.fabric} Lengha | Todi Creation`,
     description: `${product.description.slice(0, 155)}... Surat manufactured designer wear.`,
     alternates: {
       canonical: `https://todicreation.com/product/${product.slug}`,
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         },
       ],
       locale: "en_IN",
-      type: "music.song", // Using music.song as placeholder/standard or simple article/og:product if supported. For simplicity, next.js default website/article is preferred
+      type: "website",
     },
     twitter: {
       card: "summary_large_image",
@@ -90,16 +90,15 @@ export default async function ProductPage({ params }: PageProps) {
   );
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#fbfcfa] text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50 transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-ivory text-charcoal transition-colors duration-300">
       {/* Dynamic SEO JSON-LD Product Schema */}
       <SEOJsonLd
         productData={{
           title: product.title,
           description: product.description,
-          images: product.image_urls.length > 0 ? product.image_urls : ["https://todicreation.com/images/hero_banarasi_saree.jpg"],
+          images: product.image_urls.length > 0 ? product.image_urls : ["https://todicreation.com/images/hero_banarasi_lengha.jpg"],
           sku: product.sku,
-          price: product.price,
-          category: product.categories?.name || "Designer Saree",
+          category: product.categories?.name || "Designer Lengha",
           fabric: product.fabric,
           inStock: product.stock > 0,
           url: `https://todicreation.com/product/${product.slug}`,

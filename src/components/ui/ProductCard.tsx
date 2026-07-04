@@ -1,111 +1,78 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useBag } from "@/context/BagContext";
-import { ShoppingBag, Check } from "lucide-react";
 
 export interface ProductCardProps {
   product: {
     id: string;
-    title: string;
+    name?: string;
+    title?: string;
+    category?: string;
+    fabric?: string;
+    image?: string;
+    image_urls?: string[];
     slug: string;
     sku: string;
-    price: number;
-    fabric: string;
-    image_urls: string[];
   };
+  index?: number;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useBag();
-  const [isAdded, setIsAdded] = useState(false);
-
-  const handleAddToBag = () => {
-    const firstImage = product.image_urls && product.image_urls.length > 0
-      ? product.image_urls[0]
-      : "/images/hero_banarasi_saree.jpg";
-
-    addItem({
-      id: product.id,
-      title: product.title,
-      slug: product.slug,
-      price: product.price,
-      sku: product.sku,
-      fabric: product.fabric,
-      image: firstImage,
-      quantity: 1,
-    });
-
-    setIsAdded(true);
-    setTimeout(() => {
-      setIsAdded(false);
-    }, 2000);
-  };
-
-  const displayImage = product.image_urls && product.image_urls.length > 0
-    ? product.image_urls[0]
-    : "/images/hero_banarasi_saree.jpg";
+export default function ProductCard({ product, index = 0 }: ProductCardProps) {
+  // Support both new and backwards compatible fields
+  const displayName = product.name || product.title || "";
+  const displayCategory = product.category || product.fabric || "";
+  const displayImage = product.image || (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : "");
 
   return (
-    <div className="group flex flex-col bg-white dark:bg-zinc-950 rounded-xl overflow-hidden border border-neutral-100 dark:border-neutral-900 transition-all duration-300 hover:shadow-luxury-hover hover-lift">
-      {/* Image Container */}
-      <div className="relative aspect-[3/4] overflow-hidden bg-neutral-50 dark:bg-zinc-900/50">
-        <Link href={`/product/${product.slug}`} className="block w-full h-full">
+    <div className="group block relative select-none cursor-pointer rounded-[20px] bg-[#FDF9F3]/40 p-3 transition-all duration-500 ease-out hover:bg-[#FDF9F3] hover:-translate-y-2 hover:scale-[1.01] hover:shadow-card-hover shadow-card text-left flex flex-col justify-between h-full border border-[#EADFCF]/20">
+      <Link href={`/product/${product.slug}`} className="focus:outline-none block w-full flex-grow">
+        {/* Aspect ratio: 3:4 portrait for clean luxury editorial grid */}
+        <div className="relative aspect-[3/4] w-full overflow-hidden mb-5 rounded-[14px] bg-pearl-white">
           <Image
             src={displayImage}
-            alt={product.title}
+            alt={displayName}
             fill
-            className="object-contain p-2 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={index < 8}
+            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+            loading={index >= 8 ? "lazy" : undefined}
           />
-        </Link>
-        
-        {/* Fabric tag */}
-        <div className="absolute top-3 left-3 bg-neutral-900/80 dark:bg-neutral-950/80 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/10">
-          <span className="text-[10px] font-heading font-medium tracking-wider text-primary uppercase">
-            {product.fabric}
-          </span>
         </div>
-      </div>
 
-      {/* Details */}
-      <div className="p-5 flex flex-col flex-grow select-none">
-        <span className="text-[11px] font-body tracking-wider text-neutral-400 dark:text-neutral-500 uppercase mb-1">
-          {product.sku}
-        </span>
-        <h3 className="text-sm font-heading font-medium text-neutral-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors mb-2">
-          <Link href={`/product/${product.slug}`}>{product.title}</Link>
-        </h3>
-        
-        <div className="mt-auto pt-4 flex items-center justify-between border-t border-neutral-100 dark:border-neutral-900">
-          <span className="text-base font-heading font-semibold text-neutral-950 dark:text-zinc-50">
-            ₹{product.price.toLocaleString("en-IN")}
+        {/* Minimal Details */}
+        <div className="space-y-1.5 px-1.5 mb-4">
+          <span className="text-[10px] font-heading font-semibold tracking-[0.2em] text-[#B29567] uppercase block">
+            {displayCategory}
           </span>
-          
-          <button
-            onClick={handleAddToBag}
-            className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-heading font-semibold tracking-wider uppercase transition-all duration-300 active-press cursor-pointer border ${
-              isAdded
-                ? "bg-emerald-500 border-emerald-500 text-white"
-                : "bg-transparent border-primary text-primary hover:bg-primary hover:text-white"
-            }`}
-            aria-label={isAdded ? `Added ${product.title} to inquiry bag` : `Add ${product.title} to inquiry bag`}
-          >
-            {isAdded ? (
-              <>
-                <Check className="w-3.5 h-3.5" />
-                Added
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="w-3.5 h-3.5" />
-                Inquire
-              </>
-            )}
-          </button>
+          <span className="text-[10px] font-body text-warm-grey block">
+            {product.sku}
+          </span>
+          <h3 className="font-heading font-light text-lg sm:text-xl text-deep-maroon group-hover:text-royal-maroon transition-colors duration-300 leading-snug pt-0.5 line-clamp-2">
+            {displayName}
+          </h3>
         </div>
+      </Link>
+
+      {/* Details Trigger Button */}
+      <div className="px-1.5 pt-2 border-t border-[#EADFCF]/30 select-none">
+        <Link
+          href={`/product/${product.slug}`}
+          className="flex items-center justify-between w-full text-[11px] font-heading font-semibold tracking-wider text-royal-maroon uppercase group/btn"
+        >
+          <span className="relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-left after:scale-x-0 after:bg-antique-gold after:transition-transform after:duration-300 group-hover/btn:after:scale-x-100">
+            View Details
+          </span>
+          <svg
+            className="w-3.5 h-3.5 text-royal-maroon transition-transform duration-300 ease-out transform group-hover:translate-x-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
       </div>
     </div>
   );

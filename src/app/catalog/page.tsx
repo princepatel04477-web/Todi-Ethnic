@@ -1,8 +1,14 @@
 import React, { Suspense } from "react";
+import type { Metadata } from "next";
 import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import CatalogContent from "./CatalogContent";
 import CatalogSkeleton from "./CatalogSkeleton";
+
+export const metadata: Metadata = {
+  title: "Designer Lengha Catalog | Todi Creation",
+  description: "Browse Todi Creation's premium bridal lenghas, Farsi trails, sider lenghas, and Indo-Western wear manufactured in Surat.",
+};
 
 // Enable Next.js instant static shell prerendering for client navigation
 export const unstable_instant = {
@@ -14,15 +20,16 @@ interface PageProps {
   searchParams: Promise<{
     category?: string | string[];
     fabric?: string | string[];
-    priceRange?: string | string[];
     search?: string;
     sort?: string;
+    featured?: string;
+    newArrival?: string;
   }>;
 }
 
 export default async function CatalogPage({ searchParams }: PageProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-[#fbfcfa] text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50 transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-ivory text-charcoal transition-colors duration-300">
       {/* Page Header */}
       <Header />
 

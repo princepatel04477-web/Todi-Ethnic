@@ -1,102 +1,119 @@
 @import "tailwindcss";
 
 :root {
-  /* HSL luxury design tokens */
-  /* Background: rich ivory #fbfcfa */
-  --background: 80 15% 99%;
-  /* Foreground: deep charcoal #0f0f10 */
-  --foreground: 240 6% 6%;
-  
-  --card: 0 0% 100%;
-  --card-foreground: 240 6% 6%;
-  
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 6% 6%;
-  
-  /* Accent: gold/brass #c5a880 */
-  --primary: 35 38% 64%;
-  --primary-hover: 35 35% 55%;
-  --primary-light: 35 38% 92%;
-  
-  --secondary: 0 0% 29%;
-  
-  --muted: 240 5% 96%;
-  --muted-foreground: 240 5% 46%;
-  
-  --border: 240 6% 90%;
-  --border-light: 35 38% 90%;
-  
-  --glass-bg: rgba(251, 252, 250, 0.75);
-  --glass-card-bg: rgba(255, 255, 255, 0.8);
-  --glass-nav-bg: rgba(251, 252, 250, 0.85);
-  --glass-border: rgba(197, 168, 128, 0.15);
-  
-  --shadow-luxury: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.03);
-  --shadow-luxury-hover: 0 20px 40px -15px rgba(197, 168, 128, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.05);
-  --shadow-glow: 0 0 15px rgba(197, 168, 128, 0.25);
-  
-  --radius-luxury: 0.5rem;
-}
+  /* New Refined B2B Design Tokens */
+  --deep-maroon: #5C0E1D;
+  --aubergine-black: #1A1015;
+  --antique-gold: #C9A14A;
+  --soft-champagne: #E8D9B5;
+  --ivory: #FAF6F0;
+  --warm-grey: #8C8276;
+  --charcoal: #2B2420;
+  --success-sage: #5A7052;
+  --alert-terracotta: #B5573B;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Background: deep charcoal #0f0f10 */
-    --background: 240 6% 6%;
-    /* Foreground: rich ivory #fbfcfa */
-    --foreground: 80 15% 99%;
-    
-    --card: 240 6% 8%;
-    --card-foreground: 80 15% 99%;
-    
-    --popover: 240 6% 8%;
-    --popover-foreground: 80 15% 99%;
-    
-    --primary: 35 38% 64%;
-    --primary-hover: 35 45% 74%;
-    --primary-light: 35 25% 19%;
-    
-    --secondary: 240 5% 65%;
-    
-    --muted: 240 6% 12%;
-    --muted-foreground: 240 5% 65%;
-    
-    --border: 240 5% 16%;
-    --border-light: 35 38% 20%;
-    
-    --glass-bg: rgba(15, 15, 16, 0.75);
-    --glass-card-bg: rgba(20, 20, 22, 0.8);
-    --glass-nav-bg: rgba(15, 15, 16, 0.85);
-    --glass-border: rgba(197, 168, 128, 0.1);
-    
-    --shadow-luxury: 0 10px 35px -10px rgba(0, 0, 0, 0.4);
-    --shadow-luxury-hover: 0 20px 45px -15px rgba(0, 0, 0, 0.55);
-    --shadow-glow: 0 0 20px rgba(197, 168, 128, 0.2);
-  }
+  /* Legacy Variable Mappings for Visual Compatibility */
+  --warm-ivory: var(--ivory);
+  --pearl-white: var(--ivory);
+  --champagne: var(--soft-champagne);
+  --soft-beige: var(--soft-champagne);
+  --warm-cream: var(--ivory);
+
+  --royal-maroon: var(--deep-maroon);
+  --wine-red: var(--deep-maroon);
+  --rose-gold: var(--antique-gold);
+  --emerald-green: var(--success-sage);
+
+  --rich-charcoal: var(--charcoal);
+  --premium-brown: var(--charcoal);
+
+  /* B2B Layout Mappings */
+  --background: var(--ivory);
+  --foreground: var(--aubergine-black);
+  
+  --card: var(--ivory);
+  --card-foreground: var(--aubergine-black);
+  
+  --popover: var(--ivory);
+  --popover-foreground: var(--aubergine-black);
+  
+  --primary: var(--deep-maroon);
+  --primary-hover: var(--aubergine-black);
+  --primary-light: var(--soft-champagne);
+  
+  --secondary: var(--antique-gold);
+  
+  --muted: var(--soft-champagne);
+  --muted-foreground: var(--warm-grey);
+  
+  --border: var(--soft-champagne);
+  --border-light: rgba(201, 161, 74, 0.15); /* #C9A14A -> RGB: 201, 161, 74 */
+  
+  --glass-bg: rgba(250, 246, 240, 0.75); /* #FAF6F0 -> RGB: 250, 246, 240 */
+  --glass-card-bg: rgba(250, 246, 240, 0.85);
+  --glass-nav-bg: rgba(250, 246, 240, 0.9);
+  --glass-border: rgba(201, 161, 74, 0.15);
+  
+  --shadow-luxury: 0 4px 20px -2px rgba(26, 16, 21, 0.04), 0 2px 6px -1px rgba(201, 161, 74, 0.06); /* #1A1015 -> RGB: 26, 16, 21 */
+  --shadow-luxury-hover: 0 12px 30px -4px rgba(26, 16, 21, 0.08), 0 4px 12px -2px rgba(201, 161, 74, 0.15);
+  --shadow-glow: 0 0 15px rgba(201, 161, 74, 0.25);
+  
+  --radius-luxury: 0.25rem;
 }
 
 @theme {
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-deep-maroon: var(--deep-maroon);
+  --color-aubergine-black: var(--aubergine-black);
+  --color-antique-gold: var(--antique-gold);
+  --color-soft-champagne: var(--soft-champagne);
+  --color-ivory: var(--ivory);
+  --color-warm-grey: var(--warm-grey);
+  --color-charcoal: var(--charcoal);
+  --color-success-sage: var(--success-sage);
+  --color-alert-terracotta: var(--alert-terracotta);
+
+  /* Core overrides to eliminate pure black/white */
+  --color-white: var(--ivory);
+  --color-black: var(--aubergine-black);
+
+  /* Legacy variables mapped under theme as well for Tailwind utility classes */
+  --color-warm-ivory: var(--warm-ivory);
+  --color-pearl-white: var(--pearl-white);
+  --color-champagne: var(--champagne);
+  --color-soft-beige: var(--soft-beige);
+  --color-warm-cream: var(--warm-cream);
+
+  --color-royal-maroon: var(--royal-maroon);
+  --color-wine-red: var(--wine-red);
+  --color-rose-gold: var(--rose-gold);
+  --color-emerald-green: var(--emerald-green);
+
+  --color-rich-charcoal: var(--rich-charcoal);
+  --color-premium-brown: var(--premium-brown);
+
+  /* Standard Tailwind mapping properties */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   
-  --color-primary: hsl(var(--primary));
-  --color-primary-hover: hsl(var(--primary-hover));
-  --color-primary-light: hsl(var(--primary-light));
-  --color-secondary: hsl(var(--secondary));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-border: hsl(var(--border));
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
   
   /* Fonts */
-  --font-heading: var(--font-outfit), "Outfit", sans-serif;
+  --font-heading: var(--font-cormorant), "Cormorant Garamond", serif;
   --font-body: var(--font-inter), "Inter", sans-serif;
   
   /* Borders and Shadow style variables */
-  --border-luxury: 1px solid hsl(var(--border));
-  --border-luxury-gold: 1px solid hsl(var(--primary) / 0.3);
+  --border-luxury: 1px solid var(--border);
+  --border-luxury-gold: 1px solid rgba(201, 161, 74, 0.3);
   
   --shadow-luxury: var(--shadow-luxury);
   --shadow-luxury-hover: var(--shadow-luxury-hover);
@@ -120,9 +137,13 @@
 }
 
 /* Local/Global Base resets and defaults */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -130,7 +151,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 /* Custom Glassmorphism Utility Classes using Tailwind v4 @utility directive */
@@ -189,13 +210,12 @@ h1, h2, h3, h4, h5, h6 {
     height: 1px;
     bottom: -2px;
     left: 0;
-    background-color: hsl(var(--primary));
-    transform-origin: bottom right;
+    background-color: var(--primary);
+    transform-origin: left;
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   }
   &:hover::after {
     transform: scaleX(1);
-    transform-origin: bottom left;
   }
 }
 
@@ -220,7 +240,7 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.15),
+      rgba(250, 246, 240, 0.15),
       transparent
     );
     transition: all 0.6s ease;
@@ -229,3 +249,246 @@ h1, h2, h3, h4, h5, h6 {
     left: 100%;
   }
 }
+
+@keyframes slideProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+.animate-slide-progress {
+  animation: slideProgress 6s linear forwards;
+}
+
+@utility text-shadow-luxury {
+  text-shadow: 0 2px 6px rgba(107, 31, 42, 0.08);
+}
+
+@utility text-shadow-hero {
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+@utility shadow-card {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+@utility shadow-card-hover {
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.10);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@utility animate-shimmer {
+  background: linear-gradient(90deg, #FAF6F0 25%, #E8D9B5 50%, #FAF6F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* ==========================================
+   ADMIN PANEL OVERRIDES (Theme switcher & Legibility overrides)
+   ========================================== */
+
+/* Typography Reset: Force readable sans-serif (Inter) in the admin panel */
+.admin-panel,
+.admin-panel h1,
+.admin-panel h2,
+.admin-panel h3,
+.admin-panel h4,
+.admin-panel h5,
+.admin-panel h6,
+.admin-panel p,
+.admin-panel span,
+.admin-panel a,
+.admin-panel button,
+.admin-panel label,
+.admin-panel select,
+.admin-panel input,
+.admin-panel textarea,
+.admin-panel th,
+.admin-panel td,
+.admin-panel table,
+.admin-panel tr,
+.admin-panel div {
+  font-family: var(--font-body), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Font Size Scaling: Elevate tiny text sizes for high visibility */
+.admin-panel .text-\[7px\] { font-size: 0.75rem !important; line-height: 1rem !important; }
+.admin-panel .text-\[9px\] { font-size: 0.75rem !important; line-height: 1rem !important; }
+.admin-panel .text-\[10px\] { font-size: 0.8125rem !important; line-height: 1.125rem !important; }
+.admin-panel .text-xs { font-size: 0.875rem !important; line-height: 1.25rem !important; }
+.admin-panel .text-sm { font-size: 0.9375rem !important; line-height: 1.375rem !important; }
+.admin-panel .text-base { font-size: 1rem !important; line-height: 1.5rem !important; }
+.admin-panel .text-lg { font-size: 1.125rem !important; line-height: 1.75rem !important; }
+.admin-panel .text-xl { font-size: 1.25rem !important; line-height: 1.75rem !important; }
+.admin-panel .text-2xl { font-size: 1.5rem !important; line-height: 2rem !important; }
+.admin-panel .text-3xl { font-size: 1.875rem !important; line-height: 2.25rem !important; }
+
+/* Theme Definitions */
+.admin-theme-dark {
+  --admin-bg-raw: 20 13 17;        /* #140d11 - brand-based deep plum-charcoal */
+  --admin-card-raw: 31 23 28;      /* #1f171c - soft dark card */
+  --admin-card-hover-raw: 41 32 38; /* #292026 */
+  --admin-border-raw: 51 38 47;    /* #33262f - brand dark border */
+  --admin-text-raw: 250 246 240;   /* #FAF6F0 - ivory */
+  --admin-text-sec-raw: 199 190 195; /* #c7bec3 */
+  --admin-text-mut-raw: 140 130 135; /* #8c8287 */
+  --admin-input-raw: 26 18 23;     /* #1a1217 */
+  --admin-primary-raw: 201 161 74; /* #C9A14A - Gold accent in dark theme */
+  --admin-primary-hover-raw: 223 186 107; /* #dfba6b */
+}
+
+.admin-theme-light {
+  --admin-bg-raw: 250 246 240;      /* #FAF6F0 - Ivory background */
+  --admin-card-raw: 255 255 255;    /* #FFFFFF - Pure white cards */
+  --admin-card-hover-raw: 245 239 235; /* #F5EFEB - Soft warm hover */
+  --admin-border-raw: 232 217 181;  /* #E8D9B5 - Soft Champagne border */
+  --admin-text-raw: 26 16 21;       /* #1A1015 - Aubergine black text */
+  --admin-text-sec-raw: 92 84 88;   /* #5C5458 */
+  --admin-text-mut-raw: 140 130 118; /* #8C8276 */
+  --admin-input-raw: 255 255 255;   /* #FFFFFF */
+  --admin-primary-raw: 92 14 29;    /* #5C0E1D - Maroon accent in light theme */
+  --admin-primary-hover-raw: 125 28 46; /* #7d1c2e */
+}
+
+/* Base properties using defined values */
+.admin-panel.admin-theme-dark,
+.admin-panel.admin-theme-light {
+  --admin-bg: rgb(var(--admin-bg-raw));
+  --admin-card: rgb(var(--admin-card-raw));
+  --admin-card-hover: rgb(var(--admin-card-hover-raw));
+  --admin-border: rgb(var(--admin-border-raw));
+  --admin-text: rgb(var(--admin-text-raw));
+  --admin-text-secondary: rgb(var(--admin-text-sec-raw));
+  --admin-text-muted: rgb(var(--admin-text-mut-raw));
+  --admin-input: rgb(var(--admin-input-raw));
+  --admin-primary: rgb(var(--admin-primary-raw));
+  --admin-primary-hover: rgb(var(--admin-primary-hover-raw));
+
+  background-color: var(--admin-bg) !important;
+  color: var(--admin-text) !important;
+}
+
+/* Background Overrides */
+.admin-panel .bg-zinc-950 { background-color: var(--admin-bg) !important; }
+.admin-panel .bg-zinc-900 { background-color: var(--admin-card) !important; }
+.admin-panel .bg-zinc-900\/60 { background-color: rgba(var(--admin-card-raw) / 0.6) !important; }
+.admin-panel .bg-zinc-900\/80 { background-color: rgba(var(--admin-card-raw) / 0.8) !important; }
+.admin-panel .bg-zinc-900\/20 { background-color: rgba(var(--admin-card-raw) / 0.2) !important; }
+.admin-panel .bg-zinc-950\/40 { background-color: var(--admin-input) !important; }
+.admin-panel .bg-zinc-950\/20 { background-color: rgba(var(--admin-bg-raw) / 0.2) !important; }
+.admin-panel .bg-zinc-950\/30 { background-color: rgba(var(--admin-bg-raw) / 0.3) !important; }
+.admin-panel .bg-primary { background-color: var(--admin-primary) !important; }
+.admin-panel .hover\:bg-primary-hover:hover { background-color: var(--admin-primary-hover) !important; }
+.admin-panel .bg-primary\/10 { background-color: rgba(var(--admin-primary-raw) / 0.1) !important; }
+.admin-panel .bg-primary\/20 { background-color: rgba(var(--admin-primary-raw) / 0.2) !important; }
+.admin-panel .bg-rose-950\/20 { background-color: rgba(239, 68, 68, 0.08) !important; }
+.admin-panel .bg-zinc-800 { background-color: var(--admin-card-hover) !important; }
+.admin-panel select option {
+  background-color: var(--admin-card) !important;
+  color: var(--admin-text) !important;
+}
+
+/* Brand backgrounds override (e.g. form container, ivory fields) */
+.admin-panel .bg-pearl-white { background-color: var(--admin-card) !important; }
+.admin-panel .bg-ivory { background-color: var(--admin-input) !important; }
+.admin-panel .bg-\[\#FDF9F3\] { background-color: var(--admin-card-hover) !important; }
+.admin-panel .bg-zinc-900\/40 { background-color: rgba(var(--admin-card-raw) / 0.4) !important; }
+
+/* Text Color Overrides */
+.admin-panel .text-white { color: var(--admin-text) !important; }
+.admin-panel .text-zinc-100 { color: var(--admin-text) !important; }
+.admin-panel .text-zinc-200 { color: var(--admin-text) !important; }
+.admin-panel .text-zinc-350 { color: var(--admin-text-secondary) !important; }
+.admin-panel .text-zinc-300 { color: var(--admin-text-secondary) !important; }
+.admin-panel .text-zinc-400 { color: var(--admin-text-secondary) !important; }
+.admin-panel .text-zinc-550 { color: var(--admin-text-muted) !important; }
+.admin-panel .text-zinc-500 { color: var(--admin-text-muted) !important; }
+.admin-panel .text-zinc-600 { color: var(--admin-text-muted) !important; }
+.admin-panel .text-zinc-650 { color: var(--admin-text-muted) !important; }
+.admin-panel .text-charcoal { color: var(--admin-text) !important; }
+.admin-panel .text-primary { color: var(--admin-primary) !important; }
+.admin-panel .text-deep-maroon { color: var(--admin-primary) !important; }
+.admin-panel .text-royal-maroon { color: var(--admin-primary) !important; }
+.admin-panel .text-warm-ivory { color: var(--admin-text) !important; }
+.admin-panel .text-warm-grey { color: var(--admin-text-muted) !important; }
+
+/* Border Overrides */
+.admin-panel .border-zinc-900 { border-color: var(--admin-border) !important; }
+.admin-panel .border-zinc-800 { border-color: var(--admin-border) !important; }
+.admin-panel .border-zinc-850 { border-color: var(--admin-border) !important; }
+.admin-panel .border-zinc-700 { border-color: var(--admin-border) !important; }
+.admin-panel .border-zinc-800\/60 { border-color: var(--admin-border) !important; }
+.admin-panel .border-zinc-850 { border-color: var(--admin-border) !important; }
+.admin-panel .border-antique-gold\/15 { border-color: var(--admin-border) !important; }
+.admin-panel .border-antique-gold\/10 { border-color: var(--admin-border) !important; }
+.admin-panel .border-\[\#EADFCF\] { border-color: var(--admin-border) !important; }
+.admin-panel .border-\[\#EADFCF\]\/50 { border-color: var(--admin-border) !important; }
+.admin-panel .border-transparent { border-color: transparent !important; }
+.admin-panel .border-primary\/20 { border-color: rgba(var(--admin-primary-raw) / 0.2) !important; }
+.admin-panel .border-primary\/30 { border-color: rgba(var(--admin-primary-raw) / 0.3) !important; }
+.admin-panel .divide-zinc-800\/50 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--admin-border) !important;
+}
+.admin-panel .divide-zinc-800\/40 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--admin-border) !important;
+}
+
+/* Hover and Interaction Overrides */
+.admin-panel .hover\:bg-zinc-800\/40:hover {
+  background-color: var(--admin-card-hover) !important;
+}
+.admin-panel .hover\:bg-zinc-800\/10:hover {
+  background-color: var(--admin-card-hover) !important;
+}
+.admin-panel .hover\:bg-zinc-800:hover {
+  background-color: var(--admin-card-hover) !important;
+}
+.admin-panel .hover\:text-white:hover {
+  color: var(--admin-text) !important;
+}
+.admin-panel .hover\:text-royal-maroon:hover {
+  color: var(--admin-primary) !important;
+}
+.admin-panel .hover\:border-zinc-700:hover {
+  border-color: var(--admin-border) !important;
+}
+.admin-panel .hover\:border-primary\/50:hover {
+  border-color: var(--admin-primary) !important;
+}
+
+/* Form Inputs and Interactive Controls overrides */
+.admin-panel input,
+.admin-panel select,
+.admin-panel textarea {
+  color: var(--admin-text) !important;
+  border-color: var(--admin-border) !important;
+  background-color: var(--admin-input) !important;
+}
+.admin-panel input:focus,
+.admin-panel select:focus,
+.admin-panel textarea:focus {
+  border-color: var(--admin-primary) !important;
+  box-shadow: 0 0 0 1px var(--admin-primary) !important;
+}
+.admin-panel input::placeholder,
+.admin-panel textarea::placeholder {
+  color: var(--admin-text-muted) !important;
+}
+
+/* Star/Featured button overrides in table */
+.admin-panel .text-amber-500 { color: #f59e0b !important; }
+.admin-panel .text-zinc-650 { color: var(--admin-text-muted) !important; }
+
+/* Status alert classes custom text colors in both modes */
+.admin-panel .text-emerald-800 { color: #065f46 !important; }
+.admin-panel .bg-emerald-50 { background-color: #ecfdf5 !important; border-color: #a7f3d0 !important; }
+.admin-panel .text-rose-800 { color: #991b1b !important; }
+.admin-panel .bg-rose-50 { background-color: #fff5f5 !important; border-color: #fecaca !important; }
+

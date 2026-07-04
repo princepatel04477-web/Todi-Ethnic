@@ -12,30 +12,18 @@ interface FiltersDrawerProps {
   activeFilters: {
     category: string[];
     fabric: string[];
-    priceRange: string[];
     sort: string;
+    featured?: boolean;
+    newArrival?: boolean;
   };
   onApply: (filters: {
     category: string[];
     fabric: string[];
-    priceRange: string[];
     sort: string;
+    featured?: boolean;
+    newArrival?: boolean;
   }) => void;
 }
-
-const staticPriceRanges = [
-  { label: "Under ₹5,000", value: "0-5000" },
-  { label: "₹5,000 - ₹10,000", value: "5000-10000" },
-  { label: "₹10,000 - ₹15,000", value: "10000-15000" },
-  { label: "₹15,000 - ₹20,000", value: "15000-20000" },
-  { label: "₹20,000 & Above", value: "20000+" },
-];
-
-const sortOptions = [
-  { label: "Newest Arrivals", value: "newest" },
-  { label: "Price: Low to High", value: "price-asc" },
-  { label: "Price: High to Low", value: "price-desc" },
-];
 
 export default function FiltersDrawer({
   isOpen,
@@ -47,8 +35,9 @@ export default function FiltersDrawer({
 }: FiltersDrawerProps) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedFabrics, setSelectedFabrics] = useState<string[]>([]);
-  const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
   const [selectedSort, setSelectedSort] = useState<string>("newest");
+  const [showFeaturedOnly, setShowFeaturedOnly] = useState<boolean>(false);
+  const [showNewArrivalsOnly, setShowNewArrivalsOnly] = useState<boolean>(false);
 
   const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
   const [prevActiveFilters, setPrevActiveFilters] = useState(activeFilters);
@@ -59,19 +48,34 @@ export default function FiltersDrawer({
     if (isOpen) {
       setSelectedCategories(activeFilters.category);
       setSelectedFabrics(activeFilters.fabric);
-      setSelectedPriceRanges(activeFilters.priceRange);
       setSelectedSort(activeFilters.sort || "newest");
+      setShowFeaturedOnly(!!activeFilters.featured);
+      setShowNewArrivalsOnly(!!activeFilters.newArrival);
     }
   }
 
+  // Prevent background scrolling when drawer is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
     }
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
+  // Handle ESC key to close drawer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   const handleToggleCategory = (slug: string) => {
     setSelectedCategories((prev) =>
@@ -85,25 +89,21 @@ export default function FiltersDrawer({
     );
   };
 
-  const handleTogglePriceRange = (range: string) => {
-    setSelectedPriceRanges((prev) =>
-      prev.includes(range) ? prev.filter((r) => r !== range) : [...prev, range]
-    );
-  };
-
   const handleReset = () => {
     setSelectedCategories([]);
     setSelectedFabrics([]);
-    setSelectedPriceRanges([]);
     setSelectedSort("newest");
+    setShowFeaturedOnly(false);
+    setShowNewArrivalsOnly(false);
   };
 
   const handleApply = () => {
     onApply({
       category: selectedCategories,
       fabric: selectedFabrics,
-      priceRange: selectedPriceRanges,
       sort: selectedSort,
+      featured: showFeaturedOnly ? true : undefined,
+      newArrival: showNewArrivalsOnly ? true : undefined,
     });
     onClose();
   };
@@ -112,14 +112,22 @@ export default function FiltersDrawer({
   const hasChanges =
     selectedCategories.length > 0 ||
     selectedFabrics.length > 0 ||
-    selectedPriceRanges.length > 0 ||
-    selectedSort !== "newest";
+    selectedSort !== "newest" ||
+    showFeaturedOnly ||
+    showNewArrivalsOnly;
+
+  const localFiltersCount = 
+    selectedCategories.length + 
+    selectedFabrics.length + 
+    (selectedSort !== "newest" ? 1 : 0) +
+    (showFeaturedOnly ? 1 : 0) +
+    (showNewArrivalsOnly ? 1 : 0);
 
   return (
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-rich-charcoal/40 backdrop-blur-sm z-50 transition-opacity duration-300 ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -127,19 +135,22 @@ export default function FiltersDrawer({
 
       {/* Slide-over panel */}
       <div
-        className={`fixed inset-y-0 right-0 z-50 max-w-md w-full bg-white dark:bg-zinc-950 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out transform ${
+        className={`fixed inset-y-0 right-0 z-50 max-w-md w-full bg-warm-ivory border-l border-antique-gold/15 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out transform ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="filters-drawer-title"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-100 dark:border-neutral-900">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-antique-gold/10">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-heading font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">
+            <h2 id="filters-drawer-title" className="text-lg font-heading font-semibold text-deep-maroon uppercase tracking-wider">
               Filters
             </h2>
             {hasChanges && (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
-                {(selectedCategories.length + selectedFabrics.length + selectedPriceRanges.length + (selectedSort !== "newest" ? 1 : 0))}
+              <span className="flex h-5 w-5 items-center justify-center bg-royal-maroon text-[9px] font-bold text-warm-ivory">
+                {localFiltersCount}
               </span>
             )}
           </div>
@@ -147,7 +158,7 @@ export default function FiltersDrawer({
             {hasChanges && (
               <button
                 onClick={handleReset}
-                className="inline-flex items-center gap-1 text-xs font-heading font-medium tracking-wider text-neutral-500 hover:text-primary dark:text-neutral-400 dark:hover:text-primary transition-colors cursor-pointer uppercase"
+                className="inline-flex items-center gap-1.5 text-xs font-heading font-medium tracking-wider text-premium-brown/60 hover:text-royal-maroon transition-colors cursor-pointer uppercase hover-underline"
                 title="Reset all filters"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -156,7 +167,7 @@ export default function FiltersDrawer({
             )}
             <button
               onClick={onClose}
-              className="p-1 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors cursor-pointer"
+              className="p-1 text-premium-brown/70 hover:text-royal-maroon transition-colors cursor-pointer"
               aria-label="Close filters"
             >
               <X className="w-6 h-6" />
@@ -166,48 +177,68 @@ export default function FiltersDrawer({
 
         {/* Filter options (Scrollable) */}
         <div className="flex-1 overflow-y-auto p-6 space-y-8 select-none">
-          {/* Sort By */}
+          {/* Collection Status Filters */}
           <div className="space-y-4">
-            <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-primary">
-              Sort By
+            <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-royal-maroon">
+              Status Filters
             </h3>
-            <div className="space-y-3">
-              {sortOptions.map((option) => (
-                <label
-                  key={option.value}
-                  className="flex items-center gap-3 cursor-pointer group"
+            <div className="grid grid-cols-1 gap-3">
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={showFeaturedOnly}
+                  onChange={() => setShowFeaturedOnly(!showFeaturedOnly)}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-4.5 h-4.5 rounded-none border flex items-center justify-center transition-all ${
+                    showFeaturedOnly
+                      ? "border-royal-maroon bg-royal-maroon text-warm-ivory"
+                      : "border-antique-gold/30 bg-transparent group-hover:border-royal-maroon/50"
+                  }`}
                 >
-                  <input
-                    type="radio"
-                    name="sort"
-                    value={option.value}
-                    checked={selectedSort === option.value}
-                    onChange={() => setSelectedSort(option.value)}
-                    className="sr-only"
-                  />
-                  <div
-                    className={`w-4 h-4 rounded-full border flex items-center justify-center transition-all ${
-                      selectedSort === option.value
-                        ? "border-primary bg-primary"
-                        : "border-neutral-300 dark:border-neutral-700 bg-transparent group-hover:border-primary/50"
-                    }`}
-                  >
-                    {selectedSort === option.value && (
-                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                    )}
-                  </div>
-                  <span className="text-sm font-body text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
-                    {option.label}
-                  </span>
-                </label>
-              ))}
+                  {showFeaturedOnly && (
+                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                      <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+                    </svg>
+                  )}
+                </div>
+                <span className="text-sm font-body text-premium-brown group-hover:text-royal-maroon transition-colors">
+                  Featured Designs Only
+                </span>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={showNewArrivalsOnly}
+                  onChange={() => setShowNewArrivalsOnly(!showNewArrivalsOnly)}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-4.5 h-4.5 rounded-none border flex items-center justify-center transition-all ${
+                    showNewArrivalsOnly
+                      ? "border-royal-maroon bg-royal-maroon text-warm-ivory"
+                      : "border-antique-gold/30 bg-transparent group-hover:border-royal-maroon/50"
+                  }`}
+                >
+                  {showNewArrivalsOnly && (
+                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                      <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+                    </svg>
+                  )}
+                </div>
+                <span className="text-sm font-body text-premium-brown group-hover:text-royal-maroon transition-colors">
+                  New Arrivals Only
+                </span>
+              </label>
             </div>
           </div>
 
           {/* Categories */}
           {categories.length > 0 && (
-            <div className="space-y-4 border-t border-neutral-100 dark:border-neutral-900 pt-6">
-              <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-primary">
+            <div className="space-y-4 border-t border-antique-gold/10 pt-6">
+              <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-royal-maroon">
                 Categories
               </h3>
               <div className="grid grid-cols-1 gap-3">
@@ -225,22 +256,22 @@ export default function FiltersDrawer({
                         className="sr-only"
                       />
                       <div
-                        className={`w-4.5 h-4.5 rounded border flex items-center justify-center transition-all ${
+                        className={`w-4.5 h-4.5 rounded-none border flex items-center justify-center transition-all ${
                           isChecked
-                            ? "border-primary bg-primary text-white"
-                            : "border-neutral-300 dark:border-neutral-700 bg-transparent group-hover:border-primary/50"
+                            ? "border-royal-maroon bg-royal-maroon text-warm-ivory"
+                            : "border-antique-gold/30 bg-transparent group-hover:border-royal-maroon/50"
                         }`}
                       >
                         {isChecked && (
                           <svg
-                            className="w-3 h-3 fill-current"
+                            className="w-3.5 h-3.5 fill-current"
                             viewBox="0 0 20 20"
                           >
                             <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
                           </svg>
                         )}
                       </div>
-                      <span className="text-sm font-body text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
+                      <span className="text-sm font-body text-premium-brown group-hover:text-royal-maroon transition-colors">
                         {category.name}
                       </span>
                     </label>
@@ -252,8 +283,8 @@ export default function FiltersDrawer({
 
           {/* Fabric Type */}
           {fabrics.length > 0 && (
-            <div className="space-y-4 border-t border-neutral-100 dark:border-neutral-900 pt-6">
-              <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-primary">
+            <div className="space-y-4 border-t border-antique-gold/10 pt-6">
+              <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-royal-maroon">
                 Fabric Type
               </h3>
               <div className="grid grid-cols-1 gap-3">
@@ -271,22 +302,22 @@ export default function FiltersDrawer({
                         className="sr-only"
                       />
                       <div
-                        className={`w-4.5 h-4.5 rounded border flex items-center justify-center transition-all ${
+                        className={`w-4.5 h-4.5 rounded-none border flex items-center justify-center transition-all ${
                           isChecked
-                            ? "border-primary bg-primary text-white"
-                            : "border-neutral-300 dark:border-neutral-700 bg-transparent group-hover:border-primary/50"
+                            ? "border-royal-maroon bg-royal-maroon text-warm-ivory"
+                            : "border-antique-gold/30 bg-transparent group-hover:border-royal-maroon/50"
                         }`}
                       >
                         {isChecked && (
                           <svg
-                            className="w-3 h-3 fill-current"
+                            className="w-3.5 h-3.5 fill-current"
                             viewBox="0 0 20 20"
                           >
                             <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
                           </svg>
                         )}
                       </div>
-                      <span className="text-sm font-body text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
+                      <span className="text-sm font-body text-premium-brown group-hover:text-royal-maroon transition-colors">
                         {fabric}
                       </span>
                     </label>
@@ -295,57 +326,13 @@ export default function FiltersDrawer({
               </div>
             </div>
           )}
-
-          {/* Price Range */}
-          <div className="space-y-4 border-t border-neutral-100 dark:border-neutral-900 pt-6">
-            <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-primary">
-              Price Range
-            </h3>
-            <div className="grid grid-cols-1 gap-3">
-              {staticPriceRanges.map((range) => {
-                const isChecked = selectedPriceRanges.includes(range.value);
-                return (
-                  <label
-                    key={range.value}
-                    className="flex items-center gap-3 cursor-pointer group"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => handleTogglePriceRange(range.value)}
-                      className="sr-only"
-                    />
-                    <div
-                      className={`w-4.5 h-4.5 rounded border flex items-center justify-center transition-all ${
-                        isChecked
-                          ? "border-primary bg-primary text-white"
-                          : "border-neutral-300 dark:border-neutral-700 bg-transparent group-hover:border-primary/50"
-                        }`}
-                    >
-                      {isChecked && (
-                        <svg
-                          className="w-3 h-3 fill-current"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
-                        </svg>
-                      )}
-                    </div>
-                    <span className="text-sm font-body text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
-                      {range.label}
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
         </div>
 
         {/* Footer actions */}
-        <div className="p-6 border-t border-neutral-100 dark:border-neutral-900 bg-neutral-50/50 dark:bg-zinc-900/50">
+        <div className="p-6 border-t border-antique-gold/10 bg-pearl-white">
           <button
             onClick={handleApply}
-            className="w-full py-4 bg-primary hover:bg-primary-hover text-white rounded-lg font-heading font-semibold uppercase tracking-wider text-xs transition-all duration-300 active-press hover-glow cursor-pointer"
+            className="w-full py-4 bg-royal-maroon hover:bg-wine-red text-warm-ivory rounded-none font-heading font-semibold uppercase tracking-wider text-xs transition-all duration-300 hover-lift cursor-pointer"
           >
             Apply Filters
           </button>

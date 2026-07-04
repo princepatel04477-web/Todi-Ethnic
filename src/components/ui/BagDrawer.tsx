@@ -49,16 +49,13 @@ export default function BagDrawer() {
     };
   }, [isDrawerOpen]);
 
-  const estimatedSubtotal = items.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+
 
   return (
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-neutral-950/40 backdrop-blur-sm z-50 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-[#332A20]/45 backdrop-blur-sm z-50 transition-opacity duration-300 ${
           isDrawerOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsDrawerOpen(false)}
@@ -67,27 +64,28 @@ export default function BagDrawer() {
       {/* Slide-over panel */}
       <div
         ref={drawerRef}
-        className={`fixed inset-y-0 right-0 z-50 max-w-md w-full bg-white dark:bg-zinc-950 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out transform ${
+        className={`fixed inset-y-0 right-0 z-50 max-w-md w-full bg-warm-ivory border-l border-antique-gold/15 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out transform ${
           isDrawerOpen ? "translate-x-0" : "translate-x-full"
         }`}
         aria-modal="true"
         role="dialog"
+        aria-labelledby="bag-drawer-title"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-100 dark:border-neutral-900">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-antique-gold/10">
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-heading font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">
+            <h2 id="bag-drawer-title" className="text-base font-heading font-semibold text-deep-maroon uppercase tracking-wider">
               Inquiry Bag
             </h2>
             {totalCount > 0 && (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+              <span className="flex h-5 w-5 items-center justify-center bg-royal-maroon text-[9px] font-bold text-warm-ivory">
                 {totalCount}
               </span>
             )}
           </div>
           <button
             onClick={() => setIsDrawerOpen(false)}
-            className="p-1 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors cursor-pointer"
+            className="p-1 text-premium-brown/70 hover:text-royal-maroon transition-colors cursor-pointer"
             aria-label="Close bag drawer"
           >
             <X className="w-5 h-5" />
@@ -101,10 +99,10 @@ export default function BagDrawer() {
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex gap-4 border-b border-neutral-100 dark:border-neutral-900 pb-5 last:border-b-0 last:pb-0"
+                  className="flex gap-4 border-b border-antique-gold/10 pb-5 last:border-b-0 last:pb-0"
                 >
                   {/* Thumbnail Image */}
-                  <div className="relative w-16 aspect-[3/4] rounded bg-neutral-100 dark:bg-neutral-900 overflow-hidden flex-shrink-0">
+                  <div className="relative w-16 aspect-[3/4] bg-warm-cream border border-antique-gold/10 overflow-hidden flex-shrink-0">
                     <Image
                       src={item.image}
                       alt={item.title}
@@ -118,45 +116,40 @@ export default function BagDrawer() {
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-start gap-2">
-                        <h3 className="text-xs font-heading font-semibold text-neutral-900 dark:text-white tracking-tight line-clamp-1 hover:text-primary transition-colors">
+                        <h3 className="text-xs font-heading font-semibold text-deep-maroon tracking-tight line-clamp-1 hover:text-royal-maroon transition-colors">
                           <Link href={`/product/${item.slug}`} onClick={() => setIsDrawerOpen(false)}>
                             {item.title}
                           </Link>
                         </h3>
                         <button
                           onClick={() => removeItem(item.id)}
-                          className="text-neutral-400 hover:text-rose-500 dark:text-neutral-600 dark:hover:text-rose-400 transition-colors p-1 cursor-pointer"
+                          className="text-premium-brown/40 hover:text-rose-600 transition-colors p-1 cursor-pointer"
                           aria-label={`Remove ${item.title}`}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
-                      <span className="text-[10px] font-body text-neutral-400 dark:text-neutral-500 uppercase block mb-1">
+                      <span className="text-[10px] font-body text-premium-brown/60 uppercase block mb-1">
                         SKU: {item.sku} • {item.fabric}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between mt-2">
-                      {/* Price */}
-                      <span className="text-sm font-heading font-bold text-neutral-950 dark:text-zinc-50">
-                        ₹{item.price.toLocaleString("en-IN")}
-                      </span>
-
+                    <div className="flex items-center justify-end mt-2">
                       {/* Quantity Selector */}
-                      <div className="flex items-center border border-neutral-200 dark:border-neutral-800 rounded-full overflow-hidden bg-neutral-50 dark:bg-zinc-900">
+                      <div className="flex items-center border border-antique-gold/25 overflow-hidden bg-pearl-white">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="px-2.5 py-1 text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-xs font-bold transition-colors cursor-pointer"
+                          className="px-2.5 py-1 text-royal-maroon hover:bg-warm-cream text-xs font-bold transition-colors cursor-pointer"
                           aria-label="Decrease quantity"
                         >
                           <Minus className="w-2.5 h-2.5" />
                         </button>
-                        <span className="px-2 text-xs font-heading font-semibold text-neutral-800 dark:text-neutral-200 min-w-[20px] text-center">
+                        <span className="px-2 text-xs font-heading font-semibold text-premium-brown min-w-[20px] text-center">
                           {item.quantity}
                         </span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="px-2.5 py-1 text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-xs font-bold transition-colors cursor-pointer"
+                          className="px-2.5 py-1 text-royal-maroon hover:bg-warm-cream text-xs font-bold transition-colors cursor-pointer"
                           aria-label="Increase quantity"
                         >
                           <Plus className="w-2.5 h-2.5" />
@@ -166,7 +159,7 @@ export default function BagDrawer() {
 
                     {/* Custom Notes input helper preview */}
                     {item.notes ? (
-                      <div className="mt-2.5 text-[10px] font-body text-primary bg-primary-light/30 dark:bg-primary-light/5 px-2 py-1.5 rounded flex items-start gap-1">
+                      <div className="mt-2.5 text-[10px] font-body text-royal-maroon bg-warm-cream/50 px-2 py-1.5 border border-antique-gold/10 flex items-start gap-1">
                         <Edit2 className="w-3 h-3 mt-0.5 flex-shrink-0" />
                         <span className="italic line-clamp-1">Note: {item.notes}</span>
                       </div>
@@ -177,19 +170,19 @@ export default function BagDrawer() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center py-20">
-              <div className="w-16 h-16 rounded-full bg-neutral-50 dark:bg-neutral-900 flex items-center justify-center mb-6">
-                <ShoppingBag className="w-6 h-6 text-neutral-300 dark:text-neutral-700" />
+              <div className="w-16 h-16 rounded-full bg-warm-cream flex items-center justify-center mb-6 border border-antique-gold/10">
+                <ShoppingBag className="w-6 h-6 text-antique-gold" />
               </div>
-              <h3 className="text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 uppercase tracking-widest mb-2">
+              <h3 className="text-sm font-heading font-semibold text-deep-maroon uppercase tracking-widest mb-2">
                 Your Bag is Empty
               </h3>
-              <p className="text-xs text-neutral-400 dark:text-neutral-500 font-body leading-relaxed max-w-[220px] mb-8 font-light">
+              <p className="text-xs text-premium-brown/65 font-body leading-relaxed max-w-[220px] mb-8 font-light">
                 Browse our collections and add designs you love to submit a direct price quote inquiry.
               </p>
               <Link
                 href="/catalog"
                 onClick={() => setIsDrawerOpen(false)}
-                className="inline-flex px-6 py-3 bg-primary hover:bg-primary-hover text-white text-xs font-heading font-semibold tracking-wider uppercase rounded-lg transition-all duration-300 active-press hover-glow"
+                className="inline-flex px-6 py-3 bg-royal-maroon hover:bg-wine-red text-warm-ivory text-xs font-heading font-semibold tracking-wider uppercase rounded-none transition-all duration-300 active-press hover-lift"
               >
                 Browse Catalog
               </Link>
@@ -199,19 +192,19 @@ export default function BagDrawer() {
 
         {/* Footer Area (Fixed) */}
         {items.length > 0 && (
-          <div className="p-6 border-t border-neutral-100 dark:border-neutral-900 bg-neutral-50/50 dark:bg-zinc-900/50 space-y-4">
+          <div className="p-6 border-t border-antique-gold/10 bg-pearl-white space-y-4">
             {/* Subtotal */}
             <div className="flex items-center justify-between text-sm select-none">
-              <span className="font-heading font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-                Est. Subtotal
+              <span className="font-heading font-bold uppercase tracking-wider text-premium-brown/60">
+                Total Designs
               </span>
-              <span className="font-heading font-bold text-base text-neutral-950 dark:text-white">
-                ₹{estimatedSubtotal.toLocaleString("en-IN")}
+              <span className="font-heading font-bold text-base text-premium-brown">
+                {items.length}
               </span>
             </div>
 
             {/* Note text */}
-            <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-body leading-relaxed font-light">
+            <p className="text-[10px] text-premium-brown/60 font-body leading-relaxed font-light">
               * Direct trade quotes will be calculated. WhatsApp submission does not charge your card.
             </p>
 
@@ -220,7 +213,7 @@ export default function BagDrawer() {
               <Link
                 href="/inquiry-bag"
                 onClick={() => setIsDrawerOpen(false)}
-                className="w-full py-4 bg-primary hover:bg-primary-hover text-white rounded-lg font-heading font-semibold uppercase tracking-wider text-xs transition-all duration-300 active-press hover-glow flex items-center justify-center gap-2"
+                className="w-full py-4 bg-royal-maroon hover:bg-wine-red text-warm-ivory rounded-none font-heading font-semibold uppercase tracking-wider text-xs transition-all duration-300 active-press hover-lift flex items-center justify-center gap-2"
               >
                 <span>Proceed to Inquiry</span>
                 <ArrowRight className="w-4 h-4" />
@@ -228,7 +221,7 @@ export default function BagDrawer() {
 
               <button
                 onClick={clearBag}
-                className="w-full py-2 bg-transparent hover:text-rose-500 text-neutral-400 dark:text-neutral-600 dark:hover:text-rose-400 rounded-lg font-heading font-semibold uppercase tracking-widest text-[10px] transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                className="w-full py-2 bg-transparent hover:text-rose-600 text-premium-brown/50 rounded-none font-heading font-semibold uppercase tracking-widest text-[10px] transition-colors cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Clear All Items
