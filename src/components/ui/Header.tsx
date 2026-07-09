@@ -36,7 +36,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 lg:h-24">
+        <div className="flex items-center justify-between h-24 lg:h-28">
           {/* Mobile Menu Icon */}
           <div className="flex md:hidden">
             <button
@@ -83,7 +83,7 @@ export default function Header() {
                 alt="Todi Creation Logo"
                 width={360}
                 height={240}
-                className="h-16 lg:h-20 w-auto object-contain"
+                className="h-20 lg:h-24 w-auto object-contain"
                 priority
               />
             </Link>
