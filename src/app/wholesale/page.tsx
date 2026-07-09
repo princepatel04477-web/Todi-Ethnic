@@ -9,6 +9,7 @@ import RevealSection from "@/components/ui/RevealSection";
 import AboutSection from "@/components/ui/AboutSection";
 import ExportCountries from "@/components/ui/ExportCountries";
 import DeliveryAndPolicy from "@/components/ui/DeliveryAndPolicy";
+import ExportGlobe from "@/components/ui/ExportGlobe";
 
 export const metadata = {
   title: "Wholesale Lengha Manufacturer & Exporter | Todi Creation, Surat",
@@ -95,9 +96,9 @@ export default function WholesalePage() {
           <AboutSection />
         </RevealSection>
 
-        {/* Global Footprint / Export Countries */}
+        {/* Global Footprint / Export Globe */}
         <RevealSection>
-          <ExportCountries />
+          <ExportGlobe />
         </RevealSection>
 
         {/* Manufacturing Excellence Cards */}

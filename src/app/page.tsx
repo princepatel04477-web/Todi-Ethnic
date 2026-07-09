@@ -8,6 +8,7 @@ import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import OurCatalogue from "@/components/ui/OurCatalogue";
 import RevealSection from "@/components/ui/RevealSection";
+import ExportGlobe from "@/components/ui/ExportGlobe";
 
 const categories = [
   {
@@ -167,51 +168,9 @@ export default function Home() {
           </section>
         </RevealSection>
 
-        {/* Manufacturing Excellence & Trust Section (Order IV — Social Proof stays) */}
+        {/* Manufacturing Excellence & Trust Section — Premium 3D Export Globe */}
         <RevealSection>
-          <section className="py-24 bg-ivory border-t border-antique-gold/15 px-6 sm:px-12 md:px-20">
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center max-w-2xl mx-auto mb-16 select-none">
-                <span className="text-xs uppercase tracking-[0.3em] text-deep-maroon font-heading font-semibold mb-3 block">
-                  Trusted Partnership
-                </span>
-                <h2 className="text-3xl sm:text-4xl font-heading font-light tracking-tight text-deep-maroon text-shadow-luxury">
-                  Why Boutiques Choose Us
-                </h2>
-                <p className="text-sm text-warm-grey mt-3 font-light">
-                  Direct-from-manufacturer quality, loved by boutiques worldwide.
-                </p>
-              </div>
-
-              {/* Key Trust Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-12 divide-y md:divide-y-0 md:divide-x divide-antique-gold/15">
-                <div className="pt-6 md:pt-0">
-                  <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">1700+</span>
-                  <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Boutique Partners</span>
-                </div>
-                <div className="pt-6 md:pt-0">
-                  <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">17+</span>
-                  <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Countries Served</span>
-                  <span className="text-[9px] text-warm-grey block mt-1">Mauritius, UAE, UK, New Zealand, Fiji &amp; more</span>
-                </div>
-                <div className="pt-6 md:pt-0">
-                  <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">15+</span>
-                  <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Years Established</span>
-                </div>
-              </div>
-
-              {/* CTA to wholesale page */}
-              <div className="text-center">
-                <Link
-                  href="/wholesale"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-royal-maroon hover:bg-wine-red text-warm-ivory text-xs font-heading font-semibold uppercase tracking-wider rounded-none transition-all duration-300 active-press hover-lift"
-                >
-                  Partner With Us — Wholesale Inquiry
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </section>
+          <ExportGlobe />
         </RevealSection>
 
         {/* Our Catalogue Introduction Section */}
