@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { Info, Globe2, Trophy, Landmark } from "lucide-react";
+import { Globe2, Trophy, Landmark } from "lucide-react";
 
 // 1. Data configuration for export destinations
 export interface Destination {
@@ -12,24 +12,55 @@ export interface Destination {
   details: string;
 }
 
-const ORIGIN_SURAT = { lat: 21.1702, lng: 72.8311, name: "Surat, Gujarat, India" };
+const ORIGIN_SURAT = { lat: 21.1702, lng: 72.8311, name: "Surat (HQ)" };
 
 const DESTINATIONS: Destination[] = [
-  { name: "Mauritius", lat: -20.3484, lng: 57.5522, label: "East Africa Hub", details: "Premium silk and georgette bridal catalog exports." },
-  { name: "South Africa", lat: -30.5595, lng: 22.9375, label: "Southern Africa Region", details: "Direct boutique distributions to Johannesburg & Cape Town." },
-  { name: "UAE", lat: 23.4241, lng: 53.8478, label: "Middle East Gateway", details: "High-volume bridal couture supplying Dubai showrooms." },
-  { name: "United Kingdom", lat: 55.3781, lng: -3.4360, label: "Western Europe Partner", details: "Custom handloom collections shipped to London boutiques." },
-  { name: "New Zealand", lat: -40.9006, lng: 174.8860, label: "Pacific Retail Network", details: "Festive and sider lengha wear air-freighted weekly." },
-  { name: "West Indies", lat: 13.1939, lng: -59.5432, label: "Caribbean Boutiques", details: "Exclusive traditional silk trail wear collections." },
-  { name: "Sri Lanka", lat: 7.8731, lng: 80.7718, label: "South Asia Dist.", details: "Handloom fabrics and heavy embellished georgettes." },
-  { name: "Bangladesh", lat: 23.6850, lng: 90.3563, label: "South Asia Partner", details: "Direct merchant partnerships supplying Dhaka hubs." },
-  { name: "Fiji Islands", lat: -17.7134, lng: 178.0650, label: "Oceania Region", details: "Bespoke bridal lengha exports with express logistics." }
+  { name: "Dubai", lat: 25.2048, lng: 55.2708, label: "UAE Gateway", details: "Direct boutique exports to Dubai showrooms." },
+  { name: "London", lat: 51.5074, lng: -0.1278, label: "UK Hub", details: "Premium zardozi lengha supply to retail networks." },
+  { name: "Singapore", lat: 1.3521, lng: 103.8198, label: "South East Asia", details: "Direct distribution to bridal styling boutiques." },
+  { name: "Mauritius", lat: -20.3484, lng: 57.5522, label: "East Africa", details: "Custom bridal catalog exports." },
+  { name: "South Africa", lat: -30.5595, lng: 22.9375, label: "Southern Africa", details: "Supply to showrooms in Johannesburg." },
+  { name: "New Zealand", lat: -40.9006, lng: 174.8860, label: "Oceania Region", details: "Weekly express cargo deliveries." },
+  { name: "Barbados", lat: 13.1939, lng: -59.5432, label: "West Indies", details: "Traditional silk trail collections." },
+  { name: "Sri Lanka", lat: 7.8731, lng: 80.7718, label: "South Asia", details: "Handloom fabrics and heavy georgettes." },
+  { name: "Bangladesh", lat: 23.6850, lng: 90.3563, label: "East Bengal Hub", details: "Direct merchant distributions." },
+  { name: "Fiji", lat: -17.7134, lng: 178.0650, label: "Pacific Region", details: "Couture custom lengha exports." }
 ];
 
-// Helper to convert Lat/Lng to 3D Cartesian coordinates on a unit sphere
+// Mathematical representation of continents to render a dotted map on the canvas sphere
+const LAND_CENTERS = [
+  { lat: 45, lng: -100, r: 35 }, // North America
+  { lat: 60, lng: -110, r: 25 }, // Northern Canada
+  { lat: -20, lng: -60, r: 22 }, // South America
+  { lat: -5, lng: -60, r: 20 },  // Northern South America
+  { lat: 5, lng: 20, r: 28 },    // Central Africa
+  { lat: -20, lng: 22, r: 18 },   // Southern Africa
+  { lat: 50, lng: 15, r: 18 },    // Europe
+  { lat: 45, lng: 90, r: 38 },    // Northern Asia
+  { lat: 30, lng: 75, r: 32 },    // Central/Southern Asia
+  { lat: 60, lng: 100, r: 25 },   // Siberia
+  { lat: 22, lng: 77, r: 14 },    // India
+  { lat: -25, lng: 133, r: 18 },  // Australia
+  { lat: 72, lng: -40, r: 14 },   // Greenland
+];
+
+function isLand(lat: number, lng: number): boolean {
+  if (lat < -60) return true; // Antarctica
+  for (const center of LAND_CENTERS) {
+    const dLat = lat - center.lat;
+    let dLng = lng - center.lng;
+    if (dLng > 180) dLng -= 360;
+    if (dLng < -180) dLng += 360;
+    const dist = Math.sqrt(dLat * dLat + dLng * dLng);
+    if (dist < center.r) return true;
+  }
+  return false;
+}
+
+// Convert Lat/Lng to 3D Cartesian coordinates
 function latLngToVector3(lat: number, lng: number): [number, number, number] {
   const phi = (lat * Math.PI) / 180;
-  const theta = ((lng - 90) * Math.PI) / 180; // offset to align with front face projection
+  const theta = ((lng - 90) * Math.PI) / 180; // Offset to align with center projection
   return [
     Math.cos(phi) * Math.sin(theta),
     Math.sin(phi),
@@ -37,7 +68,7 @@ function latLngToVector3(lat: number, lng: number): [number, number, number] {
   ];
 }
 
-// Great circle spherical linear interpolation (Slerp) helper
+// Great circle path interpolation (Slerp)
 function slerp(
   v0: [number, number, number],
   v1: [number, number, number],
@@ -63,13 +94,9 @@ function slerp(
 }
 
 export default function ExportGlobe() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  // Interaction State
   const [hoveredDest, setHoveredDest] = useState<Destination | null>(null);
   const [cardPos, setCardPos] = useState({ x: 0, y: 0 });
-  const [isMobile, setIsMobile] = useState(false);
   const [statsAnimated, setStatsAnimated] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
 
@@ -78,9 +105,9 @@ export default function ExportGlobe() {
   const [countriesCount, setCountriesCount] = useState(0);
   const [heritageCount, setHeritageCount] = useState(0);
 
-  // Globe orientation
-  const rotationY = useRef(0);
-  const rotationX = useRef(0.3); // Slight initial tilt down
+  // Globe orientation (match tilt from screenshot)
+  const rotationY = useRef(-0.5);
+  const rotationX = useRef(0.2); // Slight natural tilt
 
   // Dragging and Momentum variables
   const isDragging = useRef(false);
@@ -89,55 +116,34 @@ export default function ExportGlobe() {
   const dragVelocityX = useRef(0);
   const dragVelocityY = useRef(0);
   const lastActiveTime = useRef(Date.now());
-  const autoRotateSpeed = 0.002;
-  const targetRotationX = useRef(0.3);
+  const autoRotateSpeed = 0.0015;
 
-  // Check if prefers-reduced-motion is active
-  const isReducedMotion = useRef(false);
-
-  // Generate background particle stars in 3D around the globe
-  const particles = useMemo(() => {
-    const arr = [];
-    for (let i = 0; i < 60; i++) {
-      const u = Math.random();
-      const v = Math.random();
-      const theta = u * 2.0 * Math.PI;
-      const phi = Math.acos(2.0 * v - 1.0);
-      const r = 1.1 + Math.random() * 0.3; // Distance from center
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
-      arr.push({ x, y, z, size: Math.random() * 1.5 + 0.5, speed: Math.random() * 0.01 + 0.002, phase: Math.random() * Math.PI });
+  // Pre-generate grid of world points to check for land/water once
+  const globeDotGrid = useMemo(() => {
+    const dots: { v: [number, number, number]; isLand: boolean }[] = [];
+    const latStep = 3.5;
+    const lngStep = 3.5;
+    for (let lat = -80; lat <= 80; lat += latStep) {
+      for (let lng = -180; lng <= 180; lng += lngStep) {
+        dots.push({
+          v: latLngToVector3(lat, lng),
+          isLand: isLand(lat, lng)
+        });
+      }
     }
-    return arr;
+    return dots;
   }, []);
 
-  // Set up screen listener
-  useEffect(() => {
-    const checkSize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkSize();
-    window.addEventListener("resize", checkSize);
-    
-    // Check reduced motion
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    isReducedMotion.current = mediaQuery.matches;
-
-    return () => window.removeEventListener("resize", checkSize);
-  }, []);
-
-  // Stats counting animation when visible
+  // Intersection observer trigger for stats animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !statsAnimated) {
           setStatsAnimated(true);
           
-          // Animate counters
           let startB = 0;
           const endB = 1700;
-          const duration = 1500;
+          const duration = 1200;
           const stepB = Math.ceil(endB / (duration / 16));
           const timerB = setInterval(() => {
             startB += stepB;
@@ -194,7 +200,6 @@ export default function ExportGlobe() {
     let animationFrameId: number;
     let isVisible = true;
 
-    // Intersection observer to pause rendering when offscreen
     const visibilityObserver = new IntersectionObserver(
       (entries) => {
         isVisible = entries[0].isIntersecting;
@@ -203,7 +208,6 @@ export default function ExportGlobe() {
     );
     visibilityObserver.observe(canvas);
 
-    // Compute exact pixel radius based on canvas size
     const resizeCanvas = () => {
       const rect = canvas.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
@@ -215,20 +219,15 @@ export default function ExportGlobe() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Precalculate Surat origin coordinates on unit sphere
     const vOrigin = latLngToVector3(ORIGIN_SURAT.lat, ORIGIN_SURAT.lng);
 
-    // Coordinate rotation logic
-    // Rotates a point [x, y, z] by current rotationX and rotationY
     const rotateVector = (v: [number, number, number]): [number, number, number] => {
       const [x, y, z] = v;
-      // Rotate around Y axis (longitude rotation)
       const cosY = Math.cos(rotationY.current);
       const sinY = Math.sin(rotationY.current);
       let rx = x * cosY - z * sinY;
       let rz = x * sinY + z * cosY;
 
-      // Rotate around X axis (latitude tilt)
       const cosX = Math.cos(rotationX.current);
       const sinX = Math.sin(rotationX.current);
       const ry = y * cosX - rz * sinX;
@@ -250,72 +249,53 @@ export default function ExportGlobe() {
       const rect = canvas.getBoundingClientRect();
       const width = rect.width;
       const height = rect.height;
-      const radius = Math.min(width, height) * 0.38;
+      const radius = Math.min(width, height) * 0.40;
       const centerX = width / 2;
       const centerY = height / 2;
 
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Idle auto-rotation rotation updates (if not dragging)
+      // Auto rotation updates
       if (!isDragging.current) {
-        if (!isReducedMotion.current) {
-          const idleTime = Date.now() - lastActiveTime.current;
-          if (idleTime > 3000) {
-            // Smoothly drift tilt back to 0.3 if tilted extreme
-            rotationX.current += (targetRotationX.current - rotationX.current) * 0.05;
-            rotationY.current += autoRotateSpeed;
-          }
+        const idleTime = Date.now() - lastActiveTime.current;
+        if (idleTime > 3000) {
+          rotationY.current += autoRotateSpeed;
         }
-        // Apply friction to momentum
         rotationY.current += dragVelocityX.current;
         rotationX.current += dragVelocityY.current;
         dragVelocityX.current *= 0.95;
         dragVelocityY.current *= 0.95;
-
-        // Constraint X axis tilt to avoid flipping upside down
-        rotationX.current = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, rotationX.current));
+        rotationX.current = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, rotationX.current));
       }
 
-      // 2. Draw Soft Outer Atmospheric Glow around the globe border
-      const glowGrad = ctx.createRadialGradient(centerX, centerY, radius * 0.95, centerX, centerY, radius * 1.15);
-      glowGrad.addColorStop(0, "rgba(178, 149, 103, 0.15)"); // brand gold
-      glowGrad.addColorStop(0.5, "rgba(107, 31, 42, 0.05)"); // brand maroon
-      glowGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.fillStyle = glowGrad;
+      // Draw subtle atmospheric background glow for the sphere
+      const atmosGrad = ctx.createRadialGradient(centerX, centerY, radius * 0.9, centerX, centerY, radius * 1.05);
+      atmosGrad.addColorStop(0, "rgba(234, 223, 207, 0.08)"); // warm ivory glow
+      atmosGrad.addColorStop(0.8, "rgba(178, 149, 103, 0.03)"); // gold glow
+      atmosGrad.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = atmosGrad;
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius * 1.25, 0, 2 * Math.PI);
+      ctx.arc(centerX, centerY, radius * 1.15, 0, 2 * Math.PI);
       ctx.fill();
 
-      // 3. Draw Ambient Sphere shading
-      const sphereGrad = ctx.createRadialGradient(
-        centerX - radius * 0.3,
-        centerY - radius * 0.3,
-        radius * 0.1,
-        centerX,
-        centerY,
-        radius
-      );
-      sphereGrad.addColorStop(0, "#231B19"); // very dark warm grey
-      sphereGrad.addColorStop(0.7, "#110D0C");
-      sphereGrad.addColorStop(1, "#080605"); // near black at bounds
-      ctx.fillStyle = sphereGrad;
+      // Draw base dark golden-ivory sphere shadow
+      ctx.fillStyle = "rgba(253, 249, 243, 0.45)"; // very soft ivory backing
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
       ctx.fill();
 
-      // 4. Draw latitude & longitude grid lines (Meridians & Parallels)
-      ctx.strokeStyle = "rgba(178, 149, 103, 0.1)"; // faint gold
+      // Draw thin latitude/longitude line circles (grid outline)
+      ctx.strokeStyle = "rgba(178, 149, 103, 0.12)"; // light antique gold grid
       ctx.lineWidth = 0.5;
-
-      const gridSegments = 60;
-      // Draw parallels (latitude grid rings)
-      for (let lat = -75; lat <= 75; lat += 15) {
+      
+      // Draw grid ring segments
+      for (let lat = -60; lat <= 60; lat += 30) {
         ctx.beginPath();
         let first = true;
-        for (let lon = -180; lon <= 180; lon += 360 / gridSegments) {
+        for (let lon = -180; lon <= 180; lon += 10) {
           const v = latLngToVector3(lat, lon);
           const [rx, ry, rz] = rotateVector(v);
-          if (rz > 0) { // facing front
+          if (rz > 0) {
             const cx = centerX + radius * rx;
             const cy = centerY - radius * ry;
             if (first) {
@@ -331,107 +311,74 @@ export default function ExportGlobe() {
         ctx.stroke();
       }
 
-      // Draw meridians (longitude grid rings)
-      for (let lon = -180; lon < 180; lon += 30) {
-        ctx.beginPath();
-        let first = true;
-        for (let lat = -90; lat <= 90; lat += 180 / gridSegments) {
-          const v = latLngToVector3(lat, lon);
-          const [rx, ry, rz] = rotateVector(v);
-          if (rz > 0) { // facing front
-            const cx = centerX + radius * rx;
-            const cy = centerY - radius * ry;
-            if (first) {
-              ctx.moveTo(cx, cy);
-              first = false;
-            } else {
-              ctx.lineTo(cx, cy);
-            }
+      // Draw Dotted Landmass (Continent shapes) matching Shiveshwar screenshot style
+      // We render only dots that are landmasses to give the dotted globe outline
+      globeDotGrid.forEach((dot) => {
+        const [rx, ry, rz] = rotateVector(dot.v);
+        if (rz > 0) { // facing camera
+          const cx = centerX + radius * rx;
+          const cy = centerY - radius * ry;
+
+          if (dot.isLand) {
+            // Draw land dot
+            ctx.fillStyle = "rgba(178, 149, 103, 0.65)"; // premium gold dots
+            ctx.beginPath();
+            ctx.arc(cx, cy, 1.2, 0, 2 * Math.PI);
+            ctx.fill();
           } else {
-            first = true;
+            // Very faint water dot (for matrix aesthetic)
+            ctx.fillStyle = "rgba(178, 149, 103, 0.08)";
+            ctx.beginPath();
+            ctx.arc(cx, cy, 0.6, 0, 2 * Math.PI);
+            ctx.fill();
           }
         }
-        ctx.stroke();
-      }
-
-      // 5. Draw 3D particle dust field orbiting the sphere
-      particles.forEach((p) => {
-        // Rotate particle vector
-        const cosY = Math.cos(rotationY.current + p.speed * time);
-        const sinY = Math.sin(rotationY.current + p.speed * time);
-        let rx = p.x * cosY - p.z * sinY;
-        let rz = p.x * sinY + p.z * cosY;
-
-        const cosX = Math.cos(rotationX.current);
-        const sinX = Math.sin(rotationX.current);
-        const ry = p.y * cosX - rz * sinX;
-        rz = p.y * sinX + rz * cosX;
-
-        // Faint twinkle animation
-        const alpha = (Math.sin(time * 2 + p.phase) + 1) * 0.25 + 0.15;
-        ctx.fillStyle = `rgba(234, 223, 207, ${alpha})`; // ivory particle
-
-        const cx = centerX + radius * rx;
-        const cy = centerY - radius * ry;
-
-        // Draw particle if depth is visible
-        ctx.beginPath();
-        ctx.arc(cx, cy, p.size, 0, 2 * Math.PI);
-        ctx.fill();
       });
 
-      // Project Origin Surat to 2D coordinates
+      // Project Origin Surat
       const [oX, oY, oZ] = rotateVector(vOrigin);
       const originScreenX = centerX + radius * oX;
       const originScreenY = centerY - radius * oY;
 
       const destinationScreenPositions: { dest: Destination; x: number; y: number; z: number }[] = [];
 
-      // 6. Draw export arcs & destinations
+      // Draw Export Arcs & Destination Dots
       DESTINATIONS.forEach((dest, idx) => {
         const vDest = latLngToVector3(dest.lat, dest.lng);
         const [dX, dY, dZ] = rotateVector(vDest);
         const destScreenX = centerX + radius * dX;
         const destScreenY = centerY - radius * dY;
 
-        // Only keep projection coords for active hover-checking
         destinationScreenPositions.push({ dest, x: destScreenX, y: destScreenY, z: dZ });
 
-        // A. DrawGreat Circle Arc with slerp interpolation
-        const steps = 36;
+        // Draw Great Circle Arc (Maroon/Gold blend)
+        const steps = 30;
         ctx.beginPath();
-        let pathBegun = false;
-        
-        // Arc glowing pulse animation
-        const speedMultiplier = 1;
-        const pulseProgress = ((time * speedMultiplier + idx * 0.12) % 1.5) / 1.5;
+        let first = true;
+        const pulseProgress = ((time * 0.8 + idx * 0.15) % 1.5) / 1.5;
 
         for (let i = 0; i <= steps; i++) {
           const t = i / steps;
           const vInterp = slerp(vOrigin, vDest, t);
           const [ix, iy, iz] = rotateVector(vInterp);
 
-          // We draw the arc. If it goes behind (iz < 0), draw it very faded, otherwise bright
-          const alphaFactor = iz > 0 ? 0.6 : 0.12;
-          
-          // Animate route path lighting
-          const distToPulse = Math.abs(t - pulseProgress);
-          const isPulseRange = distToPulse < 0.1;
-          const arcColor = isPulseRange && iz > 0
-            ? `rgba(178, 149, 103, ${0.6 + (0.1 - distToPulse) * 4})` // glowing gold
-            : `rgba(178, 149, 103, ${alphaFactor})`;
-
-          ctx.strokeStyle = arcColor;
-          ctx.lineWidth = isPulseRange && iz > 0 ? 1.5 : 0.8;
-
           const cx = centerX + radius * ix;
           const cy = centerY - radius * iy;
 
-          if (i === 0) {
+          const distToPulse = Math.abs(t - pulseProgress);
+          const isPulseRange = distToPulse < 0.1;
+          
+          const alpha = iz > 0 ? (isPulseRange ? 0.8 : 0.28) : 0.05;
+          ctx.strokeStyle = isPulseRange && iz > 0 
+            ? `rgba(107, 31, 42, ${alpha})` // bright royal maroon
+            : `rgba(178, 149, 103, ${alpha})`; // gold base arc
+
+          ctx.lineWidth = isPulseRange && iz > 0 ? 1.2 : 0.6;
+
+          if (first) {
             ctx.moveTo(cx, cy);
-            pathBegun = true;
+            first = false;
           } else {
-            // Draw segment by segment to dynamically change colors along path
             ctx.lineTo(cx, cy);
             ctx.stroke();
             ctx.beginPath();
@@ -439,75 +386,106 @@ export default function ExportGlobe() {
           }
         }
 
-        // B. Draw Destination markers
+        // Draw Destination Markers & Labels (Connect leader line to text label)
         if (dZ > 0) {
           const isHovered = hoveredDest?.name === dest.name;
-          const baseRadius = isHovered ? 4.5 : 2.5;
+          const size = isHovered ? 4.5 : 2.5;
 
-          // Pulse animation for destination marker
-          const pulse = (Math.sin(time * 6 + idx) + 1) * 0.5; // fast pulse
-          
-          // Outer pulsing ring
-          ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.8)" : "rgba(178, 149, 103, 0.5)";
-          ctx.lineWidth = 1;
+          // Fast pulse ring
+          const pulse = (Math.sin(time * 5 + idx) + 1) * 0.5;
+          ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.7)" : "rgba(178, 149, 103, 0.4)";
           ctx.beginPath();
-          ctx.arc(destScreenX, destScreenY, baseRadius + pulse * 6, 0, 2 * Math.PI);
+          ctx.arc(destScreenX, destScreenY, size + pulse * 5, 0, 2 * Math.PI);
           ctx.stroke();
 
-          // Inner solid core
-          ctx.fillStyle = isHovered ? "#6B1F2A" : "#B29567"; // deep maroon on hover, gold default
+          // Dot center
+          ctx.fillStyle = isHovered ? "#6B1F2A" : "#B29567";
           ctx.beginPath();
-          ctx.arc(destScreenX, destScreenY, baseRadius, 0, 2 * Math.PI);
+          ctx.arc(destScreenX, destScreenY, size, 0, 2 * Math.PI);
           ctx.fill();
 
-          // Small white center core dot
-          ctx.fillStyle = "#FFFFFF";
-          ctx.beginPath();
-          ctx.arc(destScreenX, destScreenY, 1, 0, 2 * Math.PI);
-          ctx.fill();
+          // Draw leader line and country text label (matching Shiveshwar styling)
+          // Draw leader lines and labels for top 5 key routes if not hovered, or display on hover
+          const showAlways = ["Dubai", "London", "Singapore", "Mauritius"].includes(dest.name);
+          if (showAlways || isHovered) {
+            ctx.fillStyle = isHovered ? "#6B1F2A" : "rgba(35, 27, 25, 0.8)";
+            ctx.font = isHovered 
+              ? "bold 10px var(--font-inter), sans-serif" 
+              : "500 9px var(--font-inter), sans-serif";
+            ctx.textAlign = destScreenX > centerX ? "left" : "right";
+            
+            // Text offset positioning
+            const textOffset = destScreenX > centerX ? 12 : -12;
+            ctx.fillText(dest.name, destScreenX + textOffset, destScreenY + 3);
+
+            // Small horizontal tick line
+            ctx.strokeStyle = "rgba(178, 149, 103, 0.35)";
+            ctx.beginPath();
+            ctx.moveTo(destScreenX, destScreenY);
+            ctx.lineTo(destScreenX + (destScreenX > centerX ? 8 : -8), destScreenY);
+            ctx.stroke();
+          }
         }
       });
 
-      // 7. Draw Surat, India Origin Marker (Always stays in focus)
+      // Draw Surat Origin Beacon
       if (oZ > 0) {
-        const pulse = (Math.sin(time * 3) + 1) * 0.5; // slower gentle pulse
+        const pulse = (Math.sin(time * 3) + 1) * 0.5;
         
-        // Large background breathing glow
-        ctx.strokeStyle = "rgba(107, 31, 42, 0.4)";
-        ctx.lineWidth = 1.5;
+        // Large outer pulsing circle
+        ctx.strokeStyle = "rgba(107, 31, 42, 0.3)";
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 5 + pulse * 8, 0, 2 * Math.PI);
+        ctx.arc(originScreenX, originScreenY, 6 + pulse * 7, 0, 2 * Math.PI);
         ctx.stroke();
 
-        // Base ring
+        // Inner solid ring
         ctx.strokeStyle = "#6B1F2A";
         ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 4, 0, 2 * Math.PI);
+        ctx.arc(originScreenX, originScreenY, 4.5, 0, 2 * Math.PI);
         ctx.stroke();
 
-        // Inner solid core
+        // Solid center core
         ctx.fillStyle = "#6B1F2A";
         ctx.beginPath();
         ctx.arc(originScreenX, originScreenY, 2.5, 0, 2 * Math.PI);
         ctx.fill();
 
-        // Origin label
-        ctx.fillStyle = "rgba(234, 223, 207, 0.9)"; // ivory text
-        ctx.font = "bold 9px var(--font-inter), sans-serif";
+        // White core dot
+        ctx.fillStyle = "#FFFFFF";
+        ctx.beginPath();
+        ctx.arc(originScreenX, originScreenY, 1, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // Surat HQ text label
+        ctx.fillStyle = "#231B19";
+        ctx.font = "bold 10px var(--font-inter), sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText("SURAT (HQ)", originScreenX, originScreenY - 10);
+        // background backing for label readability
+        ctx.fillStyle = "rgba(253, 249, 243, 0.85)";
+        ctx.fillRect(originScreenX - 25, originScreenY - 22, 50, 12);
+        ctx.fillStyle = "#6B1F2A";
+        ctx.fillText("Surat (HQ)", originScreenX, originScreenY - 13);
       }
 
-      // 8. Draw Border circle for neatness
-      ctx.strokeStyle = "rgba(178, 149, 103, 0.15)";
-      ctx.lineWidth = 1;
+      // Draw outer circle accent
+      ctx.strokeStyle = "rgba(178, 149, 103, 0.22)";
+      ctx.lineWidth = 0.8;
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
       ctx.stroke();
 
-      // Store canvas metrics for mousemove checks
+      // Store canvas metrics for hover tracking
       (canvas as any).destinations = destinationScreenPositions;
+
+      // Draw technical overlay text labels matching the Shiveshwar screenshot
+      ctx.fillStyle = "rgba(178, 149, 103, 0.4)";
+      ctx.font = "500 7px var(--font-inter), sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("SYSTEM: CANVAS_3D_ACTIVE", centerX - radius * 0.95, centerY - radius * 1.05);
+      ctx.textAlign = "right";
+      ctx.fillText("AXIS: TILTED_23.5", centerX + radius * 0.95, centerY - radius * 1.05);
 
       animationFrameId = requestAnimationFrame(render);
     };
@@ -519,9 +497,9 @@ export default function ExportGlobe() {
       window.removeEventListener("resize", resizeCanvas);
       visibilityObserver.disconnect();
     };
-  }, [particles, hoveredDest]);
+  }, [globeDotGrid, hoveredDest]);
 
-  // Handle Drag / Rotation mouse events
+  // Drag and Rotation mouse handlers
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     isDragging.current = true;
     prevMouseX.current = e.clientX;
@@ -539,7 +517,6 @@ export default function ExportGlobe() {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // Hover check for destinations
     const destinations = (canvas as any).destinations || [];
     let foundHover: Destination | null = null;
     
@@ -548,9 +525,8 @@ export default function ExportGlobe() {
         const dx = x - d.x;
         const dy = y - d.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 10) { // Hover tolerance
+        if (dist < 12) {
           foundHover = d.dest;
-          // Set floating card position
           setCardPos({ x: d.x, y: d.y - 12 });
           break;
         }
@@ -569,7 +545,6 @@ export default function ExportGlobe() {
     rotationY.current += deltaX * 0.005;
     rotationX.current += deltaY * 0.005;
 
-    // Save velocity for momentum
     dragVelocityX.current = deltaX * 0.0015;
     dragVelocityY.current = deltaY * 0.0015;
 
@@ -582,7 +557,7 @@ export default function ExportGlobe() {
     isDragging.current = false;
   };
 
-  // Keyboard navigation for accessibility (Arrow keys to rotate)
+  // Keyboard rotation support
   const handleKeyDown = (e: React.KeyboardEvent<HTMLCanvasElement>) => {
     lastActiveTime.current = Date.now();
     const rotateAmount = 0.05;
@@ -626,7 +601,6 @@ export default function ExportGlobe() {
     prevMouseY.current = e.touches[0].clientY;
     lastActiveTime.current = Date.now();
 
-    // Tap/Click simulation for mobile hover checking
     const rect = canvas.getBoundingClientRect();
     const x = e.touches[0].clientX - rect.left;
     const y = e.touches[0].clientY - rect.top;
@@ -639,7 +613,7 @@ export default function ExportGlobe() {
         const dx = x - d.x;
         const dy = y - d.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 18) { // wider hit area on touch
+        if (dist < 20) {
           foundHover = d.dest;
           setCardPos({ x: d.x, y: d.y - 12 });
           break;
@@ -659,88 +633,91 @@ export default function ExportGlobe() {
   return (
     <section className="bg-ivory border-t border-[#EADFCF]/30 select-none font-body relative overflow-hidden">
       
-      {/* Decorative grids */}
-      <div className="absolute inset-0 bg-[radial-gradient(#EADFCF_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
+      {/* Editorial subtle grid */}
+      <div className="absolute inset-0 bg-[radial-gradient(#EADFCF_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-15 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         
-        {/* Header Storytelling */}
-        <div className="max-w-3xl mx-auto text-center mb-10">
-          <span className="text-xs uppercase tracking-[0.3em] text-[#B29567] font-heading font-semibold mb-3 block">
-            Global Footprint
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-heading font-light tracking-tight text-deep-maroon text-shadow-luxury">
-            Our Global Export Network
-          </h2>
-          <p className="text-xs sm:text-sm text-warm-grey mt-4 font-light max-w-xl mx-auto leading-relaxed">
-            From the textile capital of India, we proudly deliver premium ethnic fashion to trusted boutique partners across multiple international markets.
-          </p>
-        </div>
+        {/* Two Column Layout matching screenshot's design structure */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column: Typography Storytelling */}
+          <div className="lg:col-span-5 text-left space-y-6">
+            <span className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-[#B29567] font-heading font-semibold block">
+              Global Textile Network
+            </span>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-light tracking-tight text-deep-maroon leading-tight">
+              Connecting Surat<br />
+              <span className="italic font-normal text-[#B29567]">to the World.</span>
+            </h2>
+            <div className="w-12 h-[1px] bg-antique-gold" />
+            <p className="text-xs sm:text-sm text-charcoal/80 font-light leading-relaxed max-w-md">
+              From the historical textile capital of India, our wholesale manufacturing lines feed international B2B distribution channels, supplying custom-woven bridal silks, heavy zardozi lenghas, and designer ethnic couture to elite boutique partners worldwide.
+            </p>
+          </div>
 
-        {/* Globe Container Area */}
-        <div 
-          ref={containerRef}
-          className="relative w-full aspect-square max-w-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing outline-none"
-        >
-          {/* Floating Premium Hover/Tap Card */}
-          {hoveredDest && (
-            <div 
-              style={{ 
-                left: `${cardPos.x}px`, 
-                top: `${cardPos.y}px`, 
-                transform: "translate(-50%, -100%)" 
-              }}
-              className="absolute z-30 pointer-events-none bg-rich-charcoal/95 border border-antique-gold/25 p-4 w-60 shadow-[0_12px_24px_rgba(0,0,0,0.25)] rounded-none text-left animate-fade-in"
-            >
-              <span className="text-[8px] tracking-[0.25em] font-heading uppercase font-bold text-antique-gold block mb-1">
-                {hoveredDest.label}
-              </span>
-              <h4 className="text-sm font-heading font-semibold text-warm-ivory uppercase tracking-wider mb-2">
-                {hoveredDest.name}
-              </h4>
-              <p className="text-[10px] text-warm-cream/90 font-light font-body leading-relaxed border-t border-antique-gold/15 pt-2">
-                {hoveredDest.details}
-              </p>
+          {/* Right Column: Globe Visualization */}
+          <div className="lg:col-span-7 flex justify-center items-center relative">
+            <div className="relative w-full aspect-square max-w-[540px] flex items-center justify-center cursor-grab active:cursor-grabbing outline-none">
               
-              {/* Little arrow accent on B2B card bottom */}
-              <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-full w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-rich-charcoal/95" />
+              {/* Floating Premium Hover Card */}
+              {hoveredDest && (
+                <div 
+                  style={{ 
+                    left: `${cardPos.x}px`, 
+                    top: `${cardPos.y}px`, 
+                    transform: "translate(-50%, -100%)" 
+                  }}
+                  className="absolute z-30 pointer-events-none bg-rich-charcoal/95 border border-antique-gold/25 p-4 w-60 shadow-[0_12px_24px_rgba(0,0,0,0.25)] rounded-none text-left animate-fade-in"
+                >
+                  <span className="text-[8px] tracking-[0.25em] font-heading uppercase font-bold text-antique-gold block mb-1">
+                    {hoveredDest.label}
+                  </span>
+                  <h4 className="text-sm font-heading font-semibold text-warm-ivory uppercase tracking-wider mb-2">
+                    {hoveredDest.name}
+                  </h4>
+                  <p className="text-[10px] text-warm-cream/90 font-light font-body leading-relaxed border-t border-antique-gold/15 pt-2">
+                    {hoveredDest.details}
+                  </p>
+                  
+                  {/* Decorative pointer arrow */}
+                  <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-full w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-rich-charcoal/95" />
+                </div>
+              )}
+
+              {/* Dotted Interactive Canvas Globe */}
+              <canvas
+                ref={canvasRef}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUpOrLeave}
+                onMouseLeave={handleMouseUpOrLeave}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onKeyDown={handleKeyDown}
+                tabIndex={0}
+                aria-label="3D Interactive Export Globe. Dotted land outlines connect Surat HQ to international B2B partners."
+                role="img"
+                className="w-full h-full block focus-visible:outline-none"
+              />
+
+              {/* Drag instruction overlay */}
+              <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex items-center gap-1.5 text-[8px] font-heading tracking-widest text-warm-grey uppercase bg-pearl-white/40 backdrop-blur-sm border border-[#EADFCF]/30 px-3 py-1 rounded-full pointer-events-none">
+                <Globe2 className="w-3 h-3 text-royal-maroon animate-spin-slow" />
+                Drag to Rotate Globe
+              </div>
             </div>
-          )}
-
-          {/* Core Interactive Canvas */}
-          <canvas
-            ref={canvasRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUpOrLeave}
-            onMouseLeave={handleMouseUpOrLeave}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onKeyDown={handleKeyDown}
-            tabIndex={0}
-            aria-label="3D Interactive Export Globe. Use mouse or touch dragging to rotate, or arrow keys to tilt the globe."
-            role="img"
-            className="w-full h-full block focus-visible:outline-none"
-          />
-
-          {/* Drag signpost overlay */}
-          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex items-center gap-1.5 text-[9px] font-heading tracking-widest text-warm-grey uppercase bg-pearl-white/40 backdrop-blur-sm border border-[#EADFCF]/30 px-3 py-1 rounded-full pointer-events-none">
-            <Globe2 className="w-3.5 h-3.5 text-royal-maroon animate-spin-slow" />
-            Drag Globe to Explore Routes
           </div>
         </div>
 
-        {/* Live B2B Counters (Animate on entering viewport once) */}
+        {/* Live B2B Counters Section */}
         <div 
           ref={statsRef}
-          className="w-full max-w-4xl mt-12 pt-12 border-t border-[#EADFCF]/50"
+          className="w-full max-w-4xl mt-16 pt-12 border-t border-[#EADFCF]/50"
         >
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center divide-y sm:divide-y-0 sm:divide-x divide-antique-gold/15">
             <div className="flex flex-col items-center justify-center p-4">
-              <div className="w-10 h-10 bg-royal-maroon/5 flex items-center justify-center border border-antique-gold/10 mb-3">
-                <Trophy className="w-5 h-5 text-antique-gold" />
-              </div>
               <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-1">
                 {statsAnimated ? `${boutiquesCount}+` : "0+"}
               </span>
@@ -750,9 +727,6 @@ export default function ExportGlobe() {
             </div>
 
             <div className="flex flex-col items-center justify-center p-4">
-              <div className="w-10 h-10 bg-royal-maroon/5 flex items-center justify-center border border-antique-gold/10 mb-3">
-                <Globe2 className="w-5 h-5 text-antique-gold" />
-              </div>
               <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-1">
                 {statsAnimated ? `${countriesCount}+` : "0+"}
               </span>
@@ -762,14 +736,11 @@ export default function ExportGlobe() {
             </div>
 
             <div className="flex flex-col items-center justify-center p-4">
-              <div className="w-10 h-10 bg-royal-maroon/5 flex items-center justify-center border border-antique-gold/10 mb-3">
-                <Landmark className="w-5 h-5 text-antique-gold" />
-              </div>
               <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-1">
                 {statsAnimated ? `Since ${heritageCount}` : "Since 2026"}
               </span>
               <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">
-                Surat direct since 2011
+                Established in Surat
               </span>
             </div>
           </div>
