@@ -28,20 +28,95 @@ const DESTINATIONS: Destination[] = [
 ];
 
 // Mathematical representation of continents to render a dotted map on the canvas sphere
+// Mathematical representation of continents to render a detailed world map on the canvas sphere
 const LAND_CENTERS = [
-  { lat: 45, lng: -100, r: 35 }, // North America
-  { lat: 60, lng: -110, r: 25 }, // Northern Canada
-  { lat: -20, lng: -60, r: 22 }, // South America
-  { lat: -5, lng: -60, r: 20 },  // Northern South America
-  { lat: 5, lng: 20, r: 28 },    // Central Africa
-  { lat: -20, lng: 22, r: 18 },   // Southern Africa
-  { lat: 50, lng: 15, r: 18 },    // Europe
-  { lat: 45, lng: 90, r: 38 },    // Northern Asia
-  { lat: 30, lng: 75, r: 32 },    // Central/Southern Asia
-  { lat: 60, lng: 100, r: 25 },   // Siberia
-  { lat: 22, lng: 77, r: 14 },    // India
-  { lat: -25, lng: 133, r: 18 },  // Australia
-  { lat: 72, lng: -40, r: 14 },   // Greenland
+  // North America
+  { lat: 75, lng: -100, r: 18 }, // Northern Canada islands
+  { lat: 70, lng: -120, r: 12 },
+  { lat: 62, lng: -100, r: 24 }, // Hudson bay / Canada
+  { lat: 50, lng: -110, r: 20 }, // Western Canada / US
+  { lat: 45, lng: -90, r: 22 },  // Eastern US
+  { lat: 35, lng: -115, r: 15 }, // South Western US
+  { lat: 30, lng: -85, r: 14 },  // Florida / Southeast US
+  { lat: 24, lng: -102, r: 10 }, // Mexico
+  { lat: 15, lng: -90, r: 6 },   // Central America
+  { lat: 8, lng: -80, r: 4 },    // Panama
+  
+  // Greenland
+  { lat: 75, lng: -40, r: 15 },
+  { lat: 68, lng: -40, r: 10 },
+
+  // South America
+  { lat: 5, lng: -65, r: 16 },   // Venezuela / Colombia
+  { lat: -5, lng: -60, r: 22 },  // Brazil North
+  { lat: -10, lng: -48, r: 16 }, // Brazil East
+  { lat: -18, lng: -60, r: 18 }, // Bolivia / Paraguay
+  { lat: -30, lng: -62, r: 14 }, // Argentina
+  { lat: -42, lng: -68, r: 10 }, // Patagonia
+  { lat: -52, lng: -70, r: 6 },  // Tierra del Fuego
+
+  // Africa
+  { lat: 30, lng: 10, r: 18 },   // Northwest Africa
+  { lat: 25, lng: 25, r: 20 },   // Northeast Africa / Egypt
+  { lat: 12, lng: -5, r: 14 },   // West Africa hump
+  { lat: 10, lng: 18, r: 16 },   // Central Africa North
+  { lat: -2, lng: 22, r: 18 },   // Congo region
+  { lat: -12, lng: 24, r: 15 },  // Angola / Zambia
+  { lat: -22, lng: 25, r: 12 },  // Namibia / Botswana
+  { lat: -30, lng: 26, r: 8 },   // South Africa
+  { lat: -18, lng: 46, r: 5 },   // Madagascar
+
+  // Europe
+  { lat: 64, lng: 20, r: 12 },   // Scandinavia
+  { lat: 60, lng: 10, r: 8 },
+  { lat: 52, lng: 15, r: 14 },   // Central Europe
+  { lat: 46, lng: 2, r: 10 },    // France / Spain
+  { lat: 40, lng: -4, r: 8 },    // Iberia
+  { lat: 40, lng: 15, r: 6 },    // Italy
+  { lat: 38, lng: 23, r: 6 },    // Greece
+  { lat: 54, lng: -4, r: 7 },    // UK / Ireland
+
+  // Middle East
+  { lat: 32, lng: 38, r: 10 },   // Turkey / Levant
+  { lat: 24, lng: 45, r: 14 },   // Arabia
+  { lat: 32, lng: 58, r: 12 },   // Iran
+
+  // India & South Asia
+  { lat: 22, lng: 78, r: 12 },   // North India
+  { lat: 14, lng: 78, r: 8 },    // South India
+  { lat: 7, lng: 80, r: 3 },     // Sri Lanka
+
+  // Asia (Siberia / Russia / China / East Asia)
+  { lat: 70, lng: 80, r: 22 },   // Ob Gulf / Siberia
+  { lat: 72, lng: 120, r: 20 },  // Laptev Sea coast
+  { lat: 62, lng: 100, r: 26 },  // Central Siberia
+  { lat: 64, lng: 140, r: 22 },  // East Siberia
+  { lat: 52, lng: 110, r: 24 },  // Mongolia / Baikal
+  { lat: 48, lng: 85, r: 22 },   // Central Asia / Kazakhstan
+  { lat: 40, lng: 105, r: 22 },  // Northern China
+  { lat: 30, lng: 110, r: 18 },  // Southern China
+  { lat: 36, lng: 128, r: 5 },   // Korea
+  { lat: 38, lng: 138, r: 8 },   // Japan
+  { lat: 54, lng: 160, r: 10 },  // Kamchatka
+
+  // Southeast Asia / Maritime
+  { lat: 18, lng: 105, r: 8 },   // Indochina
+  { lat: 12, lng: 108, r: 6 },   // Vietnam
+  { lat: 4, lng: 102, r: 5 },    // Malay Peninsula
+  { lat: -2, lng: 114, r: 12 },  // Borneo / Indonesia
+  { lat: -2, lng: 100, r: 10 },  // Sumatra
+  { lat: -7, lng: 112, r: 6 },   // Java
+  { lat: -2, lng: 120, r: 8 },   // Sulawesi
+  { lat: 12, lng: 122, r: 8 },   // Philippines
+  { lat: -4, lng: 140, r: 10 },  // Papua New Guinea
+
+  // Australia / Oceania
+  { lat: -18, lng: 125, r: 12 }, // Northwest Australia
+  { lat: -24, lng: 135, r: 16 }, // Central Australia
+  { lat: -32, lng: 140, r: 14 }, // South Australia
+  { lat: -20, lng: 145, r: 12 }, // Northeast Australia
+  { lat: -40, lng: 172, r: 6 },  // New Zealand North
+  { lat: -44, lng: 168, r: 6 },  // New Zealand South
 ];
 
 function isLand(lat: number, lng: number): boolean {
@@ -323,13 +398,13 @@ export default function ExportGlobe() {
             // Draw land dot
             ctx.fillStyle = "rgba(26, 19, 18, 0.75)"; // black/charcoal land dots
             ctx.beginPath();
-            ctx.arc(cx, cy, 1.2, 0, 2 * Math.PI);
+            ctx.arc(cx, cy, 1.8, 0, 2 * Math.PI); // Bolder dots
             ctx.fill();
           } else {
             // Very faint water dot (for matrix aesthetic)
             ctx.fillStyle = "rgba(26, 19, 18, 0.04)"; // very faint water dots
             ctx.beginPath();
-            ctx.arc(cx, cy, 0.6, 0, 2 * Math.PI);
+            ctx.arc(cx, cy, 0.9, 0, 2 * Math.PI); // Faint water dots
             ctx.fill();
           }
         }
@@ -389,13 +464,13 @@ export default function ExportGlobe() {
         // Draw Destination Markers & Labels (Connect leader line to text label)
         if (dZ > 0) {
           const isHovered = hoveredDest?.name === dest.name;
-          const size = isHovered ? 4.5 : 2.5;
+          const size = isHovered ? 7.5 : 4.5; // Bigger dots
 
           // Fast pulse ring
           const pulse = (Math.sin(time * 5 + idx) + 1) * 0.5;
           ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.7)" : "rgba(107, 31, 42, 0.4)";
           ctx.beginPath();
-          ctx.arc(destScreenX, destScreenY, size + pulse * 5, 0, 2 * Math.PI);
+          ctx.arc(destScreenX, destScreenY, size + pulse * 7, 0, 2 * Math.PI); // Bigger pulse ring
           ctx.stroke();
 
           // Dot center
@@ -408,21 +483,21 @@ export default function ExportGlobe() {
           // Draw leader lines and labels for top 5 key routes if not hovered, or display on hover
           const showAlways = ["Dubai", "London", "Singapore", "Mauritius"].includes(dest.name);
           if (showAlways || isHovered) {
-            ctx.fillStyle = isHovered ? "#6B1F2A" : "rgba(35, 27, 25, 0.8)";
+            ctx.fillStyle = isHovered ? "#6B1F2A" : "rgba(35, 27, 25, 0.85)";
             ctx.font = isHovered 
-              ? "bold 10px var(--font-inter), sans-serif" 
-              : "500 9px var(--font-inter), sans-serif";
+              ? "bold 13px var(--font-inter), sans-serif" 
+              : "600 11px var(--font-inter), sans-serif"; // Bigger font
             ctx.textAlign = destScreenX > centerX ? "left" : "right";
             
             // Text offset positioning
-            const textOffset = destScreenX > centerX ? 12 : -12;
-            ctx.fillText(dest.name, destScreenX + textOffset, destScreenY + 3);
+            const textOffset = destScreenX > centerX ? 15 : -15;
+            ctx.fillText(dest.name, destScreenX + textOffset, destScreenY + 4);
 
             // Small horizontal tick line
             ctx.strokeStyle = "rgba(107, 31, 42, 0.25)"; // faint reddish leader
             ctx.beginPath();
             ctx.moveTo(destScreenX, destScreenY);
-            ctx.lineTo(destScreenX + (destScreenX > centerX ? 8 : -8), destScreenY);
+            ctx.lineTo(destScreenX + (destScreenX > centerX ? 10 : -10), destScreenY);
             ctx.stroke();
           }
         }
@@ -436,37 +511,37 @@ export default function ExportGlobe() {
         ctx.strokeStyle = "rgba(107, 31, 42, 0.3)";
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 6 + pulse * 7, 0, 2 * Math.PI);
+        ctx.arc(originScreenX, originScreenY, 8 + pulse * 9, 0, 2 * Math.PI);
         ctx.stroke();
 
         // Inner solid ring
         ctx.strokeStyle = "#6B1F2A";
         ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 4.5, 0, 2 * Math.PI);
+        ctx.arc(originScreenX, originScreenY, 6, 0, 2 * Math.PI);
         ctx.stroke();
 
         // Solid center core
         ctx.fillStyle = "#6B1F2A";
         ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 2.5, 0, 2 * Math.PI);
+        ctx.arc(originScreenX, originScreenY, 3.5, 0, 2 * Math.PI);
         ctx.fill();
 
         // White core dot
         ctx.fillStyle = "#FFFFFF";
         ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 1, 0, 2 * Math.PI);
+        ctx.arc(originScreenX, originScreenY, 1.5, 0, 2 * Math.PI);
         ctx.fill();
 
         // Surat HQ text label
         ctx.fillStyle = "#231B19";
-        ctx.font = "bold 10px var(--font-inter), sans-serif";
+        ctx.font = "bold 13px var(--font-inter), sans-serif"; // Bigger font
         ctx.textAlign = "center";
         // background backing for label readability
         ctx.fillStyle = "rgba(253, 249, 243, 0.85)";
-        ctx.fillRect(originScreenX - 25, originScreenY - 22, 50, 12);
+        ctx.fillRect(originScreenX - 35, originScreenY - 26, 70, 16);
         ctx.fillStyle = "#6B1F2A";
-        ctx.fillText("Surat (HQ)", originScreenX, originScreenY - 13);
+        ctx.fillText("Surat (HQ)", originScreenX, originScreenY - 14);
       }
 
       // Draw outer circle accent
