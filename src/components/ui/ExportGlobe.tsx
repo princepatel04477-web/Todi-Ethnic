@@ -321,13 +321,13 @@ export default function ExportGlobe() {
 
           if (dot.isLand) {
             // Draw land dot
-            ctx.fillStyle = "rgba(178, 149, 103, 0.65)"; // premium gold dots
+            ctx.fillStyle = "rgba(26, 19, 18, 0.75)"; // black/charcoal land dots
             ctx.beginPath();
             ctx.arc(cx, cy, 1.2, 0, 2 * Math.PI);
             ctx.fill();
           } else {
             // Very faint water dot (for matrix aesthetic)
-            ctx.fillStyle = "rgba(178, 149, 103, 0.08)";
+            ctx.fillStyle = "rgba(26, 19, 18, 0.04)"; // very faint water dots
             ctx.beginPath();
             ctx.arc(cx, cy, 0.6, 0, 2 * Math.PI);
             ctx.fill();
@@ -368,12 +368,12 @@ export default function ExportGlobe() {
           const distToPulse = Math.abs(t - pulseProgress);
           const isPulseRange = distToPulse < 0.1;
           
-          const alpha = iz > 0 ? (isPulseRange ? 0.8 : 0.28) : 0.05;
+          const alpha = iz > 0 ? (isPulseRange ? 0.9 : 0.45) : 0.05;
           ctx.strokeStyle = isPulseRange && iz > 0 
-            ? `rgba(107, 31, 42, ${alpha})` // bright royal maroon
-            : `rgba(178, 149, 103, ${alpha})`; // gold base arc
+            ? `rgba(185, 28, 28, ${alpha})` // bright red active pulse
+            : `rgba(107, 31, 42, ${alpha * 0.75})`; // reddish maroon base arc
 
-          ctx.lineWidth = isPulseRange && iz > 0 ? 1.2 : 0.6;
+          ctx.lineWidth = isPulseRange && iz > 0 ? 1.4 : 0.7;
 
           if (first) {
             ctx.moveTo(cx, cy);
@@ -393,13 +393,13 @@ export default function ExportGlobe() {
 
           // Fast pulse ring
           const pulse = (Math.sin(time * 5 + idx) + 1) * 0.5;
-          ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.7)" : "rgba(178, 149, 103, 0.4)";
+          ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.7)" : "rgba(107, 31, 42, 0.4)";
           ctx.beginPath();
           ctx.arc(destScreenX, destScreenY, size + pulse * 5, 0, 2 * Math.PI);
           ctx.stroke();
 
           // Dot center
-          ctx.fillStyle = isHovered ? "#6B1F2A" : "#B29567";
+          ctx.fillStyle = isHovered ? "#6B1F2A" : "#881337";
           ctx.beginPath();
           ctx.arc(destScreenX, destScreenY, size, 0, 2 * Math.PI);
           ctx.fill();
@@ -419,7 +419,7 @@ export default function ExportGlobe() {
             ctx.fillText(dest.name, destScreenX + textOffset, destScreenY + 3);
 
             // Small horizontal tick line
-            ctx.strokeStyle = "rgba(178, 149, 103, 0.35)";
+            ctx.strokeStyle = "rgba(107, 31, 42, 0.25)"; // faint reddish leader
             ctx.beginPath();
             ctx.moveTo(destScreenX, destScreenY);
             ctx.lineTo(destScreenX + (destScreenX > centerX ? 8 : -8), destScreenY);
@@ -470,7 +470,7 @@ export default function ExportGlobe() {
       }
 
       // Draw outer circle accent
-      ctx.strokeStyle = "rgba(178, 149, 103, 0.22)";
+      ctx.strokeStyle = "rgba(107, 31, 42, 0.15)"; // faint reddish circle
       ctx.lineWidth = 0.8;
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
@@ -480,7 +480,7 @@ export default function ExportGlobe() {
       (canvas as any).destinations = destinationScreenPositions;
 
       // Draw technical overlay text labels matching the Shiveshwar screenshot
-      ctx.fillStyle = "rgba(178, 149, 103, 0.4)";
+      ctx.fillStyle = "rgba(107, 31, 42, 0.3)"; // faint red labels
       ctx.font = "500 7px var(--font-inter), sans-serif";
       ctx.textAlign = "left";
       ctx.fillText("SYSTEM: CANVAS_3D_ACTIVE", centerX - radius * 0.95, centerY - radius * 1.05);
