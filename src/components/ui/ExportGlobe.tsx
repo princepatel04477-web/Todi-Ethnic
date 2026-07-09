@@ -395,16 +395,20 @@ export default function ExportGlobe() {
           const cy = centerY - radius * ry;
 
           if (dot.isLand) {
-            // Draw land dot
-            ctx.fillStyle = "rgba(26, 19, 18, 0.75)"; // black/charcoal land dots
+            // Draw land dot - size and opacity scaled by depth (rz) for 3D sphere look
+            const dotSize = 1.0 + 1.2 * rz;
+            const alpha = 0.15 + 0.70 * rz;
+            ctx.fillStyle = `rgba(178, 149, 103, ${alpha})`; // premium gold land dots
             ctx.beginPath();
-            ctx.arc(cx, cy, 1.8, 0, 2 * Math.PI); // Bolder dots
+            ctx.arc(cx, cy, dotSize, 0, 2 * Math.PI);
             ctx.fill();
           } else {
             // Very faint water dot (for matrix aesthetic)
-            ctx.fillStyle = "rgba(26, 19, 18, 0.04)"; // very faint water dots
+            const dotSize = 0.5 + 0.5 * rz;
+            const alpha = 0.02 + 0.06 * rz;
+            ctx.fillStyle = `rgba(178, 149, 103, ${alpha})`; // faint water dots
             ctx.beginPath();
-            ctx.arc(cx, cy, 0.9, 0, 2 * Math.PI); // Faint water dots
+            ctx.arc(cx, cy, dotSize, 0, 2 * Math.PI);
             ctx.fill();
           }
         }
@@ -426,7 +430,7 @@ export default function ExportGlobe() {
 
         destinationScreenPositions.push({ dest, x: destScreenX, y: destScreenY, z: dZ });
 
-        // Draw Great Circle Arc (Maroon/Gold blend)
+        // Draw Great Circle Arc rising in 3D above the surface (Curved Flight Path style)
         const steps = 30;
         ctx.beginPath();
         let first = true;
@@ -437,18 +441,22 @@ export default function ExportGlobe() {
           const vInterp = slerp(vOrigin, vDest, t);
           const [ix, iy, iz] = rotateVector(vInterp);
 
-          const cx = centerX + radius * ix;
-          const cy = centerY - radius * iy;
+          // Flight path altitude: rises up to 14% above surface in center
+          const heightFactor = 1.0 + Math.sin(t * Math.PI) * 0.14;
+          const cx = centerX + radius * ix * heightFactor;
+          const cy = centerY - radius * iy * heightFactor;
+          const projectedIz = iz * heightFactor;
 
           const distToPulse = Math.abs(t - pulseProgress);
-          const isPulseRange = distToPulse < 0.1;
+          const isPulseRange = distToPulse < 0.08;
           
-          const alpha = iz > 0 ? (isPulseRange ? 0.9 : 0.45) : 0.05;
-          ctx.strokeStyle = isPulseRange && iz > 0 
-            ? `rgba(185, 28, 28, ${alpha})` // bright red active pulse
-            : `rgba(107, 31, 42, ${alpha * 0.75})`; // reddish maroon base arc
+          const baseAlpha = projectedIz > 0 ? 0.35 : 0.03;
+          const pulseAlpha = projectedIz > 0 ? 0.95 : 0.05;
+          ctx.strokeStyle = isPulseRange && projectedIz > 0 
+            ? `rgba(220, 38, 38, ${pulseAlpha})` // vibrant crimson red active pulse
+            : `rgba(107, 31, 42, ${baseAlpha})`; // soft royal maroon base arc
 
-          ctx.lineWidth = isPulseRange && iz > 0 ? 1.4 : 0.7;
+          ctx.lineWidth = isPulseRange && projectedIz > 0 ? 1.5 : 0.8;
 
           if (first) {
             ctx.moveTo(cx, cy);
@@ -468,13 +476,13 @@ export default function ExportGlobe() {
 
           // Fast pulse ring
           const pulse = (Math.sin(time * 5 + idx) + 1) * 0.5;
-          ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.7)" : "rgba(107, 31, 42, 0.4)";
+          ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.7)" : "rgba(178, 149, 103, 0.4)";
           ctx.beginPath();
           ctx.arc(destScreenX, destScreenY, size + pulse * 7, 0, 2 * Math.PI); // Bigger pulse ring
           ctx.stroke();
 
           // Dot center
-          ctx.fillStyle = isHovered ? "#6B1F2A" : "#881337";
+          ctx.fillStyle = isHovered ? "#6B1F2A" : "#B29567"; // Maroon if hovered, Gold if standard
           ctx.beginPath();
           ctx.arc(destScreenX, destScreenY, size, 0, 2 * Math.PI);
           ctx.fill();
@@ -494,7 +502,7 @@ export default function ExportGlobe() {
             ctx.fillText(dest.name, destScreenX + textOffset, destScreenY + 4);
 
             // Small horizontal tick line
-            ctx.strokeStyle = "rgba(107, 31, 42, 0.25)"; // faint reddish leader
+            ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.4)" : "rgba(178, 149, 103, 0.35)"; // gold or maroon leader
             ctx.beginPath();
             ctx.moveTo(destScreenX, destScreenY);
             ctx.lineTo(destScreenX + (destScreenX > centerX ? 10 : -10), destScreenY);
@@ -545,7 +553,7 @@ export default function ExportGlobe() {
       }
 
       // Draw outer circle accent
-      ctx.strokeStyle = "rgba(107, 31, 42, 0.15)"; // faint reddish circle
+      ctx.strokeStyle = "rgba(178, 149, 103, 0.2)"; // back to gold circle outline
       ctx.lineWidth = 0.8;
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
@@ -555,7 +563,7 @@ export default function ExportGlobe() {
       (canvas as any).destinations = destinationScreenPositions;
 
       // Draw technical overlay text labels matching the Shiveshwar screenshot
-      ctx.fillStyle = "rgba(107, 31, 42, 0.3)"; // faint red labels
+      ctx.fillStyle = "rgba(178, 149, 103, 0.4)"; // gold tech labels
       ctx.font = "500 7px var(--font-inter), sans-serif";
       ctx.textAlign = "left";
       ctx.fillText("SYSTEM: CANVAS_3D_ACTIVE", centerX - radius * 0.95, centerY - radius * 1.05);
@@ -718,12 +726,13 @@ export default function ExportGlobe() {
           
           {/* Left Column: Typography Storytelling */}
           <div className="lg:col-span-5 text-left space-y-6">
-            <span className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-[#B29567] font-heading font-semibold block">
-              Global Textile Network
+            <span className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-[#B29567] font-heading font-bold block">
+              GLOBAL TEXTILE NETWORK
             </span>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-light tracking-tight text-deep-maroon leading-tight">
-              Connecting Surat<br />
-              <span className="italic font-normal text-[#B29567]">to the World.</span>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-semibold tracking-wider text-deep-maroon uppercase leading-[1.1]">
+              Connecting<br />
+              Surat<br />
+              <span className="italic font-light text-[#B29567] block mt-2 lowercase font-serif tracking-normal">to the world.</span>
             </h2>
             <div className="w-12 h-[1px] bg-antique-gold" />
             <p className="text-xs sm:text-sm text-charcoal/80 font-light leading-relaxed max-w-md">
