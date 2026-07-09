@@ -9,6 +9,8 @@ export async function proxy(request: NextRequest) {
                    request.headers.get('x-forwarded-for')?.split(',')[0].trim();
   
   const allowedIps = [
+    '49.36.89.238', // User IP (IPv4)
+    '2405:201:200d:2822:297b:b7bb:7fa0:cc87', // User IP (IPv6)
     '49.36.91.88', 
     '2405:201:200d:2822', 
     '192.168.29.142', 
