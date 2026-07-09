@@ -46,8 +46,8 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
           <span className="text-[10px] font-heading font-semibold tracking-[0.2em] text-[#B29567] uppercase block">
             {displayCategory}
           </span>
-          <span className="text-[10px] font-body text-warm-grey block">
-            {product.sku}
+          <span className="text-[10px] font-heading font-semibold tracking-[0.15em] text-warm-grey/85 uppercase block">
+            Design No. {product.sku}
           </span>
           <h3 className="font-heading font-light text-lg sm:text-xl text-deep-maroon group-hover:text-royal-maroon transition-colors duration-300 leading-snug pt-0.5 line-clamp-2">
             {displayName}
@@ -62,7 +62,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
           className="flex items-center justify-between w-full text-[11px] font-heading font-semibold tracking-wider text-royal-maroon uppercase group/btn"
         >
           <span className="relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-left after:scale-x-0 after:bg-antique-gold after:transition-transform after:duration-300 group-hover/btn:after:scale-x-100">
-            View Details
+            View Design
           </span>
           <svg
             className="w-3.5 h-3.5 text-royal-maroon transition-transform duration-300 ease-out transform group-hover:translate-x-1"

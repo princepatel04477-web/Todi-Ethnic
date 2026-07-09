@@ -99,7 +99,7 @@ export default function CategoryCollectionPage({
             <div className="relative w-full sm:max-w-xs md:max-w-md pl-4">
               <input
                 type="text"
-                placeholder="Search collection..."
+                placeholder="Search by design number or name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-8 pr-4 py-2.5 bg-transparent focus:outline-none text-sm font-body text-premium-brown placeholder-premium-brown/40 border-none"

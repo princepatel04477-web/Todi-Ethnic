@@ -57,7 +57,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
       {/* Product SKU and Stock Status */}
       <div className="flex items-center justify-between text-xs font-heading font-medium tracking-widest uppercase border-b border-antique-gold/10 pb-3">
         <span className="text-premium-brown/60">
-          SKU: <span className="text-premium-brown font-semibold">{product.sku}</span>
+          Design No: <span className="text-premium-brown font-semibold">{product.sku}</span>
         </span>
         {product.stock > 0 ? (
           <span className="text-emerald-700 flex items-center gap-1 font-semibold">
@@ -73,6 +73,9 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
 
       {/* Product Title and Price */}
       <div>
+        <span className="text-[10px] font-heading uppercase tracking-widest text-warm-grey block mb-1">
+          Design No. {product.sku}
+        </span>
         <h1 className="text-2xl sm:text-3xl font-heading font-semibold text-deep-maroon tracking-tight mb-2">
           {product.title}
         </h1>
@@ -179,6 +182,15 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                 <div>
                   <h4 className="font-heading font-semibold text-deep-maroon mb-1 text-sm">Reliable Global Delivery</h4>
                   <p className="font-light text-premium-brown/80 leading-relaxed">Secure, premium packaging with tracking to protect delicate materials, delivering across India and globally.</p>
+                </div>
+              </div>
+              <div className="flex gap-3 items-start col-span-1 md:col-span-2 border-t border-antique-gold/10 pt-4 mt-2">
+                <Info className="w-5 h-5 text-royal-maroon flex-shrink-0" />
+                <div>
+                  <h4 className="font-heading font-semibold text-deep-maroon mb-1 text-sm">Logistics Timelines & Return Policies</h4>
+                  <p className="font-light text-premium-brown/80 leading-relaxed">
+                    Domestic orders: 7 Days. International orders: 25 Days. Due to custom B2B manufacturing, no standard returns or refunds are accepted; verified transit-damaged items are replaced after review.
+                  </p>
                 </div>
               </div>
             </div>

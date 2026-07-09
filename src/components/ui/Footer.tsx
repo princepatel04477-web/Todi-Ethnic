@@ -38,7 +38,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-xs leading-relaxed text-ivory/70 font-light max-w-sm">
-              Surat-based manufacturer of premium designer ethnic wear, Banarasi silk lenghas, bridal georgette drapes, and designer lenghas. Crafting heritage into every thread since 1998.
+              Surat-based manufacturer and exporter of premium designer ethnic wear, established in 2011. Trusted by 1700+ boutique partners across 17+ countries.
             </p>
           </div>
 

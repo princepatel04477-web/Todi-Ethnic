@@ -19,8 +19,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Todi Creation",
-  description: "Surat-based manufacturer of designer ethnic wear, bridal lenghas, and premium couture.",
+  title: "Todi Creation | Wholesale Ethnic Wear Manufacturer, Surat",
+  description: "B2B manufacturer and exporter of premium bridal lenghas, Farsi trails, and designer ethnic wear. Based in Surat since 2011. Trusted by 1700+ boutique partners across 17+ countries.",
 };
 
 export default function RootLayout({

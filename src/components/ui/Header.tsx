@@ -83,7 +83,7 @@ export default function Header() {
                 alt="Todi Creation Logo"
                 width={360}
                 height={240}
-                className="h-14 lg:h-18 w-auto object-contain"
+                className="h-16 lg:h-20 w-auto object-contain"
                 priority
               />
             </Link>

@@ -42,13 +42,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : "https://todicreation.com/images/hero_banarasi_lengha.jpg";
 
   return {
-    title: `${product.title} - ${product.fabric} Lengha | Todi Creation`,
-    description: `${product.description.slice(0, 155)}... Surat manufactured designer wear.`,
+    title: `${product.title} — Design ${product.sku} | Todi Creation`,
+    description: `Design ${product.sku}: ${product.description.slice(0, 140)}. Manufactured in Surat by Todi Creation. MOQ 25 pieces.`,
     alternates: {
       canonical: `https://todicreation.com/product/${product.slug}`,
     },
     openGraph: {
-      title: `${product.title} | Todi Creation Surat`,
+      title: `${product.title} — Design ${product.sku} | Todi Creation Surat`,
       description: product.description,
       url: `https://todicreation.com/product/${product.slug}`,
       siteName: "Todi Creation",

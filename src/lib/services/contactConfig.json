@@ -5,7 +5,7 @@
   "businessEmail": "contact@todicreation.com",
   "googleMapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3720.088339179836!2d72.836111!3d21.192111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04e5bf5555555%3A0x5555555555555555!2sTodi%20Creations!5e0!3m2!1sen!2sin!4v1782919443765!5m2!1sen!2sin",
   "googleMapSearchUrl": "https://www.google.com/search?client=ms-android-nothing-terr2-rso3&hs=78Aq&sca_esv=9d979678eff53443&hl=en-IN&cs=1&sxsrf=APpeQnsYt5ZyYHER7iO85Lz5VNgGZBQO_Q%3A1782919443765&kgmid=%2Fg%2F1pzt4vcsg&q=Todi%20Creations&shem=epsd1%2Cltae%2Crimspwouoe%2Crimspwouohe&shndl=30&source=sh%2Fx%2Floc%2Fact%2Fm1%2F4&kgs=298a83fd9f994d01",
-  "address": "Ring Road, Surat, Gujarat, 395002, India",
+  "address": "L-1665-1666, Millennium Textile Market 1, Ring Road, Surat, Gujarat, 395002, India",
   "businessHours": "Mon - Sat: 10:00 AM - 8:00 PM (IST)",
   "heroHeading": "Let's Create Something Beautiful Together",
   "heroSubtitle": "Partner with Todi Creations for handcrafted bridal couture, premium festive collections, and exclusive boutique manufacturing.",
@@ -39,7 +39,7 @@
     },
     {
       "question": "What is the minimum order quantity (MOQ)?",
-      "answer": "Please contact us with your boutique details. We support low custom MOQs for established international boutiques."
+      "answer": "Our minimum order quantity is 25 pieces per design. We keep this accessible so boutiques of all sizes can partner with us."
     },
     {
       "question": "Can I request custom embroidery?",
@@ -47,7 +47,11 @@
     },
     {
       "question": "Do you export internationally?",
-      "answer": "Yes, we ship worldwide. We handle customs documentation and express logistics for seamless international deliveries."
+      "answer": "Yes, we ship worldwide. We handle customs documentation and express logistics, offering a 7-day domestic delivery and 25-day international shipping timeline."
+    },
+    {
+      "question": "What is your return and refund policy?",
+      "answer": "No returns are accepted. In the rare case of a damaged product, we replace it after verification — no monetary refund is issued."
     }
   ]
 }

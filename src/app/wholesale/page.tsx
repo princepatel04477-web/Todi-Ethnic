@@ -6,10 +6,13 @@ import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import B2BSection from "@/components/ui/B2BSection";
 import RevealSection from "@/components/ui/RevealSection";
+import AboutSection from "@/components/ui/AboutSection";
+import ExportCountries from "@/components/ui/ExportCountries";
+import DeliveryAndPolicy from "@/components/ui/DeliveryAndPolicy";
 
 export const metadata = {
-  title: "Wholesale Lengha Manufacturer | Partner With Todi Creation",
-  description: "Direct-from-manufacturer wholesale lengha supply. Low MOQs, custom embroidery, worldwide shipping. Partner with Todi Creation, Surat since 1998.",
+  title: "Wholesale Lengha Manufacturer & Exporter | Todi Creation, Surat",
+  description: "Direct-from-manufacturer wholesale lengha supply. Minimum 25 pieces per design, custom embroidery, worldwide shipping. Partner with Todi Creation, Surat since 2011.",
 };
 
 export default function WholesalePage() {
@@ -32,7 +35,7 @@ export default function WholesalePage() {
               Partner With Surat&apos;s Trusted Lengha Manufacturer
             </h1>
             <p className="text-xs sm:text-sm text-warm-grey max-w-2xl mx-auto font-light leading-relaxed">
-              Direct from our Surat workshop. Low custom MOQs, handmade embroidery, worldwide shipping since 1998.
+              Direct from our Surat workshop. Minimum 25 pieces per design, handmade embroidery, worldwide shipping since 2011.
             </p>
             <div className="pt-4">
               <a
@@ -58,7 +61,7 @@ export default function WholesalePage() {
                   Preserving the Soul of Surat&apos;s Weaving Heritage
                 </h2>
                 <p className="text-sm text-charcoal/85 font-body leading-relaxed mb-6 font-light">
-                  At Todi Creation, manufacturing is an act of devotion. Established in 1998, our Surat workshops house master craftspeople who translate dreams into reality. We handle everything in-house, from sourcing the finest metallic zari to detailing custom embroideries.
+                  At Todi Creation, manufacturing is an act of devotion. Established in 2011, our Surat workshops house master craftspeople who translate dreams into reality. We handle everything in-house, from sourcing the finest metallic zari to detailing custom embroideries.
                 </p>
                 <p className="text-sm text-charcoal/85 font-body leading-relaxed font-light mb-8">
                   By combining centuries-old handloom techniques with modern quality assurance, we create bridal and festive collections that are shipped to premium boutiques globally.
@@ -85,6 +88,16 @@ export default function WholesalePage() {
               </div>
             </div>
           </section>
+        </RevealSection>
+
+        {/* Brand Story Section */}
+        <RevealSection>
+          <AboutSection />
+        </RevealSection>
+
+        {/* Global Footprint / Export Countries */}
+        <RevealSection>
+          <ExportCountries />
         </RevealSection>
 
         {/* Manufacturing Excellence Cards */}
@@ -145,6 +158,11 @@ export default function WholesalePage() {
               </div>
             </div>
           </section>
+        </RevealSection>
+
+        {/* Logistics & Timelines Section */}
+        <RevealSection>
+          <DeliveryAndPolicy />
         </RevealSection>
 
         {/* B2B Buyer Segmentation, Process, and Inquiry Form (Orders III, V, VI) */}

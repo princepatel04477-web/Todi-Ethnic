@@ -10,8 +10,8 @@ export const unstable_instant = {
 };
 
 export const metadata = {
-  title: "Wholesale Inquiry & B2B Partner | Todi Creation",
-  description: "Partner with Todi Creation for handcrafted bridal couture, premium festive collections, and exclusive boutique manufacturing.",
+  title: "B2B Wholesale Inquiry | Partner With Todi Creation, Surat",
+  description: "Submit a wholesale inquiry to partner with Todi Creation. MOQ 25 pieces. Established 2011. Boutique manufacturer and exporter serving 17+ countries worldwide.",
 };
 
 export default function ContactPage() {

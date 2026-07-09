@@ -187,17 +187,17 @@ I am interested in wholesale lengha partnership options for my business:
           {/* Key Trust Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-16 divide-y md:divide-y-0 md:divide-x divide-antique-gold/15">
             <div className="pt-6 md:pt-0">
-              <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">200+</span>
+              <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">1700+</span>
               <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Boutique Partners</span>
             </div>
             <div className="pt-6 md:pt-0">
-              <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">15+</span>
-              <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Countries Exported</span>
-              <span className="text-[9px] text-warm-grey block mt-1">(UK, USA, UAE, Canada, Australia)</span>
+              <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">17+</span>
+              <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Countries Served</span>
+              <span className="text-[9px] text-warm-grey block mt-1">(Mauritius, UAE, UK, NZ, Fiji &amp; more)</span>
             </div>
             <div className="pt-6 md:pt-0">
-              <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">25+</span>
-              <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Years of Heritage</span>
+              <span className="font-heading text-4xl sm:text-5xl font-light text-deep-maroon block mb-2">15+</span>
+              <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-[#B29567]">Years Established</span>
             </div>
           </div>
 

@@ -4,8 +4,8 @@ import CategoryCollectionPage from "@/components/ui/CategoryCollectionPage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bridal Collection | Todi Creation",
-  description: "Explore Todi Creation's premium bridal collection. Handcrafted masterpieces featuring antique zardozi work and fine raw silk paneling.",
+  title: "Bridal Lengha Collection | Wholesale Manufacturer | Todi Creation",
+  description: "Explore Todi Creation's wholesale bridal collection. Handcrafted in Surat since 2011 with antique zardozi work and fine raw silk. MOQ 25 pieces.",
 };
 
 export default async function BridalPage() {

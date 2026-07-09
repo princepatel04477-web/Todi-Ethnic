@@ -71,7 +71,7 @@ export default function SEOJsonLd({
   domainUrl = "https://todicreation.com",
   telephone = "+91-99999-99999",
   address = {
-    streetAddress: "Ring Road",
+    streetAddress: "L-1665-1666, Millennium Textile Market 1, Ring Road",
     addressLocality: "Surat",
     addressRegion: "Gujarat",
     postalCode: "395002",
@@ -119,6 +119,11 @@ export default function SEOJsonLd({
         name: organizationName,
         url: domainUrl,
         logo: logoUrl,
+        foundingDate: "2011",
+        description: "B2B manufacturer and exporter of premium bridal ethnic wear, established in Surat, Gujarat in 2011. Trusted by 1700+ boutique partners across 17+ countries.",
+        areaServed: ["IN", "GB", "AE", "MU", "ZA", "NZ", "LK", "BD", "FJ"],
+        numberOfEmployees: { "@type": "QuantitativeValue", value: 135 },
+        slogan: "To inspire the world to embrace Indian culture through premium ethnic fashion and exceptional craftsmanship.",
         contactPoint: {
           "@type": "ContactPoint",
           telephone: telephone,
@@ -140,9 +145,20 @@ export default function SEOJsonLd({
         url: domainUrl,
         telephone: telephone,
         priceRange: "$$",
+        foundingDate: "2011",
+        description: "Wholesale manufacturer and exporter of bridal lenghas and ethnic wear. Factory at 2260, Millennium Textile Market 4, Surat. MOQ: 25 pieces.",
+        hasMap: "https://www.google.com/maps/search/Todi+Creations+Surat",
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+            opens: "10:00",
+            closes: "20:00",
+          },
+        ],
         address: {
           "@type": "PostalAddress",
-          streetAddress: addressStreet || "Ring Road",
+          streetAddress: addressStreet || "L-1665-1666, Millennium Textile Market 1, Ring Road",
           addressLocality: addressLocality || "Surat",
           addressRegion: addressRegion || "Gujarat",
           postalCode: addressPostalCode || "395002",
