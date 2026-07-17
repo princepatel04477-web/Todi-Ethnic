@@ -26,7 +26,7 @@ const getArrayParam = (param: string | string[] | undefined): string[] => {
 
 const gatewayCategories = [
   {
-    title: "Bridal Collection",
+    title: "Bridal Lengha",
     subtitle: "Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.",
     image: "/images/catalog-covers/Bridal-cc.png",
     link: "/bridal",
@@ -44,7 +44,7 @@ const gatewayCategories = [
     link: "/farsi-lengha",
   },
   {
-    title: "Indo Western",
+    title: "Indo-Western",
     subtitle: "Contemporary fusion couture combining modern fashion with traditional elegance.",
     image: "/images/catalog-covers/Indo-Western.png",
     link: "/indo-western",

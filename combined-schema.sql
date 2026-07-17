@@ -121,10 +121,10 @@ CREATE POLICY "Allow admin delete from product-images" ON storage.objects FOR DE
 -- ========== Seed Categories ==========
 
 INSERT INTO categories (id, name, slug, description) VALUES
-  ('c0000000-0000-0000-0000-000000000001', 'Bridal Collection', 'bridal-collection', 'Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.'),
+  ('c0000000-0000-0000-0000-000000000001', 'Bridal Lengha', 'bridal-lengha', 'Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.'),
   ('c0000000-0000-0000-0000-000000000002', 'Sider Lengha', 'sider-lengha', 'Elegant festive silhouettes designed for bridesmaids, celebrations and modern occasions.'),
   ('c0000000-0000-0000-0000-000000000003', 'Farsi Lengha', 'farsi-lengha', 'Classic heritage-inspired designs featuring graceful flares and intricate artisan detailing.'),
-  ('c0000000-0000-0000-0000-000000000004', 'Indo Western', 'indo-western', 'Contemporary fusion couture combining modern fashion with traditional elegance.')
+  ('c0000000-0000-0000-0000-000000000004', 'Indo-Western', 'indo-western', 'Contemporary fusion couture combining modern fashion with traditional elegance.')
 ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- ========== Seed Storage Policies for Service Role ==========

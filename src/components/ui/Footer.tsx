@@ -50,7 +50,7 @@ export default function Footer() {
             <ul className="space-y-2 text-xs font-light">
               <li>
                 <Link href="/bridal" className="text-ivory/80 hover:text-antique-gold transition-colors">
-                  Bridal Collection
+                  Bridal Lengha
                 </Link>
               </li>
               <li>

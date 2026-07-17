@@ -44,8 +44,8 @@ async function seed() {
   const categories = [
     {
       id: "c0000000-0000-0000-0000-000000000001",
-      name: "Bridal Collection",
-      slug: "bridal-collection",
+      name: "Bridal Lengha",
+      slug: "bridal-lengha",
       description: "Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.",
     },
     {
@@ -62,7 +62,7 @@ async function seed() {
     },
     {
       id: "c0000000-0000-0000-0000-000000000004",
-      name: "Indo Western",
+      name: "Indo-Western",
       slug: "indo-western",
       description: "Contemporary fusion couture combining modern fashion with traditional elegance.",
     },

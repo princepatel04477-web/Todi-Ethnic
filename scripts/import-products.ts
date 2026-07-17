@@ -71,8 +71,8 @@ const CATEGORY_MAP: Record<string, {
   storageFolder: string; description: string;
 }> = {
   "Bridal_Photos": {
-    name: "Bridal Collection",
-    slug: "bridal-collection",
+    name: "Bridal Lengha",
+    slug: "bridal-lengha",
     categoryId: "c0000000-0000-0000-0000-000000000001",
     code: "BR",
     storageFolder: "bridal",
@@ -87,7 +87,7 @@ const CATEGORY_MAP: Record<string, {
     description: "Graceful trail lengha crafted with heritage borders and intricate gold weaving from Surat.",
   },
   "Indo-Western": {
-    name: "Indo Western",
+    name: "Indo-Western",
     slug: "indo-western",
     categoryId: "c0000000-0000-0000-0000-000000000004",
     code: "IW",
@@ -161,7 +161,7 @@ async function main() {
   for (const cat of CATEGORIES) {
     const { error } = await supabase.from("categories").upsert(
       { id: cat.id, name: cat.name, slug: cat.slug, description: cat.description },
-      { onConflict: "slug" }
+      { onConflict: "id" }
     );
     if (error) {
       console.error(`  ❌ Failed to upsert category "${cat.name}": ${error.message}`);

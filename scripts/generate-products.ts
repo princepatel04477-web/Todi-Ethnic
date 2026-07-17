@@ -27,8 +27,8 @@ const CATEGORY_MAP: Record<
   { name: string; slug: string; categoryId: string; code: string; description: string }
 > = {
   "Bridal_Photos": {
-    name: "Bridal Collection",
-    slug: "bridal-collection",
+    name: "Bridal Lengha",
+    slug: "bridal-lengha",
     categoryId: "c0000000-0000-0000-0000-000000000001",
     code: "BR",
     description:
@@ -43,7 +43,7 @@ const CATEGORY_MAP: Record<
       "Graceful trail lengha crafted with heritage borders and gold weaving.",
   },
   "Indo-Western": {
-    name: "Indo Western",
+    name: "Indo-Western",
     slug: "indo-western",
     categoryId: "c0000000-0000-0000-0000-000000000004",
     code: "IW",

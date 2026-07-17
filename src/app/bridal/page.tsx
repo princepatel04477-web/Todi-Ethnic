@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 };
 
 export default async function BridalPage() {
-  const products = await fetchProducts({ category: "Bridal Collection" });
+  const products = await fetchProducts({ category: "Bridal Lengha" });
 
   return (
     <CategoryCollectionPage
-      categoryName="Bridal Collection"
-      categorySlug="bridal-collection"
+      categoryName="Bridal Lengha"
+      categorySlug="bridal-lengha"
       tagline="Luxury Wedding Couture"
       description="Timeless silhouettes crafted for unforgettable celebrations. Handcrafted with royal zari, zardozi and antique thread embroideries by expert manufacturers."
       heroImage="/images/catalog-covers/Bridal-cc.png"

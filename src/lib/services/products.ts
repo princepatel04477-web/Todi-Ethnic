@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { generatedProducts } from "./generatedProducts";
 
 export interface Category {
   id: string;
@@ -64,6 +65,47 @@ export interface ProductFilters {
  */
 export async function fetchCategories(): Promise<Category[]> {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!supabaseUrl || supabaseUrl.includes("placeholder")) {
+      return [
+        {
+          id: "c0000000-0000-0000-0000-000000000001",
+          name: "Bridal Lengha",
+          slug: "bridal-lengha",
+          description: "Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.",
+          image_url: "/images/categories/Bridal-cc.png",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        {
+          id: "c0000000-0000-0000-0000-000000000002",
+          name: "Sider Lengha",
+          slug: "sider-lengha",
+          description: "Elegant festive silhouettes designed for bridesmaids, celebrations and modern occasions.",
+          image_url: "/images/categories/Sider.png",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        {
+          id: "c0000000-0000-0000-0000-000000000003",
+          name: "Farsi Lengha",
+          slug: "farsi-lengha",
+          description: "Classic heritage-inspired designs featuring graceful flares and intricate artisan detailing.",
+          image_url: "/images/categories/Farsi.png",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        {
+          id: "c0000000-0000-0000-0000-000000000004",
+          name: "Indo-Western",
+          slug: "indo-western",
+          description: "Contemporary fusion couture combining modern fashion with traditional elegance.",
+          image_url: "/images/categories/Indo-Western.png",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      ];
+    }
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("categories")
@@ -87,6 +129,13 @@ export async function fetchCategories(): Promise<Category[]> {
  */
 export async function fetchFabrics(): Promise<string[]> {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!supabaseUrl || supabaseUrl.includes("placeholder")) {
+      const fabrics = Array.from(new Set(generatedProducts.map((p) => p.fabric)))
+        .filter(Boolean)
+        .sort();
+      return fabrics;
+    }
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("products")
@@ -114,6 +163,64 @@ export async function fetchFabrics(): Promise<string[]> {
  */
 export async function fetchProducts(filters: ProductFilters): Promise<Product[]> {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!supabaseUrl || supabaseUrl.includes("placeholder")) {
+      let list = [...generatedProducts];
+
+      if (filters.category) {
+        const categoriesList = (
+          Array.isArray(filters.category) ? filters.category : [filters.category]
+        )
+          .filter(Boolean)
+          .map((c) => c.toLowerCase());
+
+        if (categoriesList.length > 0) {
+          list = list.filter((p) => {
+            const catName = p.category?.toLowerCase() || "";
+            const catSlug = p.categories?.slug?.toLowerCase() || p.slug.split("-").slice(0, -1).join("-") || "";
+            return categoriesList.some(item => catName.includes(item) || catSlug.includes(item) || item.includes(catName) || item.includes(catSlug));
+          });
+        }
+      }
+
+      if (filters.fabric) {
+        const fabricsList = (
+          Array.isArray(filters.fabric) ? filters.fabric : [filters.fabric]
+        )
+          .filter(Boolean)
+          .map((f) => f.toLowerCase());
+
+        if (fabricsList.length > 0) {
+          list = list.filter((p) => fabricsList.includes(p.fabric?.toLowerCase()));
+        }
+      }
+
+      if (filters.featured !== undefined) {
+        list = list.filter((p) => p.featured === filters.featured);
+      }
+
+      if (filters.search) {
+        const q = filters.search.toLowerCase().trim();
+        if (q) {
+          list = list.filter(
+            (p) =>
+              p.name.toLowerCase().includes(q) ||
+              p.description.toLowerCase().includes(q) ||
+              p.sku.toLowerCase().includes(q) ||
+              p.fabric.toLowerCase().includes(q)
+          );
+        }
+      }
+
+      if (filters.newArrival !== undefined) {
+        list = list.filter((p) => p.newArrival === filters.newArrival);
+      }
+
+      list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+      return list;
+    }
+
     const supabase = await createClient();
     
     let query = supabase
@@ -203,6 +310,11 @@ export async function fetchProducts(filters: ProductFilters): Promise<Product[]>
  */
 export async function fetchProductBySlug(slug: string): Promise<Product | null> {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!supabaseUrl || supabaseUrl.includes("placeholder")) {
+      const product = generatedProducts.find((p) => p.slug === slug);
+      return product || null;
+    }
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("products")
@@ -241,6 +353,15 @@ export async function fetchRelatedProducts(
   limit = 4
 ): Promise<Product[]> {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!supabaseUrl || supabaseUrl.includes("placeholder")) {
+      const list = generatedProducts.filter(
+        (p) =>
+          p.id !== excludeId &&
+          (p.category_id === categoryId || p.fabric === fabric)
+      );
+      return list.slice(0, limit);
+    }
     const supabase = await createClient();
     
     let query = supabase

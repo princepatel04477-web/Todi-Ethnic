@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default async function IndoWesternPage() {
-  const products = await fetchProducts({ category: "Indo Western" });
+  const products = await fetchProducts({ category: "Indo-Western" });
 
   return (
     <CategoryCollectionPage
-      categoryName="Indo Western"
+      categoryName="Indo-Western"
       categorySlug="indo-western"
       tagline="Contemporary Fusion"
       description="Modern asymmetrical silhouettes and premium handworked embroidery designed for the modern fashion-forward boutique."
