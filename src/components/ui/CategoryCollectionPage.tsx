@@ -160,7 +160,7 @@ export default function CategoryCollectionPage({
 
           {/* Grid Layout (exactly 4 desktop, 3 tablet, 2 mobile) */}
           {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8 lg:gap-10">
               {filteredProducts.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
               ))}
