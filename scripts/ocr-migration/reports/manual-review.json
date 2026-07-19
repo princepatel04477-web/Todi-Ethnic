@@ -1,0 +1,44 @@
+[
+  {
+    "productId": "00000000-0000-0000-0000-00000000b007",
+    "originalTitle": "Bridal Lengha 07",
+    "sku": "TC-BR-007",
+    "imageUrl": "/Products_Photos/Bridal_Photos/7405.jpeg_202606302100.jpeg",
+    "extractedDesignNumber": "I-18",
+    "confidence": 80,
+    "status": "manual-review",
+    "attempts": [
+      "Full Image Preprocessed",
+      "Full Image OCR result: 'I-18' with confidence 27%",
+      "Cropped Bottom-Right",
+      "Bottom-Right OCR result: 'None' with confidence 47%",
+      "Cropped Top-Right",
+      "Top-Right OCR result: 'None' with confidence 74%",
+      "Raw Full Image (No Preprocessing)",
+      "Raw Full Image OCR result: 'MTSP-18' with confidence 23%",
+      "Fallback: Using low-confidence match 'I-18' for manual review."
+    ],
+    "localPath": "C:\\Users\\rebel\\OneDrive\\Documents\\GitHub\\Todi-Ethnic\\Products_Photos\\Bridal_Photos\\7405.jpeg_202606302100.jpeg"
+  },
+  {
+    "productId": "00000000-0000-0000-0000-00000000e001",
+    "originalTitle": "Indo-Western 01",
+    "sku": "TC-IW-001",
+    "imageUrl": "/Products_Photos/Indo-Western/Indo_western.jpeg",
+    "extractedDesignNumber": "BI-202",
+    "confidence": 80,
+    "status": "manual-review",
+    "attempts": [
+      "Full Image Preprocessed",
+      "Full Image OCR result: 'BI-202' with confidence 20%",
+      "Cropped Bottom-Right",
+      "Bottom-Right OCR result: 'None' with confidence 20%",
+      "Cropped Top-Right",
+      "Top-Right OCR result: 'None' with confidence 24%",
+      "Raw Full Image (No Preprocessing)",
+      "Raw Full Image OCR result: 'AD-15' with confidence 20%",
+      "Fallback: Using low-confidence match 'BI-202' for manual review."
+    ],
+    "localPath": "C:\\Users\\rebel\\OneDrive\\Documents\\GitHub\\Todi-Ethnic\\Products_Photos\\Indo-Western\\Indo_western.jpeg"
+  }
+]

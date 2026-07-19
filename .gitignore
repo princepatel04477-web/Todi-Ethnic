@@ -40,3 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# OCR
+eng.traineddata
+scripts/ocr-migration/temp_downloads/
+scripts/ocr-migration/backups/
