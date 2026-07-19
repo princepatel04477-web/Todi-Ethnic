@@ -22,8 +22,8 @@ const slides: Slide[] = [
     title: "Todi Creation Signature Collection",
   },
   {
-    desktopImage: "/images/hero/Indowestern_1.png",
-    mobileImage: "/images/hero/mobile_indowestern.jpeg",
+    desktopImage: "/images/hero/indowestern_with_logo.jpg",
+    mobileImage: "/images/hero/indowestern_with_logo_mobile.jpg",
     link: "/catalog?category=Indo+Western",
     title: "Indo Western Catalog",
   },
@@ -34,8 +34,8 @@ const slides: Slide[] = [
     title: "Sider Lengha Collections",
   },
   {
-    desktopImage: "/images/hero/farsi.png",
-    mobileImage: "/images/hero/mobile_farsi.jpeg",
+    desktopImage: "/images/hero/farsi_with_logo.jpg",
+    mobileImage: "/images/hero/farsi_with_logo_mobile.jpg",
     link: "/catalog?category=Farsi+Lengha",
     title: "Farsi Lengha Custom Designs",
   },
