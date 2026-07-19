@@ -7,10 +7,6 @@ export default function CustomCursor() {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
-  // Position references
-  const positionRef = useRef({ x: 0, y: 0 });
-  const trailPositionRef = useRef({ x: 0, y: 0 });
-
   // DOM node references
   const dotRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
@@ -30,12 +26,12 @@ export default function CustomCursor() {
     setIsVisible(true);
 
     const onMouseMove = (e: MouseEvent) => {
-      positionRef.current.x = e.clientX;
-      positionRef.current.y = e.clientY;
-      
-      // Update dot position immediately with zero transition/delay (Dot follows hardware mouse instantly)
+      // Update both dot and circle position instantly to the exact same coordinates (no lag/lerp)
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      }
+      if (circleRef.current) {
+        circleRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       }
     };
 
@@ -72,31 +68,6 @@ export default function CustomCursor() {
     document.addEventListener("mouseleave", onMouseLeaveDoc);
     document.addEventListener("mouseenter", onMouseEnterDoc);
 
-    // Animation Loop for trailing circle (Circle follows the dot smoothly)
-    let animationFrameId = 0;
-    const updateTrail = () => {
-      const targetX = positionRef.current.x;
-      const targetY = positionRef.current.y;
-      
-      const currentX = trailPositionRef.current.x;
-      const currentY = trailPositionRef.current.y;
-
-      // Linear interpolation (lerp) for smooth trailing delay (0.15 damping factor)
-      const dx = targetX - currentX;
-      const dy = targetY - currentY;
-      
-      trailPositionRef.current.x += dx * 0.15;
-      trailPositionRef.current.y += dy * 0.15;
-
-      if (circleRef.current) {
-        circleRef.current.style.transform = `translate3d(${trailPositionRef.current.x}px, ${trailPositionRef.current.y}px, 0)`;
-      }
-
-      animationFrameId = requestAnimationFrame(updateTrail);
-    };
-
-    animationFrameId = requestAnimationFrame(updateTrail);
-
     // Hide original browser cursor on body/interactive elements
     const styleNode = document.createElement("style");
     styleNode.innerHTML = `
@@ -114,7 +85,6 @@ export default function CustomCursor() {
       window.removeEventListener("mouseover", onMouseOver);
       document.removeEventListener("mouseleave", onMouseLeaveDoc);
       document.removeEventListener("mouseenter", onMouseEnterDoc);
-      cancelAnimationFrame(animationFrameId);
       if (document.head.contains(styleNode)) {
         document.head.removeChild(styleNode);
       }
@@ -123,10 +93,11 @@ export default function CustomCursor() {
 
   if (!isVisible) return null;
 
-  // Render cursor with fixed theme colors (Antique Gold) and no mix-blend-difference
+  // Render both elements with absolute positioning. Sizing & color transitions are handled inline.
+  // The 'transform' property is purposely omitted from transition lists so it updates instantly.
   return (
     <>
-      {/* Center Dot (Instantly follows pointer) */}
+      {/* Center Dot (Instantly centered under hardware pointer) */}
       <div
         ref={dotRef}
         className="fixed top-0 left-0 w-1.5 h-1.5 bg-[#C9A14A] rounded-full pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2"
@@ -135,19 +106,20 @@ export default function CustomCursor() {
         }}
       />
       
-      {/* Trailing Circle (Lags behind the dot smoothly) */}
+      {/* Outer Circle (Concentric with dot at all times - no transform lag) */}
       <div
         ref={circleRef}
-        className={`fixed top-0 left-0 rounded-full pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2 transition-all duration-100 ease-out
+        className={`fixed top-0 left-0 rounded-full pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2
           ${isHovered 
-            ? "w-10 h-10 border border-[#C9A14A] bg-[#C9A14A]/10 scale-110" 
+            ? "w-10 h-10 border border-[#C9A14A] bg-[#C9A14A]/10" 
             : isClicked 
-              ? "w-6 h-6 border border-[#5C0E1D] bg-[#5C0E1D]/10 scale-95" 
+              ? "w-6 h-6 border border-[#5C0E1D] bg-[#5C0E1D]/10" 
               : "w-8 h-8 border border-[#C9A14A]/80"
           }
         `}
         style={{
           transform: "translate3d(-100px, -100px, 0)",
+          transition: "width 0.15s ease-out, height 0.15s ease-out, border-color 0.15s ease-out, background-color 0.15s ease-out"
         }}
       />
     </>
