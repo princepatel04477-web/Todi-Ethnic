@@ -33,6 +33,7 @@ export default function CustomCursor() {
       positionRef.current.x = e.clientX;
       positionRef.current.y = e.clientY;
       
+      // Update dot position immediately with zero transition/delay (Dot follows hardware mouse instantly)
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       }
@@ -71,7 +72,7 @@ export default function CustomCursor() {
     document.addEventListener("mouseleave", onMouseLeaveDoc);
     document.addEventListener("mouseenter", onMouseEnterDoc);
 
-    // Animation Loop for trailing circle
+    // Animation Loop for trailing circle (Circle follows the dot smoothly)
     let animationFrameId = 0;
     const updateTrail = () => {
       const targetX = positionRef.current.x;
@@ -122,26 +123,27 @@ export default function CustomCursor() {
 
   if (!isVisible) return null;
 
+  // Render cursor with fixed theme colors (Antique Gold) and no mix-blend-difference
   return (
     <>
-      {/* Center Dot */}
+      {/* Center Dot (Instantly follows pointer) */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-antique-gold rounded-full pointer-events-none z-9999 -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 mix-blend-difference"
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-[#C9A14A] rounded-full pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2"
         style={{
           transform: "translate3d(-100px, -100px, 0)",
         }}
       />
       
-      {/* Trailing Circle */}
+      {/* Trailing Circle (Lags behind the dot smoothly) */}
       <div
         ref={circleRef}
-        className={`fixed top-0 left-0 rounded-full pointer-events-none z-9999 -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out mix-blend-difference
+        className={`fixed top-0 left-0 rounded-full pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2 transition-all duration-100 ease-out
           ${isHovered 
-            ? "w-10 h-10 border border-antique-gold bg-antique-gold/10 scale-110" 
+            ? "w-10 h-10 border border-[#C9A14A] bg-[#C9A14A]/10 scale-110" 
             : isClicked 
-              ? "w-6 h-6 border-2 border-deep-maroon scale-95" 
-              : "w-8 h-8 border border-antique-gold/80"
+              ? "w-6 h-6 border border-[#5C0E1D] bg-[#5C0E1D]/10 scale-95" 
+              : "w-8 h-8 border border-[#C9A14A]/80"
           }
         `}
         style={{
