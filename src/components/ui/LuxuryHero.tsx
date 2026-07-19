@@ -28,8 +28,8 @@ const slides: Slide[] = [
     title: "Indo Western Catalog",
   },
   {
-    desktopImage: "/images/hero/Sider.png",
-    mobileImage: "/images/hero/mobile_sider.jpeg",
+    desktopImage: "/images/hero/sider_with_logo.jpg",
+    mobileImage: "/images/hero/sider_with_logo_mobile.jpg",
     link: "/catalog?category=Sider+Lengha",
     title: "Sider Lengha Collections",
   },
