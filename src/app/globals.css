@@ -110,6 +110,7 @@
   /* Fonts */
   --font-heading: var(--font-cormorant), "Cormorant Garamond", serif;
   --font-body: var(--font-inter), "Inter", sans-serif;
+  --font-number: var(--font-cinzel), "Cinzel", serif;
   
   /* Borders and Shadow style variables */
   --border-luxury: 1px solid var(--border);

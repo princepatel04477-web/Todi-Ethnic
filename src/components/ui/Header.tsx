@@ -75,7 +75,7 @@ export default function Header() {
             </Link>
             <a
               href="tel:+918141014006"
-              className="relative text-[11px] font-heading tracking-wider text-charcoal/80 hover:text-deep-maroon transition-colors py-1 flex items-center gap-1.5 uppercase font-medium"
+              className="relative text-[12px] font-number tracking-wider text-charcoal/80 hover:text-deep-maroon transition-colors py-1 flex items-center gap-1.5 font-medium"
             >
               <Phone className="w-3.5 h-3.5" />
               <span>+91 81410 14006</span>
@@ -169,7 +169,7 @@ export default function Header() {
           </button>
           <a
             href="tel:+918141014006"
-            className="block px-3 py-2 text-base font-heading font-medium tracking-wide text-charcoal hover:text-deep-maroon transition-colors uppercase flex items-center gap-2"
+            className="block px-3 py-2 text-sm font-number font-medium tracking-wide text-charcoal hover:text-deep-maroon transition-colors flex items-center gap-2"
           >
             <Phone className="w-4 h-4 text-antique-gold" />
             <span>+91 81410 14006</span>
