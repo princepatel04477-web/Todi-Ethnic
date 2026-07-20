@@ -3,8 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import gsap from "gsap";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Slide {
@@ -41,8 +40,23 @@ const slides: Slide[] = [
   },
 ];
 
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? "100%" : "-100%",
+    opacity: 1,
+  }),
+  center: {
+    x: "0%",
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction < 0 ? "100%" : "-100%",
+    opacity: 1,
+  }),
+};
+
 export default function LuxuryHero() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [[currentSlide, direction], setPage] = useState<[number, number]>([0, 1]);
   const [autoplay, setAutoplay] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,20 +69,21 @@ export default function LuxuryHero() {
   const [touchEndY, setTouchEndY] = useState<number | null>(null);
   const minSwipeDistance = 50;
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const paginate = (newDirection: number) => {
+    setPage(([prevPage]) => {
+      let nextPage = prevPage + newDirection;
+      if (nextPage >= slides.length) nextPage = 0;
+      if (nextPage < 0) nextPage = slides.length - 1;
+      return [nextPage, newDirection];
+    });
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
-  // Autoplay handler (6-second cycle)
+  // Autoplay handler (continuous 4.5-second slide cycle)
   useEffect(() => {
     if (autoplay) {
       autoplayTimerRef.current = setInterval(() => {
-        nextSlide();
-      }, 6000);
+        paginate(1);
+      }, 4500);
     }
     return () => {
       if (autoplayTimerRef.current) {
@@ -77,35 +92,14 @@ export default function LuxuryHero() {
     };
   }, [autoplay, currentSlide]);
 
-  // GSAP Ken Burns Slow Zoom Transition
-  useEffect(() => {
-    const ctx = gsap.context((self) => {
-      const activeImage = self.selector?.(".opacity-100 .hero-image");
-      if (activeImage && activeImage.length > 0) {
-        // Subtle slow zoom scaling from 1.04 down to 1.00 over 6s
-        gsap.fromTo(
-          activeImage,
-          { scale: 1.04 },
-          {
-            scale: 1,
-            duration: 6,
-            ease: "sine.out",
-          }
-        );
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, [currentSlide]);
-
   // Keyboard navigation support
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (document.activeElement !== containerRef.current) return;
       if (e.key === "ArrowLeft") {
-        prevSlide();
+        paginate(-1);
       } else if (e.key === "ArrowRight") {
-        nextSlide();
+        paginate(1);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -114,7 +108,6 @@ export default function LuxuryHero() {
 
   // Gesture Touch Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
-    setAutoplay(false);
     setTouchEndX(null);
     setTouchEndY(null);
     setTouchStartX(e.targetTouches[0].clientX);
@@ -127,19 +120,21 @@ export default function LuxuryHero() {
   };
 
   const handleTouchEnd = () => {
-    setAutoplay(true);
     if (touchStartX === null || touchStartY === null || touchEndX === null || touchEndY === null) return;
     const diffX = touchStartX - touchEndX;
     const diffY = touchStartY - touchEndY;
 
     if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipeDistance) {
       if (diffX > 0) {
-        nextSlide();
+        paginate(1);
       } else {
-        prevSlide();
+        paginate(-1);
       }
     }
   };
+
+  const activeSlideIndex = ((currentSlide % slides.length) + slides.length) % slides.length;
+  const activeSlide = slides[activeSlideIndex];
 
   return (
     <div
@@ -149,59 +144,53 @@ export default function LuxuryHero() {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      onMouseEnter={() => setAutoplay(false)}
-      onMouseLeave={() => setAutoplay(true)}
-      onFocus={() => setAutoplay(false)}
-      onBlur={() => setAutoplay(true)}
       role="region"
       aria-roledescription="carousel"
       aria-label="Todi Creation B2B Collections Showcase"
     >
-      {/* Slides Viewports */}
-      <div className="absolute inset-0 w-full h-full">
-        {slides.map((slide, index) => {
-          const isActive = index === currentSlide;
-          return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
-              style={{
-                pointerEvents: isActive ? "auto" : "none",
-                zIndex: isActive ? 10 : 0,
-              }}
-              className="absolute inset-0 w-full h-full"
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`Slide ${index + 1} of ${slides.length}: ${slide.title}`}
-              aria-hidden={!isActive}
-            >
-              <Link href={slide.link} className="block relative w-full h-full cursor-pointer focus:outline-none">
-                <div className="relative w-full h-full overflow-hidden transform-gpu">
-                  {/* Desktop / Laptop Viewport Banner */}
-                  <Image
-                    src={slide.desktopImage}
-                    alt={slide.title}
-                    fill
-                    priority={index === 0}
-                    className="hero-image hidden sm:block object-cover object-center transform-gpu"
-                    sizes="100vw"
-                  />
-                  {/* Mobile / Tablet Viewport Banner */}
-                  <Image
-                    src={slide.mobileImage}
-                    alt={slide.title}
-                    fill
-                    priority={index === 0}
-                    className="hero-image block sm:hidden object-cover object-center transform-gpu"
-                    sizes="100vw"
-                  />
-                </div>
-              </Link>
-            </motion.div>
-          );
-        })}
+      {/* Slides Viewports with Horizontal Slide In/Out Animation */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.div
+            key={currentSlide}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 32 },
+              opacity: { duration: 0.3 }
+            }}
+            className="absolute inset-0 w-full h-full"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`Slide ${activeSlideIndex + 1} of ${slides.length}: ${activeSlide.title}`}
+          >
+            <Link href={activeSlide.link} className="block relative w-full h-full cursor-pointer focus:outline-none">
+              <div className="relative w-full h-full overflow-hidden transform-gpu">
+                {/* Desktop / Laptop Viewport Banner */}
+                <Image
+                  src={activeSlide.desktopImage}
+                  alt={activeSlide.title}
+                  fill
+                  priority
+                  className="hero-image hidden sm:block object-cover object-center transform-gpu"
+                  sizes="100vw"
+                />
+                {/* Mobile / Tablet Viewport Banner */}
+                <Image
+                  src={activeSlide.mobileImage}
+                  alt={activeSlide.title}
+                  fill
+                  priority
+                  className="hero-image block sm:hidden object-cover object-center transform-gpu"
+                  sizes="100vw"
+                />
+              </div>
+            </Link>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Desktop Glass Navigation Arrows (Hidden on Mobile) */}
@@ -209,7 +198,7 @@ export default function LuxuryHero() {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            prevSlide();
+            paginate(-1);
           }}
           className="w-16 h-32 flex items-center justify-center bg-transparent border-0 opacity-0 group-hover/hero:opacity-100 transition-opacity duration-300 focus:opacity-100 focus:outline-none cursor-pointer"
           aria-label="Previous slide"
@@ -224,7 +213,7 @@ export default function LuxuryHero() {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            nextSlide();
+            paginate(1);
           }}
           className="w-16 h-32 flex items-center justify-center bg-transparent border-0 opacity-0 group-hover/hero:opacity-100 transition-opacity duration-300 focus:opacity-100 focus:outline-none cursor-pointer"
           aria-label="Next slide"
@@ -238,12 +227,13 @@ export default function LuxuryHero() {
       {/* Apple-style Capsule Progress Indicators */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
         {slides.map((_, index) => {
-          const isActive = index === currentSlide;
+          const isActive = index === activeSlideIndex;
           return (
             <button
               key={index}
               onClick={() => {
-                setCurrentSlide(index);
+                const newDirection = index > activeSlideIndex ? 1 : -1;
+                setPage([index, newDirection]);
               }}
               className={`relative h-1.5 rounded-full overflow-hidden transition-all duration-500 cursor-pointer ${
                 isActive ? "w-16 bg-ivory/20" : "w-1.5 bg-ivory/40 hover:bg-ivory/70"
@@ -251,11 +241,12 @@ export default function LuxuryHero() {
               aria-label={`Go to slide ${index + 1}`}
             >
               {isActive && (
-                <span
-                  className="absolute left-0 top-0 h-full bg-antique-gold animate-slide-progress"
-                  style={{
-                    animationPlayState: autoplay ? "running" : "paused",
-                  }}
+                <motion.span
+                  key={currentSlide}
+                  initial={{ x: "-100%" }}
+                  animate={{ x: "0%" }}
+                  transition={{ duration: 4.5, ease: "linear" }}
+                  className="absolute left-0 top-0 h-full w-full bg-antique-gold"
                 />
               )}
             </button>
