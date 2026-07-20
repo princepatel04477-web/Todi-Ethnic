@@ -147,7 +147,7 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
         <div className="fixed inset-0 z-[100] flex flex-col bg-neutral-950/98 backdrop-blur-md animate-fade-in select-none">
           {/* Lightbox Controls */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 w-full text-white">
-            <span className="text-sm font-heading tracking-widest uppercase text-neutral-400">
+            <span className="text-sm font-number font-normal tracking-wider uppercase text-neutral-300">
               {title}
             </span>
             <div className="flex items-center gap-4">
