@@ -30,11 +30,11 @@ export default function Footer() {
           <div className="space-y-4">
             <Link href="/" className="inline-block">
               <Image
-                src="/logo_1.png"
-                alt="Todi Creation Logo"
-                width={360}
-                height={240}
-                className="h-20 sm:h-26 w-auto object-contain brightness-0 invert"
+                src="/logo.png"
+                alt="TODI CREATIONS"
+                width={320}
+                height={113}
+                className="h-16 sm:h-20 w-auto object-contain drop-shadow-md"
               />
             </Link>
             <p className="text-xs leading-relaxed text-ivory/70 font-light max-w-sm">

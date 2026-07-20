@@ -106,6 +106,18 @@ function generateProducts(): { products: ProductEntry[]; countByCategory: Record
   const products: ProductEntry[] = [];
   const countByCategory: Record<string, number> = {};
 
+  // Load design number mappings
+  const mappingsPath = join(__dirname, "ocr-migration", "reports", "parsed-mappings.json");
+  let parsedMappings: Record<string, string> = {};
+  if (existsSync(mappingsPath)) {
+    const { readFileSync } = require("fs");
+    try {
+      parsedMappings = JSON.parse(readFileSync(mappingsPath, "utf8"));
+    } catch (e) {
+      console.error("Failed to parse parsed-mappings.json:", e);
+    }
+  }
+
   for (const [folderName, cat] of Object.entries(CATEGORY_MAP)) {
     const folderPath = join(PRODUCTS_DIR, folderName);
     const files = getFilesInFolder(folderPath);
@@ -121,16 +133,19 @@ function generateProducts(): { products: ProductEntry[]; countByCategory: Record
       const featured = shouldBeFeatured(i, total);
       const newArrival = shouldBeNewArrival(i, total);
 
+      const sku = `TC-${cat.code}-${skuPad}`;
+      const designNumber = parsedMappings[sku] || `${cat.name} ${pad}`;
+
       const product: ProductEntry = {
-        id: `TC-${cat.code}-${skuPad}`,
-        name: `${cat.name} ${pad}`,
-        title: `${cat.name} ${pad}`,
+        id: sku,
+        name: designNumber,
+        title: designNumber,
         category: cat.name,
         image: `/Products_Photos/${folderName}/${filename}`,
         slug: `${cat.slug}-${pad}`,
         featured,
         newArrival,
-        sku: `TC-${cat.code}-${skuPad}`,
+        sku: sku,
         fabric: cat.name,
         image_urls: [`/Products_Photos/${folderName}/${filename}`],
         category_id: cat.categoryId,

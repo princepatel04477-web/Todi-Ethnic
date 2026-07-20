@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { 
   LayoutDashboard, 
@@ -43,10 +44,14 @@ function AdminMobileHeader({ isMobileOpen, setIsMobileOpen, handleLogout, theme,
       </button>
 
       <div className="flex flex-col items-center">
-        <span className="text-base font-bold tracking-[0.25em] text-white">
-          TODI CREATION
-        </span>
-        <span className="text-[9px] tracking-[0.4em] text-primary uppercase mt-0.5">
+        <Image
+          src="/logo.png"
+          alt="TODI CREATIONS"
+          width={200}
+          height={71}
+          className="h-9 w-auto object-contain brightness-110"
+        />
+        <span className="text-[8px] tracking-[0.4em] text-primary uppercase -mt-0.5">
           Admin Panel
         </span>
       </div>
@@ -99,11 +104,15 @@ function AdminSidebar({ isMobileOpen, adminEmail, handleLogout, theme, toggleThe
     >
       <div className="select-none">
         {/* Sidebar Header branding */}
-        <div className="h-24 border-b border-zinc-900 flex flex-col justify-center px-8">
-          <span className="text-2xl font-bold tracking-[0.3em] text-white">
-            TODI CREATION
-          </span>
-          <span className="text-xs tracking-[0.45em] text-primary uppercase mt-0.5 font-medium">
+        <div className="h-24 border-b border-zinc-900 flex flex-col justify-center items-start px-6">
+          <Image
+            src="/logo.png"
+            alt="TODI CREATIONS"
+            width={240}
+            height={85}
+            className="h-12 w-auto object-contain brightness-110"
+          />
+          <span className="text-[9px] tracking-[0.45em] text-primary uppercase mt-1 font-medium">
             Admin Desk
           </span>
         </div>

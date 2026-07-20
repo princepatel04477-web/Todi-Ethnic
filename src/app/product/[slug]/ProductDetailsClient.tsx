@@ -70,7 +70,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
 
       {/* Product Title and Price */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-heading font-semibold text-deep-maroon tracking-tight mb-2">
+        <h1 className="text-2xl sm:text-3xl font-number font-medium text-deep-maroon tracking-wide mb-2">
           {product.title}
         </h1>
       </div>

@@ -84,13 +84,13 @@ export default function Header() {
 
           {/* Brand Logo */}
           <div className="flex-1 flex justify-center md:absolute md:left-1/2 md:-translate-x-1/2">
-            <Link href="/" className="flex flex-col items-center">
+            <Link href="/" className="flex flex-col items-center group py-1">
               <Image
-                src="/logo_1.png"
-                alt="Todi Creation Logo"
-                width={360}
-                height={240}
-                className="h-28 lg:h-36 w-auto object-contain"
+                src="/logo.png"
+                alt="TODI CREATIONS"
+                width={320}
+                height={113}
+                className="h-16 sm:h-20 md:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                 priority
               />
             </Link>

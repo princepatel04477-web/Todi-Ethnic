@@ -327,7 +327,7 @@ Please confirm availability and manufacturing timeline. Thank you!`;
                       <div className="flex-1 flex flex-col justify-between">
                         <div>
                           <div className="flex justify-between items-start gap-1">
-                            <h3 className="text-xs font-heading font-semibold text-deep-maroon tracking-tight line-clamp-1">
+                            <h3 className="text-xs font-number font-medium text-deep-maroon tracking-tight line-clamp-1">
                               {item.title}
                             </h3>
                             <button

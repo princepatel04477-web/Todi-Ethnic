@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, Lock, Shield, ArrowRight, AlertTriangle, Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -70,11 +71,16 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-zinc-900/60 backdrop-blur-md rounded-2xl border border-zinc-800 p-8 sm:p-10 shadow-luxury z-10 animate-fade-in">
         {/* Header Branding */}
         <div className="text-center mb-8">
-          <Link href="/" className="flex flex-col items-center mb-6">
-            <span className="text-xl sm:text-2xl font-heading font-semibold tracking-[0.3em] text-white">
-              TODI CREATION
-            </span>
-            <span className="text-[9px] font-heading tracking-[0.45em] text-primary uppercase -mt-0.5">
+          <Link href="/" className="flex flex-col items-center mb-4">
+            <Image
+              src="/logo.png"
+              alt="TODI CREATIONS"
+              width={260}
+              height={92}
+              className="h-16 sm:h-20 w-auto object-contain brightness-110 mb-1"
+              priority
+            />
+            <span className="text-[9px] font-heading tracking-[0.45em] text-primary uppercase">
               Surat
             </span>
           </Link>
