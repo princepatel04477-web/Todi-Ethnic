@@ -7,7 +7,7 @@ import { Category } from "@/lib/services/products";
 const mockCategories: Category[] = [
   { id: "cat-1", name: "Bridal Lehenga", slug: "bridal-lehengas", description: "Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.", image_url: "/images/categories/Bridal-cc.png", created_at: "", updated_at: "" },
   { id: "cat-2", name: "Sider Lehenga", slug: "sider-lehengas", description: "Elegant festive silhouettes designed for bridesmaids, celebrations and modern occasions.", image_url: "/images/categories/Sider-cc.png", created_at: "", updated_at: "" },
-  { id: "cat-3", name: "Farsi Lehenga", slug: "farsi-lehengas", description: "Classic heritage-inspired designs featuring graceful flares and intricate artisan detailing.", image_url: "/images/categories/Farsi.png", created_at: "", updated_at: "" },
+  { id: "cat-3", name: "Farsi Lehenga", slug: "farsi-lehengas", description: "Classic heritage-inspired designs featuring graceful flares and intricate artisan detailing.", image_url: "/images/categories/farsi.png", created_at: "", updated_at: "" },
   { id: "cat-4", name: "Indo-Western", slug: "indo-western", description: "Contemporary fusion couture combining modern fashion with traditional elegance.", image_url: "/images/categories/Indo-Western.png", created_at: "", updated_at: "" },
 ];
 

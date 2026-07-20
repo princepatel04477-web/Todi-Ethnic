@@ -91,7 +91,7 @@ export async function fetchCategories(): Promise<Category[]> {
           name: "Farsi Lehenga",
           slug: "farsi-lehengas",
           description: "Classic heritage-inspired designs featuring graceful flares and intricate artisan detailing.",
-          image_url: "/images/categories/Farsi.png",
+          image_url: "/images/categories/farsi.png",
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },

@@ -30,7 +30,7 @@ const categories = [
   {
     name: "Farsi Lehenga",
     subtitle: "Graceful trail and traditional vintage textures",
-    image: "/images/categories/Farsi.png",
+    image: "/images/categories/farsi.png",
     link: "/catalog?category=Farsi+Lehenga",
     count: "03",
     translateClass: "md:-translate-y-4",
