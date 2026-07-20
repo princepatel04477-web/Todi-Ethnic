@@ -88,9 +88,9 @@ export default function Header() {
               <Image
                 src="/logo.png"
                 alt="TODI CREATIONS"
-                width={320}
-                height={113}
-                className="h-16 sm:h-20 md:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                width={450}
+                height={64}
+                className="h-12 sm:h-16 md:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                 priority
               />
             </Link>
