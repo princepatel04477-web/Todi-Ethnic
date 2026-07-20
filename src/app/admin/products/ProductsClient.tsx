@@ -239,7 +239,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                 {filteredProducts.map((product) => {
                   const firstImg = product.image_urls && product.image_urls.length > 0
                     ? product.image_urls[0]
-                    : "/images/hero_banarasi_lengha.jpg";
+                    : "/images/hero_banarasi_lehenga.jpg";
                   
                   const isFeaturedBusy = isProcessing === `featured-${product.id}`;
                   const isStockBusy = isProcessing === `stock-${product.id}`;

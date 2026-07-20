@@ -71,20 +71,20 @@ const CATEGORY_MAP: Record<string, {
   storageFolder: string; description: string;
 }> = {
   "Bridal_Photos": {
-    name: "Bridal Lengha",
-    slug: "bridal-lengha",
+    name: "Bridal Lehenga",
+    slug: "bridal-lehengas",
     categoryId: "c0000000-0000-0000-0000-000000000001",
     code: "BR",
     storageFolder: "bridal",
     description: "Premium handcrafted bridal masterpiece featuring timeless luxury embroidery crafted in Surat.",
   },
-  "Farsi_lengha": {
-    name: "Farsi Lengha",
-    slug: "farsi-lengha",
+  "Farsi_lehenga": {
+    name: "Farsi Lehenga",
+    slug: "farsi-lehengas",
     categoryId: "c0000000-0000-0000-0000-000000000003",
     code: "FL",
-    storageFolder: "farsi-lengha",
-    description: "Graceful trail lengha crafted with heritage borders and intricate gold weaving from Surat.",
+    storageFolder: "farsi-lehengas",
+    description: "Graceful trail lehenga crafted with heritage borders and intricate gold weaving from Surat.",
   },
   "Indo-Western": {
     name: "Indo-Western",
@@ -94,13 +94,13 @@ const CATEGORY_MAP: Record<string, {
     storageFolder: "indo-western",
     description: "Contemporary fusion couture combining modern aesthetics with traditional artisanship.",
   },
-  "Sider_Lengha": {
-    name: "Sider Lengha",
-    slug: "sider-lengha",
+  "Sider_Lehenga": {
+    name: "Sider Lehenga",
+    slug: "sider-lehengas",
     categoryId: "c0000000-0000-0000-0000-000000000002",
     code: "SL",
-    storageFolder: "sider-lengha",
-    description: "Charming lengha designed for bridesmaids and festive celebrations, crafted in Surat.",
+    storageFolder: "sider-lehengas",
+    description: "Charming lehenga designed for bridesmaids and festive celebrations, crafted in Surat.",
   },
 };
 

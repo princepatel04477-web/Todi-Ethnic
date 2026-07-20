@@ -18,9 +18,9 @@ A comprehensive TypeScript script that:
    ```
 
 2. Image folders in the project root:
-   - `Bridal_Photos/` - 20 bridal lengha images
-   - `Sider_Lengha/` - 20 sider lengha images
-   - `Farsi_lengha/` - 19 farsi lengha images
+   - `Bridal_Photos/` - 20 bridal lehenga images
+   - `Sider_Lehenga/` - 20 sider lehenga images
+   - `Farsi_lehenga/` - 19 farsi lehenga images
    - `Indo_western.jpeg` - 1 indo-western image
 
 ### Usage
@@ -32,7 +32,7 @@ npm run seed
 ### What it does
 
 1. **Creates storage bucket** (`product-images`) if it doesn't exist
-2. **Creates categories** (Bridal Lengha, Sider Lengha, Farsi Lengha, Indo-Western) if they don't exist
+2. **Creates categories** (Bridal Lehenga, Sider Lehenga, Farsi Lehenga, Indo-Western) if they don't exist
 3. **Uploads images** with duplicate detection:
    - Computes SHA256 hash of each image
    - Skips upload if the exact same file was already uploaded

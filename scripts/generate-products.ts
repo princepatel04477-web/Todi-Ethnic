@@ -2,7 +2,7 @@
 /**
  * Generate product data from the Products_Photos/ folder structure.
  *
- * Scans Bridal_Photos/, Farsi_lengha/, Indo-Western/, Sider_Lengha/
+ * Scans Bridal_Photos/, Farsi_lehenga/, Indo-Western/, Sider_Lehenga/
  * and produces src/lib/services/generatedProducts.ts with one product
  * per image. IDs, slugs, featured/newArrival flags are deterministic.
  *
@@ -27,20 +27,20 @@ const CATEGORY_MAP: Record<
   { name: string; slug: string; categoryId: string; code: string; description: string }
 > = {
   "Bridal_Photos": {
-    name: "Bridal Lengha",
-    slug: "bridal-lengha",
+    name: "Bridal Lehenga",
+    slug: "bridal-lehengas",
     categoryId: "c0000000-0000-0000-0000-000000000001",
     code: "BR",
     description:
       "Premium handcrafted bridal masterpiece featuring timeless luxury motifs.",
   },
-  "Farsi_lengha": {
-    name: "Farsi Lengha",
-    slug: "farsi-lengha",
+  "Farsi_lehenga": {
+    name: "Farsi Lehenga",
+    slug: "farsi-lehengas",
     categoryId: "c0000000-0000-0000-0000-000000000003",
     code: "FL",
     description:
-      "Graceful trail lengha crafted with heritage borders and gold weaving.",
+      "Graceful trail lehenga crafted with heritage borders and gold weaving.",
   },
   "Indo-Western": {
     name: "Indo-Western",
@@ -50,13 +50,13 @@ const CATEGORY_MAP: Record<
     description:
       "Contemporary fusion outfit combining modern aesthetics with traditional silhouettes.",
   },
-  "Sider_Lengha": {
-    name: "Sider Lengha",
-    slug: "sider-lengha",
+  "Sider_Lehenga": {
+    name: "Sider Lehenga",
+    slug: "sider-lehengas",
     categoryId: "c0000000-0000-0000-0000-000000000002",
     code: "SL",
     description:
-      "Charming lengha designed for bridesmaids and festive celebrations.",
+      "Charming lehenga designed for bridesmaids and festive celebrations.",
   },
 };
 

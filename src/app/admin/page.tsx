@@ -10,7 +10,7 @@ import {
   ExternalLink,
   Clock
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isDynamicError } from "@/lib/supabase/server";
 
 // Define mock data for local development if database is unconfigured
 const mockStats = {
@@ -28,8 +28,8 @@ const mockInquiries = [
     status: "pending",
     created_at: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
     items: [
-      { title: "Varanasi Rajat Brocade Lengha", quantity: 5 },
-      { title: "Zardozi Empress Lengha", quantity: 2 }
+      { title: "Varanasi Rajat Brocade Lehenga", quantity: 5 },
+      { title: "Zardozi Empress Lehenga", quantity: 2 }
     ]
   },
   {
@@ -39,7 +39,7 @@ const mockInquiries = [
     status: "pending",
     created_at: new Date(Date.now() - 3600000 * 18).toISOString(), // 18 hours ago
     items: [
-      { title: "Amber Aura Fusion Lengha", quantity: 1 }
+      { title: "Amber Aura Fusion Lehenga", quantity: 1 }
     ]
   }
 ];
@@ -87,6 +87,7 @@ export default async function AdminDashboardPage() {
         items: Array.isArray(inq.items) ? inq.items : []
       })) : [];
     } catch (err) {
+      if (isDynamicError(err)) throw err;
       console.error("Failed to fetch dashboard stats from Supabase:", err);
       isDevMode = true;
     }

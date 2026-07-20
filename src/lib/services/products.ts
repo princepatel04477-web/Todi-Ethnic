@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/server";
 import { generatedProducts } from "./generatedProducts";
 
 export interface Category {
@@ -70,8 +70,8 @@ export async function fetchCategories(): Promise<Category[]> {
       return [
         {
           id: "c0000000-0000-0000-0000-000000000001",
-          name: "Bridal Lengha",
-          slug: "bridal-lengha",
+          name: "Bridal Lehenga",
+          slug: "bridal-lehengas",
           description: "Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.",
           image_url: "/images/categories/Bridal-cc.png",
           created_at: new Date().toISOString(),
@@ -79,8 +79,8 @@ export async function fetchCategories(): Promise<Category[]> {
         },
         {
           id: "c0000000-0000-0000-0000-000000000002",
-          name: "Sider Lengha",
-          slug: "sider-lengha",
+          name: "Sider Lehenga",
+          slug: "sider-lehengas",
           description: "Elegant festive silhouettes designed for bridesmaids, celebrations and modern occasions.",
           image_url: "/images/categories/Sider.png",
           created_at: new Date().toISOString(),
@@ -88,8 +88,8 @@ export async function fetchCategories(): Promise<Category[]> {
         },
         {
           id: "c0000000-0000-0000-0000-000000000003",
-          name: "Farsi Lengha",
-          slug: "farsi-lengha",
+          name: "Farsi Lehenga",
+          slug: "farsi-lehengas",
           description: "Classic heritage-inspired designs featuring graceful flares and intricate artisan detailing.",
           image_url: "/images/categories/Farsi.png",
           created_at: new Date().toISOString(),
@@ -106,7 +106,7 @@ export async function fetchCategories(): Promise<Category[]> {
         },
       ];
     }
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from("categories")
       .select("*")
@@ -136,7 +136,7 @@ export async function fetchFabrics(): Promise<string[]> {
         .sort();
       return fabrics;
     }
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from("products")
       .select("fabric")
@@ -221,7 +221,7 @@ export async function fetchProducts(filters: ProductFilters): Promise<Product[]>
       return list;
     }
 
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     
     let query = supabase
       .from("products")
@@ -315,7 +315,7 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
       const product = generatedProducts.find((p) => p.slug === slug);
       return product || null;
     }
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from("products")
       .select("*, categories(*)")
@@ -362,7 +362,7 @@ export async function fetchRelatedProducts(
       );
       return list.slice(0, limit);
     }
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     
     let query = supabase
       .from("products")

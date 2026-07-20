@@ -55,10 +55,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
   return (
     <div className="flex flex-col space-y-6 select-none animate-fade-in">
       {/* Product SKU and Stock Status */}
-      <div className="flex items-center justify-between text-xs font-heading font-medium tracking-widest uppercase border-b border-antique-gold/10 pb-3">
-        <span className="text-premium-brown/60">
-          Design No: <span className="text-premium-brown font-semibold">{product.sku}</span>
-        </span>
+      <div className="flex items-center justify-end text-xs font-heading font-medium tracking-widest uppercase border-b border-antique-gold/10 pb-3">
         {product.stock > 0 ? (
           <span className="text-emerald-700 flex items-center gap-1 font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-ping" />
@@ -73,9 +70,6 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
 
       {/* Product Title and Price */}
       <div>
-        <span className="text-[10px] font-heading uppercase tracking-widest text-warm-grey block mb-1">
-          Design No. {product.sku}
-        </span>
         <h1 className="text-2xl sm:text-3xl font-heading font-semibold text-deep-maroon tracking-tight mb-2">
           {product.title}
         </h1>
@@ -174,7 +168,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                 <RefreshCw className="w-5 h-5 text-royal-maroon flex-shrink-0" />
                 <div>
                   <h4 className="font-heading font-semibold text-deep-maroon mb-1 text-sm">Uncompromising Quality</h4>
-                  <p className="font-light text-premium-brown/80 leading-relaxed">Each lengha undergoes strict quality control for stitching, weaving, and embroidery.</p>
+                  <p className="font-light text-premium-brown/80 leading-relaxed">Each lehenga undergoes strict quality control for stitching, weaving, and embroidery.</p>
                 </div>
               </div>
               <div className="flex gap-3 items-start">

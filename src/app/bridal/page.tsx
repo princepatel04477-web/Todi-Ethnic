@@ -4,17 +4,17 @@ import CategoryCollectionPage from "@/components/ui/CategoryCollectionPage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bridal Lengha Collection | Wholesale Manufacturer | Todi Creation",
+  title: "Bridal Lehenga Collection | Wholesale Manufacturer | Todi Creation",
   description: "Explore Todi Creation's wholesale bridal collection. Handcrafted in Surat since 2011 with antique zardozi work and fine raw silk. MOQ 25 pieces.",
 };
 
 export default async function BridalPage() {
-  const products = await fetchProducts({ category: "Bridal Lengha" });
+  const products = await fetchProducts({ category: "Bridal Lehenga" });
 
   return (
     <CategoryCollectionPage
-      categoryName="Bridal Lengha"
-      categorySlug="bridal-lengha"
+      categoryName="Bridal Lehenga"
+      categorySlug="bridal-lehengas"
       tagline="Luxury Wedding Couture"
       description="Timeless silhouettes crafted for unforgettable celebrations. Handcrafted with royal zari, zardozi and antique thread embroideries by expert manufacturers."
       heroImage="/images/catalog-covers/Bridal-cc.png"

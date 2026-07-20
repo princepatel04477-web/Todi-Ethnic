@@ -26,22 +26,22 @@ const getArrayParam = (param: string | string[] | undefined): string[] => {
 
 const gatewayCategories = [
   {
-    title: "Bridal Lengha",
+    title: "Bridal Lehenga",
     subtitle: "Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.",
     image: "/images/catalog-covers/Bridal-cc.png",
     link: "/bridal",
   },
   {
-    title: "Sider Lengha",
+    title: "Sider Lehenga",
     subtitle: "Elegant festive silhouettes designed for bridesmaids, celebrations and modern occasions.",
     image: "/images/catalog-covers/Sider-cc.png",
-    link: "/sider-lengha",
+    link: "/sider-lehengas",
   },
   {
-    title: "Farsi Lengha",
+    title: "Farsi Lehenga",
     subtitle: "Classic heritage-inspired designs featuring graceful flares and intricate artisan detailing.",
     image: "/images/catalog-covers/Farsi.png",
-    link: "/farsi-lengha",
+    link: "/farsi-lehengas",
   },
   {
     title: "Indo-Western",

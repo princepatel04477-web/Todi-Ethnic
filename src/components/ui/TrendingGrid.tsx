@@ -18,32 +18,32 @@ interface Product {
 const trendingProducts: Product[] = [
   {
     id: "trending-1",
-    title: "Varanasi Rajat Brocade Lengha",
+    title: "Varanasi Rajat Brocade Lehenga",
     slug: "varanasi-rajat-brocade",
     sku: "TC-LEH-001",
-    fabric: "Bridal Lengha",
+    fabric: "Bridal Lehenga",
     image: "/images/bridal/bridal-8.jpg",
   },
   {
     id: "trending-2",
-    title: "Crimson Shiddat Farsi Lengha",
+    title: "Crimson Shiddat Farsi Lehenga",
     slug: "crimson-shiddat-bridal",
     sku: "TC-FAR-002",
-    fabric: "Farsi Lengha",
+    fabric: "Farsi Lehenga",
     image: "/images/bridal/bridal-9.jpg",
   },
   {
     id: "trending-3",
-    title: "Amber Aura Sider Lengha",
+    title: "Amber Aura Sider Lehenga",
     slug: "amber-aura-fusion",
     sku: "TC-SID-003",
-    fabric: "Sider Lengha",
+    fabric: "Sider Lehenga",
     image: "/images/bridal/bridal-10.jpg",
   },
   {
     id: "trending-4",
     title: "Zardozi Empress Indo Western",
-    slug: "zardozi-empress-lengha",
+    slug: "zardozi-empress-lehenga",
     sku: "TC-IND-004",
     fabric: "Indo Western",
     image: "/images/bridal/bridal-11.jpg",
@@ -103,10 +103,7 @@ export default function TrendingGrid() {
 
             {/* Info details */}
             <div className="p-5 flex flex-col flex-grow">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] font-body tracking-[0.2em] text-warm-grey uppercase">
-                  {product.sku}
-                </span>
+              <div className="flex items-center justify-end mb-2">
                 <span className="text-[9px] font-body font-semibold tracking-wider text-success-sage uppercase">
                   • In Stock
                 </span>

@@ -14,7 +14,8 @@ import {
   ChevronDown, 
   ChevronUp, 
   ArrowRight, 
-  ExternalLink 
+  ExternalLink,
+  Shield 
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { ContactConfig } from "@/lib/services/contactConfig";
@@ -39,14 +40,14 @@ export default function ContactClient({ config }: ContactClientProps) {
   const [phone, setPhone] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [email, setEmail] = useState("");
-  const [category, setCategory] = useState("Bridal Lengha");
+  const [category, setCategory] = useState("Bridal Lehenga");
   const [message, setMessage] = useState("");
 
   // Populate prefill fields if present
   useEffect(() => {
     if (paramCategory) {
       // Try to match dropdown values
-      const matched = ["Bridal Lengha", "Sider Lengha", "Farsi Lengha", "Indo-Western", "Indo Western"].find(
+      const matched = ["Bridal Lehenga", "Sider Lehenga", "Farsi Lehenga", "Indo-Western", "Indo Western"].find(
         (c) => c.toLowerCase().replace("-", " ") === paramCategory.toLowerCase().replace("-", " ")
       );
       if (matched) {
@@ -147,6 +148,8 @@ ${paramProduct ? `- Design: ${paramProduct} (${paramDesign})\n` : ""}
         return <Globe className="w-6 h-6 text-antique-gold" />;
       case "PenTool":
         return <PenTool className="w-6 h-6 text-antique-gold" />;
+      case "Shield":
+        return <Shield className="w-6 h-6 text-antique-gold" />;
       default:
         return <Sparkles className="w-6 h-6 text-antique-gold" />;
     }
@@ -164,7 +167,7 @@ ${paramProduct ? `- Design: ${paramProduct} (${paramDesign})\n` : ""}
         </h1>
         
         <p className="text-sm sm:text-base text-charcoal/80 font-body leading-relaxed mb-8 max-w-lg font-light">
-          Thank you, <span className="font-semibold text-deep-maroon">{name}</span>. Your inquiry has been logged, and we have redirected you to connect with Gautam Todi on WhatsApp.
+          Thank you, <span className="font-semibold text-deep-maroon">{name}</span>. Your inquiry has been logged, and we have redirected you to connect with Todi Creations on WhatsApp.
         </p>
 
         <div className="w-full bg-[#FDF9F3] border border-[#EADFCF] p-6 shadow-luxury mb-8 rounded-none">
@@ -395,9 +398,9 @@ ${paramProduct ? `- Design: ${paramProduct} (${paramDesign})\n` : ""}
                       onChange={(e) => setCategory(e.target.value)}
                       className="w-full px-4 py-3 rounded-none border border-[#EADFCF] bg-ivory focus:outline-none focus:border-antique-gold text-sm font-heading font-semibold uppercase tracking-wider text-charcoal cursor-pointer appearance-none"
                     >
-                      <option value="Bridal Lengha">Bridal Lengha</option>
-                      <option value="Sider Lengha">Sider Lengha</option>
-                      <option value="Farsi Lengha">Farsi Lengha</option>
+                      <option value="Bridal Lehenga">Bridal Lehenga</option>
+                      <option value="Sider Lehenga">Sider Lehenga</option>
+                      <option value="Farsi Lehenga">Farsi Lehenga</option>
                       <option value="Indo-Western">Indo-Western</option>
                     </select>
                     <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
@@ -614,7 +617,7 @@ ${paramProduct ? `- Design: ${paramProduct} (${paramDesign})\n` : ""}
             {config.ctaText}
           </h2>
           <p className="text-xs sm:text-sm text-ivory/70 font-light max-w-lg mx-auto leading-relaxed">
-            Connect with Gautam Todi for elite manufacturing partnerships, fabric catalogs, and international shipping rates.
+            Connect with Todi Creations for elite manufacturing partnerships, fabric catalogs, and international shipping rates.
           </p>
           <div className="pt-4">
             <button

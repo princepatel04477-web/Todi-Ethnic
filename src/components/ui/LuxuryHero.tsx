@@ -30,14 +30,14 @@ const slides: Slide[] = [
   {
     desktopImage: "/images/hero/sider_with_logo.jpg",
     mobileImage: "/images/hero/sider_with_logo_mobile.jpg",
-    link: "/catalog?category=Sider+Lengha",
-    title: "Sider Lengha Collections",
+    link: "/catalog?category=Sider+Lehenga",
+    title: "Sider Lehenga Collections",
   },
   {
     desktopImage: "/images/hero/farsi_with_logo.jpg",
     mobileImage: "/images/hero/farsi_with_logo_mobile.jpg",
-    link: "/catalog?category=Farsi+Lengha",
-    title: "Farsi Lengha Custom Designs",
+    link: "/catalog?category=Farsi+Lehenga",
+    title: "Farsi Lehenga Custom Designs",
   },
 ];
 

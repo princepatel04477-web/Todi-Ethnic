@@ -17,7 +17,7 @@ export default function ImageCarousel({ imageUrls, title }: ImageCarouselProps) 
   const touchEndX = useRef(0);
 
   // Fallback if no images are provided
-  const images = imageUrls && imageUrls.length > 0 ? imageUrls : ["/images/hero_banarasi_lengha.jpg"];
+  const images = imageUrls && imageUrls.length > 0 ? imageUrls : ["/images/hero_banarasi_lehenga.jpg"];
 
 
 

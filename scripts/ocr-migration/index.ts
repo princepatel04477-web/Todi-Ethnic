@@ -24,9 +24,9 @@ async function getLocalImagePath(imageUrl: string): Promise<string> {
       // Map storage folder to local folder
       const folderMap: Record<string, { dir: string; prefix: string }> = {
         "bridal": { dir: "Bridal_Photos", prefix: "BR" },
-        "farsi-lengha": { dir: "Farsi_lengha", prefix: "FL" },
+        "farsi-lehengas": { dir: "Farsi_lehenga", prefix: "FL" },
         "indo-western": { dir: "Indo-Western", prefix: "IW" },
-        "sider-lengha": { dir: "Sider_Lengha", prefix: "SL" },
+        "sider-lehengas": { dir: "Sider_Lehenga", prefix: "SL" },
       };
 
       const mapping = folderMap[folder];

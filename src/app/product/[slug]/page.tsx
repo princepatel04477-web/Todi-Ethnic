@@ -39,19 +39,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const firstImage = product.image_urls && product.image_urls.length > 0
     ? product.image_urls[0]
-    : "https://todicreation.com/images/hero_banarasi_lengha.jpg";
+    : "https://todicreation.com/images/hero_banarasi_lehenga.jpg";
 
   return {
-    title: `${product.title} — Design ${product.sku} | Todi Creation`,
-    description: `Design ${product.sku}: ${product.description.slice(0, 140)}. Manufactured in Surat by Todi Creation. MOQ 25 pieces.`,
+    title: `${product.title} | Todi Creations`,
+    description: `${product.title}: ${product.description.slice(0, 140)}. Manufactured in Surat by Todi Creations. MOQ 25 pieces.`,
     alternates: {
       canonical: `https://todicreation.com/product/${product.slug}`,
     },
     openGraph: {
-      title: `${product.title} — Design ${product.sku} | Todi Creation Surat`,
+      title: `${product.title} | Todi Creations Surat`,
       description: product.description,
       url: `https://todicreation.com/product/${product.slug}`,
-      siteName: "Todi Creation",
+      siteName: "Todi Creations",
       images: [
         {
           url: firstImage,
@@ -96,9 +96,9 @@ export default async function ProductPage({ params }: PageProps) {
         productData={{
           title: product.title,
           description: product.description,
-          images: product.image_urls.length > 0 ? product.image_urls : ["https://todicreation.com/images/hero_banarasi_lengha.jpg"],
+          images: product.image_urls.length > 0 ? product.image_urls : ["https://todicreation.com/images/hero_banarasi_lehenga.jpg"],
           sku: product.sku,
-          category: product.categories?.name || "Designer Lengha",
+          category: product.categories?.name || "Designer Lehenga",
           fabric: product.fabric,
           inStock: product.stock > 0,
           url: `https://todicreation.com/product/${product.slug}`,

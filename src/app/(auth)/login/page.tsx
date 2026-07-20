@@ -104,7 +104,7 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 required
-                placeholder="admin@todicreation.com"
+                placeholder="admin@todiethnic.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-11 pr-4 py-3 rounded-lg border border-zinc-800 bg-zinc-950/50 focus:outline-none focus:border-primary text-sm font-body text-white transition-colors placeholder-zinc-600"

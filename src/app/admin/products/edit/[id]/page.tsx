@@ -1,6 +1,6 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isDynamicError } from "@/lib/supabase/server";
 import ProductForm, { ProductFormData } from "@/components/admin/ProductForm";
 import { Product, Category } from "@/lib/services/products";
 
@@ -47,6 +47,7 @@ export default async function EditProductPage({ params }: PageProps) {
 
     categories = categoriesRes.data || [];
   } catch (err) {
+    if (isDynamicError(err)) throw err;
     console.error("Database connection error:", err);
   }
 

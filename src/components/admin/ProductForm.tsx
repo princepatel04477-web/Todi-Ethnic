@@ -30,7 +30,7 @@ const fabricSuggestions = [
   "Banarasi Silk",
   "Bridal Georgette",
   "Silk Cotton",
-  "Designer Lengha",
+  "Designer Lehenga",
   "Georgette Crepe",
   "Organza Silk",
   "Kanchipuram Silk",
@@ -156,7 +156,7 @@ export default function ProductForm({
               id="title"
               type="text"
               required
-              placeholder="e.g. Varanasi Gold Brocade Lengha"
+              placeholder="e.g. Varanasi Gold Brocade Lehenga"
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border border-zinc-800 bg-zinc-950/40 focus:outline-none focus:border-primary text-xs font-body text-white transition-colors placeholder-zinc-600"

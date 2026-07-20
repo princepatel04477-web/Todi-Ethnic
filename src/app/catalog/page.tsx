@@ -7,7 +7,7 @@ import CatalogSkeleton from "./CatalogSkeleton";
 
 export const metadata: Metadata = {
   title: "Design Catalog | Premium Ethnic Wear | Todi Creation",
-  description: "Browse Todi Creation's design catalog — bridal lenghas, Farsi trails, sider lenghas, and Indo-Western wear. Each design number handcrafted in Surat, Gujarat.",
+  description: "Browse Todi Creation's design catalog — bridal lehengas, Farsi trails, sider lehengas, and Indo-Western wear. Each design number handcrafted in Surat, Gujarat.",
 };
 
 // Enable Next.js instant static shell prerendering for client navigation

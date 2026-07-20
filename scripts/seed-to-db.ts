@@ -44,20 +44,20 @@ async function seed() {
   const categories = [
     {
       id: "c0000000-0000-0000-0000-000000000001",
-      name: "Bridal Lengha",
-      slug: "bridal-lengha",
+      name: "Bridal Lehenga",
+      slug: "bridal-lehengas",
       description: "Luxury bridal masterpieces handcrafted with timeless embroidery and royal craftsmanship.",
     },
     {
       id: "c0000000-0000-0000-0000-000000000002",
-      name: "Sider Lengha",
-      slug: "sider-lengha",
+      name: "Sider Lehenga",
+      slug: "sider-lehengas",
       description: "Elegant festive silhouettes designed for bridesmaids, celebrations and modern occasions.",
     },
     {
       id: "c0000000-0000-0000-0000-000000000003",
-      name: "Farsi Lengha",
-      slug: "farsi-lengha",
+      name: "Farsi Lehenga",
+      slug: "farsi-lehengas",
       description: "Classic heritage-inspired designs featuring graceful flares and intricate artisan detailing.",
     },
     {
@@ -69,7 +69,7 @@ async function seed() {
   ];
 
   for (const cat of categories) {
-    const { error } = await supabase.from("categories").upsert(cat, { onConflict: "slug" });
+    const { error } = await supabase.from("categories").upsert(cat);
     if (error) {
       console.error(`❌ Error seeding category ${cat.name}:`, error.message);
       process.exit(1);
@@ -93,8 +93,8 @@ async function seed() {
     const prefixMap: Record<string, string> = {
       BR: "b",
       FL: "f",
-      IW: "i",
-      SL: "s",
+      IW: "c",
+      SL: "d",
     };
     const codeChar = prefixMap[code] || "a";
     const uuid = `00000000-0000-0000-0000-00000000${codeChar}${num}`;

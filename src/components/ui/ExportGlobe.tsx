@@ -16,7 +16,7 @@ const ORIGIN_SURAT = { lat: 21.1702, lng: 72.8311, name: "Surat (HQ)" };
 
 const DESTINATIONS: Destination[] = [
   { name: "Dubai", lat: 25.2048, lng: 55.2708, label: "UAE Gateway", details: "Direct boutique exports to Dubai showrooms." },
-  { name: "London", lat: 51.5074, lng: -0.1278, label: "UK Hub", details: "Premium zardozi lengha supply to retail networks." },
+  { name: "London", lat: 51.5074, lng: -0.1278, label: "UK Hub", details: "Premium zardozi lehenga supply to retail networks." },
   { name: "Singapore", lat: 1.3521, lng: 103.8198, label: "South East Asia", details: "Direct distribution to bridal styling boutiques." },
   { name: "Mauritius", lat: -20.3484, lng: 57.5522, label: "East Africa", details: "Custom bridal catalog exports." },
   { name: "South Africa", lat: -30.5595, lng: 22.9375, label: "Southern Africa", details: "Supply to showrooms in Johannesburg." },
@@ -24,123 +24,404 @@ const DESTINATIONS: Destination[] = [
   { name: "Barbados", lat: 13.1939, lng: -59.5432, label: "West Indies", details: "Traditional silk trail collections." },
   { name: "Sri Lanka", lat: 7.8731, lng: 80.7718, label: "South Asia", details: "Handloom fabrics and heavy georgettes." },
   { name: "Bangladesh", lat: 23.6850, lng: 90.3563, label: "East Bengal Hub", details: "Direct merchant distributions." },
-  { name: "Fiji", lat: -17.7134, lng: 178.0650, label: "Pacific Region", details: "Couture custom lengha exports." }
+  { name: "Fiji", lat: -17.7134, lng: 178.0650, label: "Pacific Region", details: "Couture custom lehenga exports." }
 ];
 
-// Mathematical representation of continents to render a dotted map on the canvas sphere
-// Mathematical representation of continents to render a detailed world map on the canvas sphere
-const LAND_CENTERS = [
-  // North America
-  { lat: 75, lng: -100, r: 18 }, // Northern Canada islands
-  { lat: 70, lng: -120, r: 12 },
-  { lat: 62, lng: -100, r: 24 }, // Hudson bay / Canada
-  { lat: 50, lng: -110, r: 20 }, // Western Canada / US
-  { lat: 45, lng: -90, r: 22 },  // Eastern US
-  { lat: 35, lng: -115, r: 15 }, // South Western US
-  { lat: 30, lng: -85, r: 14 },  // Florida / Southeast US
-  { lat: 24, lng: -102, r: 10 }, // Mexico
-  { lat: 15, lng: -90, r: 6 },   // Central America
-  { lat: 8, lng: -80, r: 4 },    // Panama
-  
-  // Greenland
-  { lat: 75, lng: -40, r: 15 },
-  { lat: 68, lng: -40, r: 10 },
-
-  // South America
-  { lat: 5, lng: -65, r: 16 },   // Venezuela / Colombia
-  { lat: -5, lng: -60, r: 22 },  // Brazil North
-  { lat: -10, lng: -48, r: 16 }, // Brazil East
-  { lat: -18, lng: -60, r: 18 }, // Bolivia / Paraguay
-  { lat: -30, lng: -62, r: 14 }, // Argentina
-  { lat: -42, lng: -68, r: 10 }, // Patagonia
-  { lat: -52, lng: -70, r: 6 },  // Tierra del Fuego
-
-  // Africa
-  { lat: 30, lng: 10, r: 18 },   // Northwest Africa
-  { lat: 25, lng: 25, r: 20 },   // Northeast Africa / Egypt
-  { lat: 12, lng: -5, r: 14 },   // West Africa hump
-  { lat: 10, lng: 18, r: 16 },   // Central Africa North
-  { lat: -2, lng: 22, r: 18 },   // Congo region
-  { lat: -12, lng: 24, r: 15 },  // Angola / Zambia
-  { lat: -22, lng: 25, r: 12 },  // Namibia / Botswana
-  { lat: -30, lng: 26, r: 8 },   // South Africa
-  { lat: -18, lng: 46, r: 5 },   // Madagascar
-
-  // Europe
-  { lat: 64, lng: 20, r: 12 },   // Scandinavia
-  { lat: 60, lng: 10, r: 8 },
-  { lat: 52, lng: 15, r: 14 },   // Central Europe
-  { lat: 46, lng: 2, r: 10 },    // France / Spain
-  { lat: 40, lng: -4, r: 8 },    // Iberia
-  { lat: 40, lng: 15, r: 6 },    // Italy
-  { lat: 38, lng: 23, r: 6 },    // Greece
-  { lat: 54, lng: -4, r: 7 },    // UK / Ireland
-
-  // Middle East
-  { lat: 32, lng: 38, r: 10 },   // Turkey / Levant
-  { lat: 24, lng: 45, r: 14 },   // Arabia
-  { lat: 32, lng: 58, r: 12 },   // Iran
-
-  // India & South Asia
-  { lat: 22, lng: 78, r: 12 },   // North India
-  { lat: 14, lng: 78, r: 8 },    // South India
-  { lat: 7, lng: 80, r: 3 },     // Sri Lanka
-
-  // Asia (Siberia / Russia / China / East Asia)
-  { lat: 70, lng: 80, r: 22 },   // Ob Gulf / Siberia
-  { lat: 72, lng: 120, r: 20 },  // Laptev Sea coast
-  { lat: 62, lng: 100, r: 26 },  // Central Siberia
-  { lat: 64, lng: 140, r: 22 },  // East Siberia
-  { lat: 52, lng: 110, r: 24 },  // Mongolia / Baikal
-  { lat: 48, lng: 85, r: 22 },   // Central Asia / Kazakhstan
-  { lat: 40, lng: 105, r: 22 },  // Northern China
-  { lat: 30, lng: 110, r: 18 },  // Southern China
-  { lat: 36, lng: 128, r: 5 },   // Korea
-  { lat: 38, lng: 138, r: 8 },   // Japan
-  { lat: 54, lng: 160, r: 10 },  // Kamchatka
-
-  // Southeast Asia / Maritime
-  { lat: 18, lng: 105, r: 8 },   // Indochina
-  { lat: 12, lng: 108, r: 6 },   // Vietnam
-  { lat: 4, lng: 102, r: 5 },    // Malay Peninsula
-  { lat: -2, lng: 114, r: 12 },  // Borneo / Indonesia
-  { lat: -2, lng: 100, r: 10 },  // Sumatra
-  { lat: -7, lng: 112, r: 6 },   // Java
-  { lat: -2, lng: 120, r: 8 },   // Sulawesi
-  { lat: 12, lng: 122, r: 8 },   // Philippines
-  { lat: -4, lng: 140, r: 10 },  // Papua New Guinea
-
-  // Australia / Oceania
-  { lat: -18, lng: 125, r: 12 }, // Northwest Australia
-  { lat: -24, lng: 135, r: 16 }, // Central Australia
-  { lat: -32, lng: 140, r: 14 }, // South Australia
-  { lat: -20, lng: 145, r: 12 }, // Northeast Australia
-  { lat: -40, lng: 172, r: 6 },  // New Zealand North
-  { lat: -44, lng: 168, r: 6 },  // New Zealand South
+const EXPORT_COUNTRY_CODES = [
+  "IND", "ARE", "GBR", "SGP", "MUS", "ZAF", "NZL", "BRB", "LKA", "BGD", "FJI"
 ];
 
-function isLand(lat: number, lng: number): boolean {
-  if (lat < -60) return true; // Antarctica
-  for (const center of LAND_CENTERS) {
-    const dLat = lat - center.lat;
-    let dLng = lng - center.lng;
-    if (dLng > 180) dLng -= 360;
-    if (dLng < -180) dLng += 360;
-    const dist = Math.sqrt(dLat * dLat + dLng * dLng);
-    if (dist < center.r) return true;
-  }
-  return false;
+// Country Data — ISO numeric → [ISO3, name]
+const CD: { [key: string]: [string, string] } = {
+  "004": ["AFG", "Afghanistan"],
+  "008": ["ALB", "Albania"],
+  "012": ["DZA", "Algeria"],
+  "024": ["AGO", "Angola"],
+  "032": ["ARG", "Argentina"],
+  "036": ["AUS", "Australia"],
+  "040": ["AUT", "Austria"],
+  "031": ["AZE", "Azerbaijan"],
+  "050": ["BGD", "Bangladesh"],
+  "056": ["BEL", "Belgium"],
+  "204": ["BEN", "Benin"],
+  "064": ["BTN", "Bhutan"],
+  "068": ["BOL", "Bolivia"],
+  "070": ["BIH", "Bosnia and Herz."],
+  "072": ["BWA", "Botswana"],
+  "076": ["BRA", "Brazil"],
+  "096": ["BRN", "Brunei"],
+  "100": ["BGR", "Bulgaria"],
+  "854": ["BFA", "Burkina Faso"],
+  "108": ["BDI", "Burundi"],
+  "116": ["KHM", "Cambodia"],
+  "120": ["CMR", "Cameroon"],
+  "124": ["CAN", "Canada"],
+  "140": ["CAF", "Central African Rep."],
+  "148": ["TCD", "Chad"],
+  "152": ["CHL", "Chile"],
+  "156": ["CHN", "China"],
+  "170": ["COL", "Colombia"],
+  "178": ["COG", "Congo"],
+  "180": ["COD", "Dem. Rep. Congo"],
+  "188": ["CRI", "Costa Rica"],
+  "384": ["CIV", "Côte d'Ivoire"],
+  "191": ["HRV", "Croatia"],
+  "192": ["CUB", "Cuba"],
+  "196": ["CYP", "Cyprus"],
+  "203": ["CZE", "Czechia"],
+  "208": ["DNK", "Denmark"],
+  "262": ["DJI", "Djibouti"],
+  "214": ["DOM", "Dominican Rep."],
+  "218": ["ECU", "Ecuador"],
+  "818": ["EGY", "Egypt"],
+  "222": ["SLV", "El Salvador"],
+  "226": ["GNQ", "Eq. Guinea"],
+  "232": ["ERI", "Eritrea"],
+  "233": ["EST", "Estonia"],
+  "748": ["SWZ", "Eswatini"],
+  "231": ["ETH", "Ethiopia"],
+  "242": ["FJI", "Fiji"],
+  "246": ["FIN", "Finland"],
+  "250": ["FRA", "France"],
+  "266": ["GAB", "Gabon"],
+  "270": ["GMB", "Gambia"],
+  "268": ["GEO", "Georgia"],
+  "276": ["DEU", "Germany"],
+  "288": ["GHA", "Ghana"],
+  "300": ["GRC", "Greece"],
+  "304": ["GRL", "Greenland"],
+  "320": ["GTM", "Guatemala"],
+  "324": ["GIN", "Guinea"],
+  "624": ["GNB", "Guinea-Bissau"],
+  "328": ["GUY", "Guyana"],
+  "332": ["HTI", "Haiti"],
+  "340": ["HND", "Honduras"],
+  "348": ["HUN", "Hungary"],
+  "352": ["ISL", "Iceland"],
+  "356": ["IND", "India"],
+  "360": ["IDN", "Indonesia"],
+  "364": ["IRN", "Iran"],
+  "368": ["IRQ", "Iraq"],
+  "372": ["IRL", "Ireland"],
+  "376": ["ISR", "Israel"],
+  "380": ["ITA", "Italy"],
+  "388": ["JAM", "Jamaica"],
+  "392": ["JPN", "Japan"],
+  "400": ["JOR", "Jordan"],
+  "398": ["KAZ", "Kazakhstan"],
+  "404": ["KEN", "Kenya"],
+  "408": ["PRK", "North Korea"],
+  "410": ["KOR", "South Korea"],
+  "414": ["KWT", "Kuwait"],
+  "417": ["KGZ", "Kyrgyzstan"],
+  "418": ["LAO", "Laos"],
+  "428": ["LVA", "Latvia"],
+  "422": ["LBN", "Lebanon"],
+  "426": ["LSO", "Lesotho"],
+  "430": ["LBR", "Liberia"],
+  "434": ["LBY", "Libya"],
+  "440": ["LTU", "Lithuania"],
+  "442": ["LUX", "Luxembourg"],
+  "450": ["MDG", "Madagascar"],
+  "454": ["MWI", "Malawi"],
+  "458": ["MYS", "Malaysia"],
+  "466": ["MLI", "Mali"],
+  "478": ["MRT", "Mauritania"],
+  "484": ["MEX", "Mexico"],
+  "498": ["MDA", "Moldova"],
+  "496": ["MNG", "Mongolia"],
+  "499": ["MNE", "Montenegro"],
+  "504": ["MAR", "Morocco"],
+  "508": ["MOZ", "Mozambique"],
+  "104": ["MMR", "Myanmar"],
+  "516": ["NAM", "Namibia"],
+  "524": ["NPL", "Nepal"],
+  "528": ["NLD", "Netherlands"],
+  "554": ["NZL", "New Zealand"],
+  "558": ["NIC", "Nicaragua"],
+  "562": ["NER", "Niger"],
+  "566": ["NGA", "Nigeria"],
+  "578": ["NOR", "Norway"],
+  "512": ["OMN", "Oman"],
+  "586": ["PAK", "Pakistan"],
+  "591": ["PAN", "Panama"],
+  "598": ["PNG", "Papua New Guinea"],
+  "600": ["PRY", "Paraguay"],
+  "604": ["PER", "Peru"],
+  "608": ["PHL", "Philippines"],
+  "616": ["POL", "Poland"],
+  "620": ["PRT", "Portugal"],
+  "634": ["QAT", "Qatar"],
+  "642": ["ROU", "Romania"],
+  "643": ["RUS", "Russia"],
+  "646": ["RWA", "Rwanda"],
+  "682": ["SAU", "Saudi Arabia"],
+  "686": ["SEN", "Senegal"],
+  "688": ["SRB", "Serbia"],
+  "694": ["SLE", "Sierra Leone"],
+  "702": ["SGP", "Singapore"],
+  "703": ["SVK", "Slovakia"],
+  "705": ["SVN", "Slowenia"],
+  "706": ["SOM", "Somalia"],
+  "710": ["ZAF", "South Africa"],
+  "728": ["SSD", "South Sudan"],
+  "724": ["ESP", "Spain"],
+  "144": ["LKA", "Sri Lanka"],
+  "729": ["SDN", "Sudan"],
+  "740": ["SUR", "Suriname"],
+  "752": ["SWE", "Sweden"],
+  "756": ["CHE", "Switzerland"],
+  "760": ["SYR", "Syria"],
+  "158": ["TWN", "Taiwan"],
+  "762": ["TJK", "Tajikistan"],
+  "834": ["TZA", "Tanzania"],
+  "764": ["THA", "Thailand"],
+  "626": ["TLS", "Timor-Leste"],
+  "768": ["TGO", "Togo"],
+  "780": ["TTO", "Trinidad and Tobago"],
+  "788": ["TUN", "Tunisia"],
+  "792": ["TUR", "Turkey"],
+  "795": ["TKM", "Turkmenistan"],
+  "800": ["UGA", "Uganda"],
+  "804": ["UKR", "Ukraine"],
+  "784": ["ARE", "UAE"],
+  "826": ["GBR", "United Kingdom"],
+  "840": ["USA", "United States"],
+  "858": ["URY", "Uruguay"],
+  "860": ["UZB", "Uzbekistan"],
+  "862": ["VEN", "Venezuela"],
+  "704": ["VNM", "Vietnam"],
+  "887": ["YEM", "Yemen"],
+  "894": ["ZMB", "Zambia"],
+  "716": ["ZWE", "Zimbabwe"],
+  "275": ["PSE", "Palestine"],
+  "807": ["MKD", "North Macedonia"],
+  "051": ["ARM", "Armenia"],
+  "112": ["BLR", "Belarus"],
+  "174": ["COM", "Comoros"],
+  "084": ["BLZ", "Belize"],
+  "090": ["SLB", "Solomon Islands"],
+  "540": ["NCL", "New Caledonia"],
+  "548": ["VUT", "Vanuatu"],
+  "010": ["ATA", "Antarctica"],
+  "-99": ["XKX", "Kosovo"]
+};
+
+/* ========================================================================== */
+/* 3D Sphere Math */
+/* ========================================================================== */
+const D2R = Math.PI / 180;
+const R2D = 180 / Math.PI;
+
+function clamp(v: number, lo: number, hi: number): number {
+  return v < lo ? lo : v > hi ? hi : v;
 }
 
-// Convert Lat/Lng to 3D Cartesian coordinates
-function latLngToVector3(lat: number, lng: number): [number, number, number] {
-  const phi = (lat * Math.PI) / 180;
-  const theta = ((lng - 90) * Math.PI) / 180; // Offset to align with center projection
+interface ProjectedPoint {
+  sx: number;
+  sy: number;
+  rx: number;
+  ry: number;
+  rz: number;
+  v: boolean;
+}
+
+function project(
+  lng: number,
+  lat: number,
+  lambda: number,
+  phi: number,
+  gamma: number,
+  R: number,
+  cx: number,
+  cy: number
+): ProjectedPoint {
+  const lr = (lng - lambda) * D2R;
+  const la = lat * D2R;
+  const cl = Math.cos(la);
+  // Unrotated unit-sphere position (post-Z-rotation by lambda)
+  const x0 = cl * Math.cos(lr);
+  const y0 = cl * Math.sin(lr);
+  const z0 = Math.sin(la);
+  // Rotate around Y by phi (tilts north pole forward)
+  const cp = Math.cos(phi * D2R);
+  const sp = Math.sin(phi * D2R);
+  const x1 = x0 * cp + z0 * sp;
+  const y1 = y0;
+  const z1 = -x0 * sp + z0 * cp;
+  // Rotate around X by gamma (rolls around the viewer-facing axis)
+  const cg = Math.cos(gamma * D2R);
+  const sg = Math.sin(gamma * D2R);
+  const rx = x1;
+  const ry = y1 * cg - z1 * sg;
+  const rz = y1 * sg + z1 * cg;
+  return { sx: cx + R * ry, sy: cy - R * rz, rx, ry, rz, v: rx >= 0 };
+}
+
+function unproject(
+  px: number,
+  py: number,
+  lambda: number,
+  phi: number,
+  gamma: number,
+  R: number,
+  cx: number,
+  cy: number
+): { lng: number; lat: number } | null {
+  const Ry = (px - cx) / R;
+  const Rz = -(py - cy) / R;
+  const r2 = Ry * Ry + Rz * Rz;
+  if (r2 > 1) return null;
+  const cg = Math.cos(gamma * D2R);
+  const sg = Math.sin(gamma * D2R);
+  const y1 = Ry * cg + Rz * sg;
+  const z1 = -Ry * sg + Rz * cg;
+  const x1 = Math.sqrt(Math.max(0, 1 - r2));
+  const cp = Math.cos(phi * D2R);
+  const sp = Math.sin(phi * D2R);
+  const x0 = x1 * cp - z1 * sp;
+  const y0 = y1;
+  const z0 = x1 * sp + z1 * cp;
+  const lat = Math.asin(clamp(z0, -1, 1)) * R2D;
+  let lng = Math.atan2(y0, x0) * R2D + lambda;
+  lng = ((lng + 180) % 360 + 360) % 360 - 180;
+  return { lng, lat };
+}
+
+function limbIntersect(
+  a: ProjectedPoint,
+  b: ProjectedPoint,
+  R: number,
+  cx: number,
+  cy: number
+): ProjectedPoint | null {
+  const dr = a.rx - b.rx;
+  if (Math.abs(dr) < 1e-12) return null;
+  const t = a.rx / dr;
+  if (t < 0 || t > 1) return null;
+  let ry = a.ry + t * (b.ry - a.ry);
+  let rz = a.rz + t * (b.rz - a.rz);
+  const norm = Math.sqrt(ry * ry + rz * rz);
+  if (norm < 1e-9) return null;
+  ry /= norm;
+  rz /= norm;
+  return { sx: cx + R * ry, sy: cy - R * rz, rx: 0, ry, rz, v: true };
+}
+
+function ringToSegments(
+  ring: [number, number][],
+  lambda: number,
+  phi: number,
+  gamma: number,
+  R: number,
+  cx: number,
+  cy: number
+): ProjectedPoint[][] {
+  const n = ring.length;
+  if (n < 3) return [];
+  const proj: ProjectedPoint[] = new Array(n);
+  let visCount = 0;
+  for (let i = 0; i < n; i++) {
+    const p = ring[i];
+    proj[i] = project(p[0], p[1], lambda, phi, gamma, R, cx, cy);
+    if (proj[i].v) visCount++;
+  }
+  if (visCount === 0) return [];
+  if (visCount === n) return [proj.slice()];
+
+  let startIdx = -1;
+  for (let i = 0; i < n; i++) {
+    if (!proj[i].v && proj[(i + 1) % n].v) {
+      startIdx = i;
+      break;
+    }
+  }
+
+  if (startIdx === -1) return [proj.slice()];
+  const segments: ProjectedPoint[][] = [];
+  let cur: ProjectedPoint[] = [];
+
+  for (let k = 0; k < n; k++) {
+    const i = (startIdx + k) % n;
+    const j = (startIdx + k + 1) % n;
+    const A = proj[i];
+    const B = proj[j];
+
+    if (A.v && B.v) {
+      cur.push(B);
+    } else if (A.v && !B.v) {
+      const inter = limbIntersect(A, B, R, cx, cy);
+      if (inter) cur.push(inter);
+      if (cur.length >= 2) segments.push(cur);
+      cur = [];
+    } else if (!A.v && B.v) {
+      const inter = limbIntersect(A, B, R, cx, cy);
+      if (inter) cur.push(inter);
+      cur.push(B);
+    }
+  }
+
+  return segments;
+}
+
+function segmentsToPath(segs: ProjectedPoint[][]): string {
+  if (segs.length === 0) return "";
+  let out = "";
+  for (const seg of segs) {
+    for (let i = 0; i < seg.length; i++) {
+      const p = seg[i];
+      out += (i === 0 ? "M" : "L") + p.sx.toFixed(1) + "," + p.sy.toFixed(1);
+    }
+    out += "Z";
+  }
+  return out;
+}
+
+function buildSphericalPath(
+  type: string,
+  coords: any,
+  lambda: number,
+  phi: number,
+  gamma: number,
+  R: number,
+  cx: number,
+  cy: number
+): string {
+  if (!coords) return "";
+  if (type === "Polygon") {
+    let out = "";
+    for (const ring of coords) {
+      out += segmentsToPath(ringToSegments(ring, lambda, phi, gamma, R, cx, cy));
+    }
+    return out;
+  }
+  if (type === "MultiPolygon") {
+    let out = "";
+    for (const poly of coords) {
+      for (const ring of poly) {
+        out += segmentsToPath(ringToSegments(ring, lambda, phi, gamma, R, cx, cy));
+      }
+    }
+    return out;
+  }
+  return "";
+}
+
+// Convert Lat/Lng to 3D Cartesian coordinates matching project
+function latLngToUnitVector(lat: number, lng: number): [number, number, number] {
+  const la = lat * D2R;
+  const lo = lng * D2R;
   return [
-    Math.cos(phi) * Math.sin(theta),
-    Math.sin(phi),
-    Math.cos(phi) * Math.cos(theta)
+    Math.cos(la) * Math.cos(lo),
+    Math.cos(la) * Math.sin(lo),
+    Math.sin(la)
   ];
+}
+
+function unitVectorToLatLng(v: [number, number, number]): { lat: number; lng: number } {
+  const lat = Math.asin(clamp(v[2], -1, 1)) * R2D;
+  const lng = Math.atan2(v[1], v[0]) * R2D;
+  return { lat, lng };
 }
 
 // Great circle path interpolation (Slerp)
@@ -168,10 +449,103 @@ function slerp(
   ];
 }
 
+/* ========================================================================== */
+/* TopoJSON Decoder */
+/* ========================================================================== */
+function decArcs(t: any): any[] {
+  const tf = t.transform;
+  if (!tf) return t.arcs;
+  const sx = tf.scale[0], sy = tf.scale[1], dx = tf.translate[0], dy = tf.translate[1];
+  return t.arcs.map((a: any[]) => {
+    let x = 0, y = 0;
+    return a.map(p => {
+      x += p[0];
+      y += p[1];
+      return [x * sx + dx, y * sy + dy];
+    });
+  });
+}
+
+function resolveRing(idx: number[], arcs: any[]): any[] {
+  const out = [];
+  for (const i of idx) {
+    const a = i >= 0 ? arcs[i] : arcs[~i].slice().reverse();
+    for (let j: number = out.length > 0 ? 1 : 0; j < a.length; j++) out.push(a[j]);
+  }
+  return out;
+}
+
+interface CountryFeature {
+  id: string;
+  type: string;
+  coords: any;
+}
+
+function extractFeatures(t: any): CountryFeature[] {
+  const arcs = decArcs(t);
+  const gs = t.objects.countries?.geometries;
+  if (!gs) return [];
+  return gs.map((g: any) => {
+    let c = null;
+    if (g.type === "Polygon") c = g.arcs.map((r: any) => resolveRing(r, arcs));
+    else if (g.type === "MultiPolygon")
+      c = g.arcs.map((p: any) => p.map((r: any) => resolveRing(r, arcs)));
+    return { id: String(g.id ?? ""), type: g.type, coords: c };
+  });
+}
+
+/* ========================================================================== */
+/* Hover hit-test (point-in-polygon over lng/lat) */
+/* ========================================================================== */
+interface CountryIndexItem {
+  id: string;
+  name: string;
+  type: string;
+  coords: any;
+  rings: [number, number][][];
+  bbox: { minLng: number; maxLng: number; minLat: number; maxLat: number };
+}
+
+function pointInRing(x: number, y: number, ring: [number, number][]): boolean {
+  let inside = false;
+  const n = ring.length;
+  for (let i = 0, j = n - 1; i < n; j = i++) {
+    const xi = ring[i][0], yi = ring[i][1];
+    const xj = ring[j][0], yj = ring[j][1];
+    if (yi > y !== yj > y && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+function findCountryAt(lng: number, lat: number, index: CountryIndexItem[]): CountryIndexItem | null {
+  for (const c of index) {
+    if (lng < c.bbox.minLng || lng > c.bbox.maxLng) continue;
+    if (lat < c.bbox.minLat || lat > c.bbox.maxLat) continue;
+    let inside = false;
+    for (const ring of c.rings) {
+      if (pointInRing(lng, lat, ring)) inside = !inside;
+    }
+    if (inside) return c;
+  }
+  return null;
+}
+
+const DATA_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
 export default function ExportGlobe() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const pathRefs = useRef<Map<string, SVGPathElement>>(new Map());
+  const ghostPathRefs = useRef<Map<string, SVGPathElement>>(new Map());
+  const markerRefs = useRef<Map<number, SVGGElement>>(new Map());
+  const gridPathRef = useRef<SVGPathElement>(null);
+  const originBeaconRef = useRef<SVGGElement>(null);
+  const arcRefs = useRef<Map<number, SVGPathElement>>(new Map());
+  const pulseRefs = useRef<Map<number, SVGGElement>>(new Map());
+  const hoverCardRef = useRef<HTMLDivElement>(null);
+
   const [hoveredDest, setHoveredDest] = useState<Destination | null>(null);
-  const [cardPos, setCardPos] = useState({ x: 0, y: 0 });
+  const hoveredDestRef = useRef<Destination | null>(null);
   const [statsAnimated, setStatsAnimated] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
 
@@ -180,36 +554,129 @@ export default function ExportGlobe() {
   const [countriesCount, setCountriesCount] = useState(0);
   const [heritageCount, setHeritageCount] = useState(0);
 
-  // Globe orientation (match tilt from screenshot)
-  const rotationY = useRef(-0.5);
-  const rotationX = useRef(0.2); // Slight natural tilt
+  const [isClient, setIsClient] = useState(false);
+  const [dims, setDims] = useState({ w: 540, h: 540 });
+  const [feats, setFeats] = useState<CountryFeature[] | null>(null);
+  const [err, setErr] = useState(false);
+  const [hC, setHC] = useState<{ screenX: number; screenY: number; name: string; code: string } | null>(null);
 
-  // Dragging and Momentum variables
-  const isDragging = useRef(false);
-  const prevMouseX = useRef(0);
-  const prevMouseY = useRef(0);
-  const dragVelocityX = useRef(0);
-  const dragVelocityY = useRef(0);
-  const lastActiveTime = useRef(Date.now());
-  const autoRotateSpeed = 0.0015;
+  // Globe orientation state held in refs for 60fps performance
+  // lambda = Z axis rotation (spin / longitude)
+  // phi = Y axis rotation (tilt / latitude)
+  // gamma = X axis rotation (roll)
+  // Set default view to focus on Surat/India
+  const rotRef = useRef({ lambda: 72, phi: 21, gamma: 0 });
+  const dragRef = useRef({ active: false, startX: 0, startY: 0, startLambda: 0, startPhi: 0 });
+  const lastMouseRef = useRef<{ x: number; y: number } | null>(null);
+  const userInteractedRef = useRef<number>(0);
+  const timeRef = useRef<number>(0);
+  const autoRotateSpeed = 2.0; // degrees per second
 
-  // Pre-generate grid of world points to check for land/water once
-  const globeDotGrid = useMemo(() => {
-    const dots: { v: [number, number, number]; isLand: boolean }[] = [];
-    const latStep = 3.5;
-    const lngStep = 3.5;
-    for (let lat = -80; lat <= 80; lat += latStep) {
-      for (let lng = -180; lng <= 180; lng += lngStep) {
-        dots.push({
-          v: latLngToVector3(lat, lng),
-          isLand: isLand(lat, lng)
-        });
-      }
+  // Store projected 2D coordinates of markers for hover card alignment
+  const markerPositionsRef = useRef<{ [key: string]: { x: number; y: number; visible: boolean } }>({});
+
+  const handleSetHoveredDest = (dest: Destination | null) => {
+    setHoveredDest(dest);
+    hoveredDestRef.current = dest;
+    if (!dest && hoverCardRef.current) {
+      hoverCardRef.current.style.display = "none";
     }
-    return dots;
+  };
+
+  /* SSR guard */
+  useEffect(() => {
+    setIsClient(true);
   }, []);
 
-  // Intersection observer trigger for stats animation
+  /* Resize observer for responsiveness */
+  useEffect(() => {
+    if (!isClient) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(entries => {
+      const r = entries[0]?.contentRect;
+      if (r && r.width > 0 && r.height > 0) {
+        React.startTransition(() => {
+          setDims({ w: r.width, h: r.height });
+        });
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [isClient]);
+
+  /* Load map geometries */
+  useEffect(() => {
+    if (!isClient) return;
+    let dead = false;
+    fetch(DATA_URL)
+      .then(r => {
+        if (!r.ok) throw new Error("Fetch failed");
+        return r.json();
+      })
+      .then(t => {
+        if (!dead) {
+          React.startTransition(() => {
+            setFeats(extractFeatures(t));
+          });
+        }
+      })
+      .catch(() => {
+        if (!dead) {
+          React.startTransition(() => {
+            setErr(true);
+          });
+        }
+      });
+    return () => {
+      dead = true;
+    };
+  }, [isClient]);
+
+  /* Build country index (flatten rings + bbox) */
+  const countryIndex = useMemo(() => {
+    if (!feats) return [];
+    const out: CountryIndexItem[] = [];
+    for (const f of feats) {
+      const pad3 = String(f.id).padStart(3, "0");
+      const e = CD[pad3];
+      const a3 = e ? e[0] : pad3;
+      const nm = e ? e[1] : a3;
+      if (a3 === "ATA") continue; // skip Antarctica for aesthetics
+
+      const rings: [number, number][][] = [];
+      let minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity;
+      
+      const visit = (ring: [number, number][]) => {
+        rings.push(ring);
+        for (const p of ring) {
+          if (p[0] < minLng) minLng = p[0];
+          if (p[0] > maxLng) maxLng = p[0];
+          if (p[1] < minLat) minLat = p[1];
+          if (p[1] > maxLat) maxLat = p[1];
+        }
+      };
+
+      if (f.type === "Polygon") {
+        for (const r of f.coords) visit(r);
+      } else if (f.type === "MultiPolygon") {
+        for (const poly of f.coords) {
+          for (const r of poly) visit(r);
+        }
+      }
+      out.push({
+        id: a3,
+        name: nm,
+        type: f.type,
+        coords: f.coords,
+        rings,
+        bbox: { minLng, maxLng, minLat, maxLat }
+      });
+    }
+    return out;
+  }, [feats]);
+
+  // Intersection observer trigger for stats counter animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -264,454 +731,317 @@ export default function ExportGlobe() {
     return () => observer.disconnect();
   }, [statsAnimated]);
 
-  // Main Canvas Render Loop
+  /* Main Canvas-equivalent SVG Render Loop (Imperative 3D updates) */
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!isClient || countryIndex.length === 0) return;
+    const { w: W, h: H } = dims;
+    if (W <= 0 || H <= 0) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const R = Math.min(W, H) / 2 - 20;
+    const cx = W / 2;
+    const cy = H / 2;
 
-    let animationFrameId: number;
-    let isVisible = true;
+    let raf = 0;
+    let lastTime = typeof performance !== "undefined" ? performance.now() : 0;
+    const idleMs = 1500; // time to resume rotation after interaction
 
-    const visibilityObserver = new IntersectionObserver(
-      (entries) => {
-        isVisible = entries[0].isIntersecting;
-      },
-      { threshold: 0.05 }
-    );
-    visibilityObserver.observe(canvas);
+    const step = (now: number) => {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
 
-    const resizeCanvas = () => {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.scale(dpr, dpr);
-    };
+      timeRef.current += dt;
 
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    const vOrigin = latLngToVector3(ORIGIN_SURAT.lat, ORIGIN_SURAT.lng);
-
-    const rotateVector = (v: [number, number, number]): [number, number, number] => {
-      const [x, y, z] = v;
-      const cosY = Math.cos(rotationY.current);
-      const sinY = Math.sin(rotationY.current);
-      let rx = x * cosY - z * sinY;
-      let rz = x * sinY + z * cosY;
-
-      const cosX = Math.cos(rotationX.current);
-      const sinX = Math.sin(rotationX.current);
-      const ry = y * cosX - rz * sinX;
-      rz = y * sinX + rz * cosX;
-
-      return [rx, ry, rz];
-    };
-
-    let time = 0;
-
-    const render = () => {
-      if (!isVisible) {
-        animationFrameId = requestAnimationFrame(render);
-        return;
+      const sinceUser = now - userInteractedRef.current;
+      if (!dragRef.current.active && sinceUser > idleMs) {
+        // Rotate Z axis (spin longitude)
+        rotRef.current.lambda += autoRotateSpeed * dt;
       }
 
-      time += 0.008;
+      const { lambda, phi, gamma } = rotRef.current;
 
-      const rect = canvas.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
-      const radius = Math.min(width, height) * 0.40;
-      const centerX = width / 2;
-      const centerY = height / 2;
+      // 1. Update Country Borders (Paths)
+      for (const c of countryIndex) {
+        const d = buildSphericalPath(c.type, c.coords, lambda, phi, gamma, R, cx, cy);
+        const pathEl = pathRefs.current.get(c.id);
+        if (pathEl) pathEl.setAttribute("d", d);
 
-      ctx.clearRect(0, 0, width, height);
-
-      // Auto rotation updates
-      if (!isDragging.current) {
-        const idleTime = Date.now() - lastActiveTime.current;
-        if (idleTime > 3000) {
-          rotationY.current += autoRotateSpeed;
-        }
-        rotationY.current += dragVelocityX.current;
-        rotationX.current += dragVelocityY.current;
-        dragVelocityX.current *= 0.95;
-        dragVelocityY.current *= 0.95;
-        rotationX.current = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, rotationX.current));
+        const ghostEl = ghostPathRefs.current.get(c.id);
+        if (ghostEl) ghostEl.setAttribute("d", d);
       }
 
-      // Draw subtle atmospheric background glow for the sphere
-      const atmosGrad = ctx.createRadialGradient(centerX, centerY, radius * 0.9, centerX, centerY, radius * 1.05);
-      atmosGrad.addColorStop(0, "rgba(234, 223, 207, 0.08)"); // warm ivory glow
-      atmosGrad.addColorStop(0.8, "rgba(178, 149, 103, 0.03)"); // gold glow
-      atmosGrad.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = atmosGrad;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius * 1.15, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Draw base dark golden-ivory sphere shadow
-      ctx.fillStyle = "rgba(253, 249, 243, 0.45)"; // very soft ivory backing
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Draw thin latitude/longitude line circles (grid outline)
-      ctx.strokeStyle = "rgba(178, 149, 103, 0.12)"; // light antique gold grid
-      ctx.lineWidth = 0.5;
-      
-      // Draw grid ring segments
-      for (let lat = -60; lat <= 60; lat += 30) {
-        ctx.beginPath();
-        let first = true;
-        for (let lon = -180; lon <= 180; lon += 10) {
-          const v = latLngToVector3(lat, lon);
-          const [rx, ry, rz] = rotateVector(v);
-          if (rz > 0) {
-            const cx = centerX + radius * rx;
-            const cy = centerY - radius * ry;
-            if (first) {
-              ctx.moveTo(cx, cy);
-              first = false;
-            } else {
-              ctx.lineTo(cx, cy);
+      // 2. Update Latitude/Longitude Grid
+      if (gridPathRef.current) {
+        let gridD = "";
+        // Parallels (latitudes)
+        for (let lat = -60; lat <= 60; lat += 30) {
+          let started = false;
+          let prev = null;
+          for (let lng = -180; lng <= 180; lng += 4) {
+            const p = project(lng, lat, lambda, phi, gamma, R, cx, cy);
+            if (p.v) {
+              if (!started || (prev && !prev.v)) {
+                gridD += `M${p.sx.toFixed(1)},${p.sy.toFixed(1)}`;
+                started = true;
+              } else {
+                gridD += `L${p.sx.toFixed(1)},${p.sy.toFixed(1)}`;
+              }
             }
-          } else {
-            first = true;
+            prev = p;
           }
         }
-        ctx.stroke();
+        // Meridians (longitudes)
+        for (let lng = -180; lng < 180; lng += 30) {
+          let started = false;
+          let prev = null;
+          for (let lat = -80; lat <= 80; lat += 4) {
+            const p = project(lng, lat, lambda, phi, gamma, R, cx, cy);
+            if (p.v) {
+              if (!started || (prev && !prev.v)) {
+                gridD += `M${p.sx.toFixed(1)},${p.sy.toFixed(1)}`;
+                started = true;
+              } else {
+                gridD += `L${p.sx.toFixed(1)},${p.sy.toFixed(1)}`;
+              }
+            }
+            prev = p;
+          }
+        }
+        gridPathRef.current.setAttribute("d", gridD);
       }
 
-      // Draw Dotted Landmass (Continent shapes) matching Shiveshwar screenshot style
-      // We render only dots that are landmasses to give the dotted globe outline
-      globeDotGrid.forEach((dot) => {
-        const [rx, ry, rz] = rotateVector(dot.v);
-        if (rz > 0) { // facing camera
-          const cx = centerX + radius * rx;
-          const cy = centerY - radius * ry;
-
-          if (dot.isLand) {
-            // Draw land dot - size and opacity scaled by depth (rz) for 3D sphere look
-            const dotSize = 1.0 + 1.2 * rz;
-            const alpha = 0.15 + 0.70 * rz;
-            ctx.fillStyle = `rgba(178, 149, 103, ${alpha})`; // premium gold land dots
-            ctx.beginPath();
-            ctx.arc(cx, cy, dotSize, 0, 2 * Math.PI);
-            ctx.fill();
-          } else {
-            // Very faint water dot (for matrix aesthetic)
-            const dotSize = 0.5 + 0.5 * rz;
-            const alpha = 0.02 + 0.06 * rz;
-            ctx.fillStyle = `rgba(178, 149, 103, ${alpha})`; // faint water dots
-            ctx.beginPath();
-            ctx.arc(cx, cy, dotSize, 0, 2 * Math.PI);
-            ctx.fill();
-          }
+      // 3. Update Surat Origin Beacon
+      const originEl = originBeaconRef.current;
+      if (originEl) {
+        const p = project(ORIGIN_SURAT.lng, ORIGIN_SURAT.lat, lambda, phi, gamma, R, cx, cy);
+        if (p.v) {
+          originEl.style.display = "";
+          originEl.setAttribute("transform", `translate(${p.sx.toFixed(1)},${p.sy.toFixed(1)})`);
+          const fade = clamp(p.rx * 4, 0, 1);
+          originEl.style.opacity = String(fade);
+          markerPositionsRef.current["Surat"] = { x: p.sx, y: p.sy, visible: true };
+        } else {
+          originEl.style.display = "none";
+          markerPositionsRef.current["Surat"] = { x: 0, y: 0, visible: false };
         }
-      });
+      }
 
-      // Project Origin Surat
-      const [oX, oY, oZ] = rotateVector(vOrigin);
-      const originScreenX = centerX + radius * oX;
-      const originScreenY = centerY - radius * oY;
-
-      const destinationScreenPositions: { dest: Destination; x: number; y: number; z: number }[] = [];
-
-      // Draw Export Arcs & Destination Dots
+      // 4. Update Destination Markers
       DESTINATIONS.forEach((dest, idx) => {
-        const vDest = latLngToVector3(dest.lat, dest.lng);
-        const [dX, dY, dZ] = rotateVector(vDest);
-        const destScreenX = centerX + radius * dX;
-        const destScreenY = centerY - radius * dY;
+        const el = markerRefs.current.get(idx);
+        if (!el) return;
 
-        destinationScreenPositions.push({ dest, x: destScreenX, y: destScreenY, z: dZ });
+        const p = project(dest.lng, dest.lat, lambda, phi, gamma, R, cx, cy);
+        if (p.v) {
+          const fade = clamp(p.rx * 4, 0, 1);
+          el.style.opacity = String(fade);
+          el.style.display = "";
+          el.setAttribute("transform", `translate(${p.sx.toFixed(1)},${p.sy.toFixed(1)})`);
+          markerPositionsRef.current[dest.name] = { x: p.sx, y: p.sy, visible: true };
+        } else {
+          el.style.opacity = "0";
+          el.style.display = "none";
+          markerPositionsRef.current[dest.name] = { x: 0, y: 0, visible: false };
+        }
+      });
 
-        // Draw Great Circle Arc rising in 3D above the surface (Curved Flight Path style)
-        const steps = 30;
-        ctx.beginPath();
-        let first = true;
-        const pulseProgress = ((time * 0.8 + idx * 0.15) % 1.5) / 1.5;
+      // 5. Update Connection Arcs and Pulse Elements
+      const vOrigin = latLngToUnitVector(ORIGIN_SURAT.lat, ORIGIN_SURAT.lng);
+      DESTINATIONS.forEach((dest, idx) => {
+        const arcEl = arcRefs.current.get(idx);
+        const pulseEl = pulseRefs.current.get(idx);
+        const vDest = latLngToUnitVector(dest.lat, dest.lng);
 
-        for (let i = 0; i <= steps; i++) {
-          const t = i / steps;
-          const vInterp = slerp(vOrigin, vDest, t);
-          const [ix, iy, iz] = rotateVector(vInterp);
+        // Update Arc path
+        if (arcEl) {
+          const steps = 20;
+          let pathD = "";
+          let isDrawing = false;
 
-          // Flight path altitude: rises up to 14% above surface in center
-          const heightFactor = 1.0 + Math.sin(t * Math.PI) * 0.14;
-          const cx = centerX + radius * ix * heightFactor;
-          const cy = centerY - radius * iy * heightFactor;
-          const projectedIz = iz * heightFactor;
+          for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            const vInterp = slerp(vOrigin, vDest, t);
+            const { lat: lat_t, lng: lng_t } = unitVectorToLatLng(vInterp);
+            
+            // Arch height is 12% of the globe radius at the midpoint
+            const R_eff = R * (1.0 + Math.sin(t * Math.PI) * 0.12);
+            const p = project(lng_t, lat_t, lambda, phi, gamma, R_eff, cx, cy);
 
-          const distToPulse = Math.abs(t - pulseProgress);
-          const isPulseRange = distToPulse < 0.08;
-          
-          const baseAlpha = projectedIz > 0 ? 0.35 : 0.03;
-          const pulseAlpha = projectedIz > 0 ? 0.95 : 0.05;
-          ctx.strokeStyle = isPulseRange && projectedIz > 0 
-            ? `rgba(220, 38, 38, ${pulseAlpha})` // vibrant crimson red active pulse
-            : `rgba(107, 31, 42, ${baseAlpha})`; // soft royal maroon base arc
-
-          ctx.lineWidth = isPulseRange && projectedIz > 0 ? 1.5 : 0.8;
-
-          if (first) {
-            ctx.moveTo(cx, cy);
-            first = false;
-          } else {
-            ctx.lineTo(cx, cy);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
+            if (p.v) {
+              if (!isDrawing) {
+                pathD += `M${p.sx.toFixed(1)},${p.sy.toFixed(1)}`;
+                isDrawing = true;
+              } else {
+                pathD += ` L${p.sx.toFixed(1)},${p.sy.toFixed(1)}`;
+              }
+            } else {
+              isDrawing = false;
+            }
           }
+          arcEl.setAttribute("d", pathD);
         }
 
-        // Draw Destination Markers & Labels (Connect leader line to text label)
-        if (dZ > 0) {
-          const isHovered = hoveredDest?.name === dest.name;
-          const size = isHovered ? 7.5 : 4.5; // Bigger dots
+        // Update Pulse element position
+        if (pulseEl) {
+          // Pulse takes 2.2 seconds per loop, staggered by index
+          const progress = ((timeRef.current * 0.45 + idx * 0.12) % 1.0);
+          const vPulse = slerp(vOrigin, vDest, progress);
+          const { lat: latP, lng: lngP } = unitVectorToLatLng(vPulse);
+          const R_eff = R * (1.0 + Math.sin(progress * Math.PI) * 0.12);
+          const pP = project(lngP, latP, lambda, phi, gamma, R_eff, cx, cy);
 
-          // Fast pulse ring
-          const pulse = (Math.sin(time * 5 + idx) + 1) * 0.5;
-          ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.7)" : "rgba(178, 149, 103, 0.4)";
-          ctx.beginPath();
-          ctx.arc(destScreenX, destScreenY, size + pulse * 7, 0, 2 * Math.PI); // Bigger pulse ring
-          ctx.stroke();
-
-          // Dot center
-          ctx.fillStyle = isHovered ? "#6B1F2A" : "#B29567"; // Maroon if hovered, Gold if standard
-          ctx.beginPath();
-          ctx.arc(destScreenX, destScreenY, size, 0, 2 * Math.PI);
-          ctx.fill();
-
-          // Draw leader line and country text label (matching Shiveshwar styling)
-          // Draw leader lines and labels for top 5 key routes if not hovered, or display on hover
-          const showAlways = ["Dubai", "London", "Singapore", "Mauritius"].includes(dest.name);
-          if (showAlways || isHovered) {
-            ctx.fillStyle = isHovered ? "#6B1F2A" : "rgba(35, 27, 25, 0.85)";
-            ctx.font = isHovered 
-              ? "bold 13px var(--font-inter), sans-serif" 
-              : "600 11px var(--font-inter), sans-serif"; // Bigger font
-            ctx.textAlign = destScreenX > centerX ? "left" : "right";
-            
-            // Text offset positioning
-            const textOffset = destScreenX > centerX ? 15 : -15;
-            ctx.fillText(dest.name, destScreenX + textOffset, destScreenY + 4);
-
-            // Small horizontal tick line
-            ctx.strokeStyle = isHovered ? "rgba(107, 31, 42, 0.4)" : "rgba(178, 149, 103, 0.35)"; // gold or maroon leader
-            ctx.beginPath();
-            ctx.moveTo(destScreenX, destScreenY);
-            ctx.lineTo(destScreenX + (destScreenX > centerX ? 10 : -10), destScreenY);
-            ctx.stroke();
+          if (pP.v) {
+            pulseEl.style.display = "";
+            pulseEl.setAttribute("transform", `translate(${pP.sx.toFixed(1)},${pP.sy.toFixed(1)})`);
+            // Fade pulse near both ends and by projection depth
+            const fade = Math.sin(progress * Math.PI) * clamp(pP.rx * 4, 0, 1);
+            pulseEl.style.opacity = String(fade);
+          } else {
+            pulseEl.style.display = "none";
           }
         }
       });
 
-      // Draw Surat Origin Beacon
-      if (oZ > 0) {
-        const pulse = (Math.sin(time * 3) + 1) * 0.5;
-        
-        // Large outer pulsing circle
-        ctx.strokeStyle = "rgba(107, 31, 42, 0.3)";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 8 + pulse * 9, 0, 2 * Math.PI);
-        ctx.stroke();
-
-        // Inner solid ring
-        ctx.strokeStyle = "#6B1F2A";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 6, 0, 2 * Math.PI);
-        ctx.stroke();
-
-        // Solid center core
-        ctx.fillStyle = "#6B1F2A";
-        ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 3.5, 0, 2 * Math.PI);
-        ctx.fill();
-
-        // White core dot
-        ctx.fillStyle = "#FFFFFF";
-        ctx.beginPath();
-        ctx.arc(originScreenX, originScreenY, 1.5, 0, 2 * Math.PI);
-        ctx.fill();
-
-        // Surat HQ text label
-        ctx.fillStyle = "#231B19";
-        ctx.font = "bold 13px var(--font-inter), sans-serif"; // Bigger font
-        ctx.textAlign = "center";
-        // background backing for label readability
-        ctx.fillStyle = "rgba(253, 249, 243, 0.85)";
-        ctx.fillRect(originScreenX - 35, originScreenY - 26, 70, 16);
-        ctx.fillStyle = "#6B1F2A";
-        ctx.fillText("Surat (HQ)", originScreenX, originScreenY - 14);
+      // 6. Dynamic Floating Hover Card position update (aligns with marker during rotation)
+      if (hoveredDestRef.current && hoverCardRef.current) {
+        const pos = markerPositionsRef.current[hoveredDestRef.current.name];
+        if (pos && pos.visible) {
+          hoverCardRef.current.style.display = "";
+          hoverCardRef.current.style.left = `${pos.x}px`;
+          hoverCardRef.current.style.top = `${pos.y - 12}px`;
+        } else {
+          hoverCardRef.current.style.display = "none";
+        }
       }
 
-      // Draw outer circle accent
-      ctx.strokeStyle = "rgba(178, 149, 103, 0.2)"; // back to gold circle outline
-      ctx.lineWidth = 0.8;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-      ctx.stroke();
+      // Re-evaluate country hover if pointer is stationary but globe rotated under it
+      if (lastMouseRef.current && !dragRef.current.active) {
+        const m = lastMouseRef.current;
+        const ll = unproject(m.x, m.y, lambda, phi, gamma, R, cx, cy);
+        if (ll) {
+          const c = findCountryAt(ll.lng, ll.lat, countryIndex);
+          if (c) {
+            if (!hC || hC.code !== c.id) {
+              React.startTransition(() => {
+                setHC({ screenX: m.x, screenY: m.y, name: c.name, code: c.id });
+              });
+            } else if (hC.screenX !== m.x || hC.screenY !== m.y) {
+              React.startTransition(() => {
+                setHC(prev => prev ? { ...prev, screenX: m.x, screenY: m.y } : null);
+              });
+            }
+          } else if (hC) {
+            React.startTransition(() => {
+              setHC(null);
+            });
+          }
+        } else if (hC) {
+          React.startTransition(() => {
+            setHC(null);
+          });
+        }
+      }
 
-      // Store canvas metrics for hover tracking
-      (canvas as any).destinations = destinationScreenPositions;
-
-      // Draw technical overlay text labels matching the Shiveshwar screenshot
-      ctx.fillStyle = "rgba(178, 149, 103, 0.4)"; // gold tech labels
-      ctx.font = "500 7px var(--font-inter), sans-serif";
-      ctx.textAlign = "left";
-      ctx.fillText("SYSTEM: CANVAS_3D_ACTIVE", centerX - radius * 0.95, centerY - radius * 1.05);
-      ctx.textAlign = "right";
-      ctx.fillText("AXIS: TILTED_23.5", centerX + radius * 0.95, centerY - radius * 1.05);
-
-      animationFrameId = requestAnimationFrame(render);
+      raf = requestAnimationFrame(step);
     };
 
-    render();
-
+    raf = requestAnimationFrame(step);
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resizeCanvas);
-      visibilityObserver.disconnect();
+      cancelAnimationFrame(raf);
     };
-  }, [globeDotGrid, hoveredDest]);
+  }, [isClient, countryIndex, dims]);
 
-  // Drag and Rotation mouse handlers
-  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    isDragging.current = true;
-    prevMouseX.current = e.clientX;
-    prevMouseY.current = e.clientY;
-    lastActiveTime.current = Date.now();
-    dragVelocityX.current = 0;
-    dragVelocityY.current = 0;
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const destinations = (canvas as any).destinations || [];
-    let foundHover: Destination | null = null;
-    
-    for (const d of destinations) {
-      if (d.z > 0) {
-        const dx = x - d.x;
-        const dy = y - d.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 12) {
-          foundHover = d.dest;
-          setCardPos({ x: d.x, y: d.y - 12 });
-          break;
-        }
-      }
+  /* Highlight hovered countries (separates Standard vs B2B export countries) */
+  useEffect(() => {
+    for (const c of countryIndex) {
+      const el = pathRefs.current.get(c.id);
+      if (!el) continue;
+      const isHov = hC?.code === c.id;
+      const isExport = EXPORT_COUNTRY_CODES.includes(c.id);
+      const fill = isHov
+        ? "#6B1F2A" // Royal Maroon on hover
+        : isExport
+        ? "#EADFCF" // Rich Antique Sand for export destinations
+        : "#FBF8F3"; // Faint Warm Ivory for standard countries
+      el.setAttribute("fill", fill);
     }
+  }, [countryIndex, hC]);
 
-    if (foundHover !== hoveredDest) {
-      setHoveredDest(foundHover);
-    }
-
-    if (!isDragging.current) return;
-
-    const deltaX = e.clientX - prevMouseX.current;
-    const deltaY = e.clientY - prevMouseY.current;
-
-    rotationY.current += deltaX * 0.005;
-    rotationX.current += deltaY * 0.005;
-
-    dragVelocityX.current = deltaX * 0.0015;
-    dragVelocityY.current = deltaY * 0.0015;
-
-    prevMouseX.current = e.clientX;
-    prevMouseY.current = e.clientY;
-    lastActiveTime.current = Date.now();
+  /* Drag Rotation Handlers */
+  const localMouse = (e: React.PointerEvent<SVGSVGElement>) => {
+    const r = svgRef.current?.getBoundingClientRect();
+    if (!r) return { x: 0, y: 0 };
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
   };
 
-  const handleMouseUpOrLeave = () => {
-    isDragging.current = false;
+  const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
+    const m = localMouse(e);
+    const { w: W, h: H } = dims;
+    const R = Math.min(W, H) / 2 - 20;
+    const cx = W / 2;
+    const cy = H / 2;
+    const dx = m.x - cx;
+    const dy = m.y - cy;
+
+    // Only start drag if clicking directly on the globe sphere disc
+    if (dx * dx + dy * dy > (R + 10) * (R + 10)) return;
+
+    dragRef.current = {
+      active: true,
+      startX: m.x,
+      startY: m.y,
+      startLambda: rotRef.current.lambda,
+      startPhi: rotRef.current.phi
+    };
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+
+    React.startTransition(() => {
+      setHC(null);
+    });
   };
 
-  // Keyboard rotation support
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLCanvasElement>) => {
-    lastActiveTime.current = Date.now();
-    const rotateAmount = 0.05;
-    if (e.key === "ArrowLeft") {
-      rotationY.current -= rotateAmount;
-    } else if (e.key === "ArrowRight") {
-      rotationY.current += rotateAmount;
-    } else if (e.key === "ArrowUp") {
-      rotationX.current -= rotateAmount;
-    } else if (e.key === "ArrowDown") {
-      rotationX.current += rotateAmount;
+  const onPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
+    const m = localMouse(e);
+    lastMouseRef.current = m;
+
+    if (dragRef.current.active) {
+      const sens = 0.25; // Drag sensitivity
+      const dx = m.x - dragRef.current.startX;
+      const dy = m.y - dragRef.current.startY;
+
+      // Adjust rotation (lambda = polar spin, phi = horizontal tilt)
+      rotRef.current.lambda = dragRef.current.startLambda - dx * sens;
+      rotRef.current.phi = clamp(dragRef.current.startPhi + dy * sens, -85, 85);
     }
   };
 
-  // Mobile Touch Support
-  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    if (e.touches.length !== 1) return;
-    isDragging.current = true;
-    prevMouseX.current = e.touches[0].clientX;
-    prevMouseY.current = e.touches[0].clientY;
-    lastActiveTime.current = Date.now();
-    dragVelocityX.current = 0;
-    dragVelocityY.current = 0;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    if (!isDragging.current || e.touches.length !== 1) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const deltaX = e.touches[0].clientX - prevMouseX.current;
-    const deltaY = e.touches[0].clientY - prevMouseY.current;
-
-    rotationY.current += deltaX * 0.005;
-    rotationX.current += deltaY * 0.005;
-
-    dragVelocityX.current = deltaX * 0.0015;
-    dragVelocityY.current = deltaY * 0.0015;
-
-    prevMouseX.current = e.touches[0].clientX;
-    prevMouseY.current = e.touches[0].clientY;
-    lastActiveTime.current = Date.now();
-
-    const rect = canvas.getBoundingClientRect();
-    const x = e.touches[0].clientX - rect.left;
-    const y = e.touches[0].clientY - rect.top;
-
-    const destinations = (canvas as any).destinations || [];
-    let foundHover: Destination | null = null;
-    
-    for (const d of destinations) {
-      if (d.z > 0) {
-        const dx = x - d.x;
-        const dy = y - d.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 20) {
-          foundHover = d.dest;
-          setCardPos({ x: d.x, y: d.y - 12 });
-          break;
-        }
-      }
-    }
-
-    if (foundHover !== hoveredDest) {
-      setHoveredDest(foundHover);
+  const onPointerUp = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (dragRef.current.active) {
+      dragRef.current.active = false;
+      userInteractedRef.current = typeof performance !== "undefined" ? performance.now() : Date.now();
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {}
     }
   };
 
-  const handleTouchEnd = () => {
-    isDragging.current = false;
+  const onPointerLeave = () => {
+    lastMouseRef.current = null;
+    if (!dragRef.current.active) {
+      React.startTransition(() => {
+        setHC(null);
+      });
+    }
   };
+
+  const loading = !feats && !err;
+  const W = dims.w;
+  const H = dims.h;
+  const R = Math.min(W, H) / 2 - 20;
+  const cx = W / 2;
+  const cy = H / 2;
 
   return (
     <section className="bg-ivory border-t border-[#EADFCF]/30 select-none font-body relative overflow-hidden">
@@ -736,23 +1066,42 @@ export default function ExportGlobe() {
             </h2>
             <div className="w-12 h-[1px] bg-antique-gold" />
             <p className="text-xs sm:text-sm text-charcoal/80 font-light leading-relaxed max-w-md">
-              From the historical textile capital of India, our wholesale manufacturing lines feed international B2B distribution channels, supplying custom-woven bridal silks, heavy zardozi lenghas, and designer ethnic couture to elite boutique partners worldwide.
+              From the historical textile capital of India, our wholesale manufacturing lines feed international B2B distribution channels, supplying custom-woven bridal silks, heavy zardozi lehengas, and designer ethnic couture to elite boutique partners worldwide.
             </p>
           </div>
 
           {/* Right Column: Globe Visualization */}
           <div className="lg:col-span-7 flex justify-center items-center relative">
-            <div className="relative w-full aspect-square max-w-[540px] flex items-center justify-center cursor-grab active:cursor-grabbing outline-none">
-              
+            <div 
+              ref={containerRef} 
+              className="relative w-full aspect-square max-w-[540px] flex items-center justify-center cursor-grab active:cursor-grabbing outline-none"
+            >
+              {/* CSS Styles for animations */}
+              <style>{`
+                .mm-c { transition: fill 150ms ease; }
+                @keyframes mm-pulse {
+                  0%, 100% { transform: scale(1); opacity: 0.55; }
+                  50% { transform: scale(1.6); opacity: 0.05; }
+                }
+                .mm-pulse {
+                  animation: mm-pulse 2.2s ease-out infinite;
+                  transform-box: fill-box;
+                  transform-origin: center;
+                }
+              `}</style>
+
               {/* Floating Premium Hover Card */}
               {hoveredDest && (
                 <div 
+                  ref={hoverCardRef}
                   style={{ 
-                    left: `${cardPos.x}px`, 
-                    top: `${cardPos.y}px`, 
-                    transform: "translate(-50%, -100%)" 
+                    position: "absolute",
+                    zIndex: 30,
+                    pointerEvents: "none",
+                    transform: "translate(-50%, -100%)",
+                    display: "none"
                   }}
-                  className="absolute z-30 pointer-events-none bg-rich-charcoal/95 border border-antique-gold/25 p-4 w-60 shadow-[0_12px_24px_rgba(0,0,0,0.25)] rounded-none text-left animate-fade-in"
+                  className="bg-rich-charcoal/95 border border-antique-gold/25 p-4 w-60 shadow-[0_12px_24px_rgba(0,0,0,0.25)] rounded-none text-left animate-fade-in"
                 >
                   <span className="text-[8px] tracking-[0.25em] font-heading uppercase font-bold text-antique-gold block mb-1">
                     {hoveredDest.label}
@@ -769,22 +1118,238 @@ export default function ExportGlobe() {
                 </div>
               )}
 
-              {/* Dotted Interactive Canvas Globe */}
-              <canvas
-                ref={canvasRef}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUpOrLeave}
-                onMouseLeave={handleMouseUpOrLeave}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                onKeyDown={handleKeyDown}
-                tabIndex={0}
-                aria-label="3D Interactive Export Globe. Dotted land outlines connect Surat HQ to international B2B partners."
-                role="img"
-                className="w-full h-full block focus-visible:outline-none"
-              />
+              {/* Loading State Overlay */}
+              {loading && (
+                <div className="absolute inset-0 flex items-center justify-center text-[10px] uppercase tracking-widest text-[#B29567]/60">
+                  Loading Global Map Data…
+                </div>
+              )}
+
+              {/* Error State Overlay */}
+              {err && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 text-xs text-red-700/80">
+                  <span>Map display unavailable.</span>
+                  <span className="text-[9px] opacity-60">Check network status for jsdelivr CDN.</span>
+                </div>
+              )}
+
+              {/* Interactive 3D SVG Globe */}
+              {isClient && !err && (
+                <svg
+                  ref={svgRef}
+                  width={W}
+                  height={H}
+                  viewBox={`0 0 ${W} ${H}`}
+                  onPointerDown={onPointerDown}
+                  onPointerMove={onPointerMove}
+                  onPointerUp={onPointerUp}
+                  onPointerCancel={onPointerUp}
+                  onPointerLeave={onPointerLeave}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                    willChange: "transform",
+                    transform: "translateZ(0)",
+                    backfaceVisibility: "hidden"
+                  }}
+                  aria-label="3D Interactive Export Globe. Connecting Surat HQ to international B2B partners."
+                  role="img"
+                >
+                  <defs>
+                    {/* Shadow filter for landmasses */}
+                    <filter id="landShadow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="3" result="blur" />
+                      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.12 0" />
+                    </filter>
+                    {/* Globe surface spherical shadow */}
+                    <radialGradient id="sphereShade" cx="38%" cy="32%" r="78%">
+                      <stop offset="0%" stopColor="rgba(255, 255, 255, 0.1)" />
+                      <stop offset="55%" stopColor="rgba(255, 255, 255, 0)" />
+                      <stop offset="90%" stopColor="rgba(35, 27, 25, 0.15)" />
+                      <stop offset="100%" stopColor="rgba(35, 27, 25, 0.4)" />
+                    </radialGradient>
+                    {/* Atmospheric Glow Halo */}
+                    <radialGradient id="atmosphereGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="rgba(178, 149, 103, 0)" />
+                      <stop offset={`${(R / (R + 60) * 100).toFixed(1)}%`} stopColor="rgba(178, 149, 103, 0)" />
+                      <stop offset={`${((R + 6) / (R + 60) * 100).toFixed(1)}%`} stopColor="rgba(178, 149, 103, 0.12)" />
+                      <stop offset="100%" stopColor="rgba(178, 149, 103, 0)" />
+                    </radialGradient>
+                    {/* 3D Sphere shading overlay */}
+                    <linearGradient id="oceanBack" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="rgba(252, 249, 245, 0.4)" />
+                      <stop offset="100%" stopColor="rgba(234, 223, 207, 0.3)" />
+                    </linearGradient>
+                    {/* Clipping mask to keep features within the circle */}
+                    <clipPath id="globeClip">
+                      <circle cx={cx} cy={cy} r={R} />
+                    </clipPath>
+                  </defs>
+
+                  {/* Atmospheric gold glow halo */}
+                  <circle cx={cx} cy={cy} r={R + 60} fill="url(#atmosphereGlow)" pointerEvents="none" />
+
+                  {/* Base Ocean sphere */}
+                  <circle cx={cx} cy={cy} r={R} fill="#FCF9F5" />
+                  <circle cx={cx} cy={cy} r={R} fill="url(#oceanBack)" />
+
+                  {/* Clipped map elements (land & grid) */}
+                  <g clipPath="url(#globeClip)">
+                    {/* Soft shadows behind lands */}
+                    <g opacity={0.06} filter="url(#landShadow)">
+                      {countryIndex.map((c, index) => (
+                        <path
+                          key={"ghost_" + c.id + "_" + index}
+                          ref={el => {
+                            if (el) ghostPathRefs.current.set(c.id, el);
+                            else ghostPathRefs.current.delete(c.id);
+                          }}
+                          fill="#D1C2A5"
+                          stroke="none"
+                          pointerEvents="none"
+                        />
+                      ))}
+                    </g>
+
+                    {/* Lat/Lng Grid (Graticule) */}
+                    <path
+                      ref={gridPathRef}
+                      fill="none"
+                      stroke="#B29567"
+                      strokeWidth={0.5}
+                      strokeOpacity={0.08}
+                      vectorEffect="non-scaling-stroke"
+                      pointerEvents="none"
+                    />
+
+                    {/* Actual Country polygons */}
+                    {countryIndex.map((c, index) => {
+                      const isExport = EXPORT_COUNTRY_CODES.includes(c.id);
+                      const initialFill = isExport ? "#EADFCF" : "#FBF8F3";
+                      return (
+                        <path
+                          key={c.id + "_" + index}
+                          ref={el => {
+                            if (el) pathRefs.current.set(c.id, el);
+                            else pathRefs.current.delete(c.id);
+                          }}
+                          className="mm-c"
+                          fill={initialFill}
+                          stroke="#D1C2A5"
+                          strokeWidth={0.6}
+                          vectorEffect="non-scaling-stroke"
+                          style={{ cursor: "default" }}
+                        />
+                      );
+                    })}
+
+                    {/* Connection Arcs (Surat -> Destinations) */}
+                    {DESTINATIONS.map((_, idx) => (
+                      <path
+                        key={`arc_${idx}`}
+                        ref={el => {
+                          if (el) arcRefs.current.set(idx, el);
+                          else arcRefs.current.delete(idx);
+                        }}
+                        fill="none"
+                        stroke="rgba(107, 31, 42, 0.3)"
+                        strokeWidth={0.8}
+                        pointerEvents="none"
+                      />
+                    ))}
+
+                    {/* Traveling pulses on connection arcs */}
+                    {DESTINATIONS.map((_, idx) => (
+                      <g
+                        key={`pulse_${idx}`}
+                        ref={el => {
+                          if (el) pulseRefs.current.set(idx, el);
+                          else pulseRefs.current.delete(idx);
+                        }}
+                        style={{ display: "none" }}
+                        pointerEvents="none"
+                      >
+                        <circle r={1.5} fill="#DC2626" />
+                        <circle r={4.5} fill="none" stroke="#DC2626" strokeWidth={1} opacity={0.6} className="mm-pulse" />
+                      </g>
+                    ))}
+                  </g>
+
+                  {/* Shading overlay for 3D depth */}
+                  <circle cx={cx} cy={cy} r={R} fill="url(#sphereShade)" pointerEvents="none" />
+                  <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(178, 149, 103, 0.25)" strokeWidth={1} pointerEvents="none" />
+
+                  {/* Destination Markers */}
+                  {DESTINATIONS.map((dest, idx) => {
+                    const isHovered = hoveredDest?.name === dest.name;
+                    return (
+                      <g
+                        key={idx}
+                        ref={el => {
+                          if (el) markerRefs.current.set(idx, el);
+                          else markerRefs.current.delete(idx);
+                        }}
+                        style={{ cursor: "pointer", display: "none" }}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onMouseEnter={() => handleSetHoveredDest(dest)}
+                        onMouseLeave={() => handleSetHoveredDest(null)}
+                      >
+                        {/* Outer pulse */}
+                        <circle
+                          className={isHovered ? "mm-pulse" : ""}
+                          r={isHovered ? 12 : 8}
+                          fill={isHovered ? "rgba(107, 31, 42, 0.25)" : "rgba(178, 149, 103, 0.2)"}
+                        />
+                        {/* Solid center dot */}
+                        <circle r={isHovered ? 5.5 : 4.5} fill={isHovered ? "#6B1F2A" : "#B29567"} />
+                        <circle cx={-0.6} cy={-0.6} r={0.6} fill="#FFF" opacity={0.7} />
+
+                        {/* Constant Text Labels for Top Locations */}
+                        {["Dubai", "London", "Singapore", "Mauritius"].includes(dest.name) && (
+                          <text
+                            x={10}
+                            y={3}
+                            fill="#6B1F2A"
+                            fontSize={9}
+                            fontWeight={700}
+                            className="select-none pointer-events-none opacity-80"
+                            style={{
+                              paintOrder: "stroke",
+                              stroke: "#FCF9F5",
+                              strokeWidth: 3,
+                              strokeLinejoin: "round"
+                            }}
+                          >
+                            {dest.name}
+                          </text>
+                        )}
+                      </g>
+                    );
+                  })}
+
+                  {/* Surat HQ Origin Beacon */}
+                  <g ref={originBeaconRef} style={{ display: "none" }}>
+                    <circle className="mm-pulse" r={10} fill="rgba(107, 31, 42, 0.25)" />
+                    <circle r={6} fill="none" stroke="#6B1F2A" strokeWidth={1.5} />
+                    <circle r={3} fill="#6B1F2A" />
+                    <circle cx={-0.8} cy={-0.8} r={0.8} fill="#FFF" />
+                    {/* Surat HQ Text Label */}
+                    <rect x={-32} y={-23} width={64} height={14} fill="rgba(253, 249, 243, 0.85)" rx={2} />
+                    <text y={-13} fill="#6B1F2A" fontSize={8} fontWeight="bold" textAnchor="middle">
+                      Surat (HQ)
+                    </text>
+                  </g>
+
+                  {/* Technical Overlay Labels */}
+                  <text x={cx - R * 0.95} y={cy - R * 0.98} fill="rgba(178, 149, 103, 0.4)" fontSize={7} fontWeight={500}>
+                    SYSTEM: SVG_3D_ORTHO_ACTIVE
+                  </text>
+                  <text x={cx + R * 0.95} y={cy - R * 0.98} fill="rgba(178, 149, 103, 0.4)" fontSize={7} fontWeight={500} textAnchor="end">
+                    AXIS: TILTED_23.5
+                  </text>
+                </svg>
+              )}
 
               {/* Drag instruction overlay */}
               <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex items-center gap-1.5 text-[8px] font-heading tracking-widest text-warm-grey uppercase bg-pearl-white/40 backdrop-blur-sm border border-[#EADFCF]/30 px-3 py-1 rounded-full pointer-events-none">

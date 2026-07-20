@@ -217,7 +217,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
       {categories.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => {
-            const cover = category.image_url || "/images/hero_banarasi_lengha.jpg";
+            const cover = category.image_url || "/images/hero_banarasi_lehenga.jpg";
             return (
               <div 
                 key={category.id} 
@@ -324,7 +324,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                   id="cat-name"
                   type="text"
                   required
-                  placeholder="e.g. Designer Lenghas"
+                  placeholder="e.g. Designer Lehengas"
                   value={name}
                   onChange={(e) => handleNameChange(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-lg border border-zinc-800 bg-zinc-950/40 focus:outline-none focus:border-primary text-xs font-body text-white transition-colors placeholder-zinc-650"
@@ -340,7 +340,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                   id="cat-slug"
                   type="text"
                   required
-                  placeholder="e.g. designer-lenghas"
+                  placeholder="e.g. designer-lehengas"
                   value={slug}
                   onChange={(e) => {
                     setSlug(e.target.value);

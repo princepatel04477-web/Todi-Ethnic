@@ -46,9 +46,6 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
           <span className="text-[10px] font-heading font-semibold tracking-[0.2em] text-[#B29567] uppercase block">
             {displayCategory}
           </span>
-          <span className="text-[10px] font-heading font-semibold tracking-[0.15em] text-warm-grey/85 uppercase block">
-            Design No. {product.sku}
-          </span>
           <h3 className="font-heading font-light text-lg sm:text-xl text-deep-maroon group-hover:text-royal-maroon transition-colors duration-300 leading-snug pt-0.5 line-clamp-2">
             {displayName}
           </h3>

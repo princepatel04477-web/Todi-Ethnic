@@ -12,26 +12,26 @@ import ExportGlobe from "@/components/ui/ExportGlobe";
 
 const categories = [
   {
-    name: "Bridal Lengha",
+    name: "Bridal Lehenga",
     subtitle: "Heavy hand-embroidery & classic royal motifs",
     image: "/images/categories/Bridal-cc.png",
-    link: "/catalog?category=Bridal+Lengha",
+    link: "/catalog?category=Bridal+Lehenga",
     count: "01",
     translateClass: "md:translate-y-0",
   },
   {
-    name: "Sider Lengha",
+    name: "Sider Lehenga",
     subtitle: "Intricate modern designs for bridesmaids & festivals",
     image: "/images/categories/Sider.png",
-    link: "/catalog?category=Sider+Lengha",
+    link: "/catalog?category=Sider+Lehenga",
     count: "02",
     translateClass: "md:translate-y-8",
   },
   {
-    name: "Farsi Lengha",
+    name: "Farsi Lehenga",
     subtitle: "Graceful trail and traditional vintage textures",
     image: "/images/categories/Farsi.png",
-    link: "/catalog?category=Farsi+Lengha",
+    link: "/catalog?category=Farsi+Lehenga",
     count: "03",
     translateClass: "md:-translate-y-4",
   },
@@ -92,7 +92,7 @@ export default function Home() {
               Crafting Luxury Heritage for Modern Boutiques
             </h1>
             <p className="text-sm sm:text-base text-charcoal/80 leading-relaxed max-w-2xl mx-auto font-light">
-              We manufacture premium bridal lenghas, traditional lenghas, delicate hand-worked options, 
+              We manufacture premium bridal lehengas, traditional lehengas, delicate hand-worked options, 
               and Indo Western designs that blend authentic Indian heritage with contemporary fashion sensibilities. 
               Every drape tells a story of meticulous detail and quality craftsmanship.
             </p>

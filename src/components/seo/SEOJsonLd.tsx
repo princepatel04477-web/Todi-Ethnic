@@ -146,7 +146,7 @@ export default function SEOJsonLd({
         telephone: telephone,
         priceRange: "$$",
         foundingDate: "2011",
-        description: "Wholesale manufacturer and exporter of bridal lenghas and ethnic wear. Factory at 2260, Millennium Textile Market 4, Surat. MOQ: 25 pieces.",
+        description: "Wholesale manufacturer and exporter of bridal lehengas and ethnic wear. Factory at 2260, Millennium Textile Market 4, Surat. MOQ: 25 pieces.",
         hasMap: "https://www.google.com/maps/search/Todi+Creations+Surat",
         openingHoursSpecification: [
           {

@@ -19,7 +19,7 @@ export default function B2BSection() {
   const [name, setName] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [contactInfo, setContactInfo] = useState("");
-  const [category, setCategory] = useState("Bridal Lengha");
+  const [category, setCategory] = useState("Bridal Lehenga");
   const [message, setMessage] = useState("");
   
   // UX states
@@ -72,10 +72,10 @@ export default function B2BSection() {
     }
 
     // 2. WhatsApp redirect
-    const targetWaNumber = "918141014006"; // Gautam Todi WhatsApp
+    const targetWaNumber = "918141014006"; // Todi Creations WhatsApp
     const waMsg = `Hi Todi Creation,
 
-I am interested in wholesale lengha partnership options for my business:
+I am interested in wholesale lehenga partnership options for my business:
 
 *Contact Name:* ${name}
 *Business Name:* ${businessName}
@@ -126,7 +126,7 @@ I am interested in wholesale lengha partnership options for my business:
               </p>
             </div>
             <button
-              onClick={() => handleSegmentClick("Bridal Lengha", "I own a bridal boutique and want to inquire about custom bridal lengha collections, low MOQ terms, and customization options.")}
+              onClick={() => handleSegmentClick("Bridal Lehenga", "I own a bridal boutique and want to inquire about custom bridal lehenga collections, low MOQ terms, and customization options.")}
               className="mt-8 py-3 w-full bg-transparent border border-royal-maroon text-royal-maroon hover:bg-royal-maroon hover:text-warm-ivory text-[10px] font-heading font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Inquire for Boutiques</span>
@@ -148,7 +148,7 @@ I am interested in wholesale lengha partnership options for my business:
               </p>
             </div>
             <button
-              onClick={() => handleSegmentClick("Farsi Lengha", "We are looking to place bulk export orders for Farsi and Bridal lenghas. Please share catalog, bulk tier pricing sheets, and export delivery timelines.")}
+              onClick={() => handleSegmentClick("Farsi Lehenga", "We are looking to place bulk export orders for Farsi and Bridal lehengas. Please share catalog, bulk tier pricing sheets, and export delivery timelines.")}
               className="mt-8 py-3 w-full bg-transparent border border-royal-maroon text-royal-maroon hover:bg-royal-maroon hover:text-warm-ivory text-[10px] font-heading font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Inquire for Exports</span>
@@ -170,7 +170,7 @@ I am interested in wholesale lengha partnership options for my business:
               </p>
             </div>
             <button
-              onClick={() => handleSegmentClick("Sider Lengha", "I am a wedding stylist/planner looking to order custom bridal & sider lenghas for upcoming clients. Let's discuss bespoke designs and priority timelines.")}
+              onClick={() => handleSegmentClick("Sider Lehenga", "I am a wedding stylist/planner looking to order custom bridal & sider lehengas for upcoming clients. Let's discuss bespoke designs and priority timelines.")}
               className="mt-8 py-3 w-full bg-transparent border border-royal-maroon text-royal-maroon hover:bg-royal-maroon hover:text-warm-ivory text-[10px] font-heading font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Inquire for Stylists</span>
@@ -232,7 +232,7 @@ I am interested in wholesale lengha partnership options for my business:
                 <span className="text-[10px] font-heading font-bold uppercase tracking-wider text-deep-maroon">Verified Partner</span>
               </div>
               <p className="text-xs font-light text-charcoal/80 leading-relaxed italic mb-6">
-                &ldquo;As an exporter, I need consistency, reliable shipping, and strict quality control. Gautam Todi and his workshop have delivered on all counts for the past 7 years without delay.&rdquo;
+                &ldquo;As an exporter, I need consistency, reliable shipping, and strict quality control. Todi Creations and their workshop have delivered on all counts for the past 7 years without delay.&rdquo;
               </p>
               <div className="border-t border-antique-gold/10 pt-4">
                 <h4 className="text-xs font-heading font-bold uppercase tracking-wider text-deep-maroon">Rajesh Patel</h4>
@@ -246,7 +246,7 @@ I am interested in wholesale lengha partnership options for my business:
                 <span className="text-[10px] font-heading font-bold uppercase tracking-wider text-deep-maroon">Verified Partner</span>
               </div>
               <p className="text-xs font-light text-charcoal/80 leading-relaxed italic mb-6">
-                &ldquo;Their Farsi trails and bridal lenghas are the centerpieces of our bridal consultations. Stylists and brides alike are wowed by the handloom weave quality and royal textures.&rdquo;
+                &ldquo;Their Farsi trails and bridal lehengas are the centerpieces of our bridal consultations. Stylists and brides alike are wowed by the handloom weave quality and royal textures.&rdquo;
               </p>
               <div className="border-t border-antique-gold/10 pt-4">
                 <h4 className="text-xs font-heading font-bold uppercase tracking-wider text-deep-maroon">Amina Khan</h4>
@@ -333,7 +333,7 @@ I am interested in wholesale lengha partnership options for my business:
                   Lead Request Logged
                 </h3>
                 <p className="text-xs sm:text-sm text-charcoal/80 font-light leading-relaxed mb-6 max-w-md">
-                  Thank you, <span className="font-semibold text-deep-maroon">{name}</span>. We have recorded your wholesale inquiry and redirected you to connect with Gautam Todi on WhatsApp.
+                  Thank you, <span className="font-semibold text-deep-maroon">{name}</span>. We have recorded your wholesale inquiry and redirected you to connect with Todi Creations on WhatsApp.
                 </p>
                 
                 <a
@@ -442,9 +442,9 @@ I am interested in wholesale lengha partnership options for my business:
                         onChange={(e) => setCategory(e.target.value)}
                         className="w-full px-4 py-3 rounded-none border border-[#EADFCF] bg-ivory focus:outline-none focus:border-antique-gold text-xs font-heading font-semibold uppercase tracking-wider text-charcoal cursor-pointer appearance-none"
                       >
-                        <option value="Bridal Lengha">Bridal Lengha</option>
-                        <option value="Sider Lengha">Sider Lengha</option>
-                        <option value="Farsi Lengha">Farsi Lengha</option>
+                        <option value="Bridal Lehenga">Bridal Lehenga</option>
+                        <option value="Sider Lehenga">Sider Lehenga</option>
+                        <option value="Farsi Lehenga">Farsi Lehenga</option>
                         <option value="Indo-Western">Indo-Western</option>
                       </select>
                     </div>
@@ -458,7 +458,7 @@ I am interested in wholesale lengha partnership options for my business:
                     <textarea
                       id="b2b-message"
                       rows={4}
-                      placeholder="e.g. Bridal lenghas with zardozi borders, looking for wholesale trade quote..."
+                      placeholder="e.g. Bridal lehengas with zardozi borders, looking for wholesale trade quote..."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       className="w-full px-4 py-3 rounded-none border border-[#EADFCF] bg-ivory focus:outline-none focus:border-antique-gold text-xs font-light text-charcoal placeholder-charcoal/30 resize-none"

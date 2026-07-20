@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ShoppingBag, Search, Menu, X } from "lucide-react";
+import { ShoppingBag, Search, Menu, X, Phone } from "lucide-react";
 import { useBag } from "@/context/BagContext";
 
 export default function Header() {
@@ -54,7 +54,7 @@ export default function Header() {
           </div>
 
           {/* Navigation Links - Desktop */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-8 items-center">
             <Link
               href="/"
               className="relative text-sm font-heading tracking-widest text-charcoal hover:text-deep-maroon transition-colors uppercase py-1 after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-left after:scale-x-0 after:bg-antique-gold after:transition-transform after:duration-300 hover:after:scale-x-100"
@@ -73,6 +73,13 @@ export default function Header() {
             >
               Contact
             </Link>
+            <a
+              href="tel:+918141014006"
+              className="relative text-[11px] font-heading tracking-wider text-charcoal/80 hover:text-deep-maroon transition-colors py-1 flex items-center gap-1.5 uppercase font-medium"
+            >
+              <Phone className="w-3.5 h-3.5" />
+              <span>+91 81410 14006</span>
+            </a>
           </nav>
 
           {/* Brand Logo */}
@@ -160,6 +167,13 @@ export default function Header() {
           >
             Inquiry Bag ({totalCount})
           </button>
+          <a
+            href="tel:+918141014006"
+            className="block px-3 py-2 text-base font-heading font-medium tracking-wide text-charcoal hover:text-deep-maroon transition-colors uppercase flex items-center gap-2"
+          >
+            <Phone className="w-4 h-4 text-antique-gold" />
+            <span>+91 81410 14006</span>
+          </a>
         </div>
       )}
     </motion.header>

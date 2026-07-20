@@ -12,8 +12,8 @@ import DeliveryAndPolicy from "@/components/ui/DeliveryAndPolicy";
 import ExportGlobe from "@/components/ui/ExportGlobe";
 
 export const metadata = {
-  title: "Wholesale Lengha Manufacturer & Exporter | Todi Creation, Surat",
-  description: "Direct-from-manufacturer wholesale lengha supply. Minimum 25 pieces per design, custom embroidery, worldwide shipping. Partner with Todi Creation, Surat since 2011.",
+  title: "Wholesale Lehenga Manufacturer & Exporter | Todi Creations, Surat",
+  description: "Direct-from-manufacturer wholesale Lehenga supply. Minimum 25 pieces, handmade embroidery, worldwide shipping. Partner with Todi Creations, Surat since 2011.",
 };
 
 export default function WholesalePage() {
@@ -33,10 +33,10 @@ export default function WholesalePage() {
               Wholesale Manufacturing
             </span>
             <h1 className="text-3xl sm:text-5xl font-heading font-light text-deep-maroon tracking-tight leading-tight">
-              Partner With Surat&apos;s Trusted Lengha Manufacturer
+              Partner With Surat&apos;s Trusted Lehenga Manufacturer
             </h1>
             <p className="text-xs sm:text-sm text-warm-grey max-w-2xl mx-auto font-light leading-relaxed">
-              Direct from our Surat workshop. Minimum 25 pieces per design, handmade embroidery, worldwide shipping since 2011.
+              Direct from our Surat workshop. Minimum 25 pieces, handmade embroidery, worldwide shipping since 2011.
             </p>
             <div className="pt-4">
               <a
@@ -136,7 +136,7 @@ export default function WholesalePage() {
                     <span className="font-heading text-4xl text-antique-gold/50 font-light block mb-4">02</span>
                     <h3 className="text-xl font-heading font-semibold text-deep-maroon mb-3">Handmade Embroidery</h3>
                     <p className="text-xs font-body text-charcoal/80 leading-relaxed font-light">
-                      Our embroidery workshops hand-sew meticulous zardozi, Resham thread, cutdana, and sequined embellishments. A single heavy bridal lengha panel can take up to three weeks.
+                      Our embroidery workshops hand-sew meticulous zardozi, Resham thread, cutdana, and sequined embellishments. A single heavy bridal lehenga panel can take up to three weeks.
                     </p>
                   </div>
                   <div className="border-t border-antique-gold/10 pt-4 mt-6">
