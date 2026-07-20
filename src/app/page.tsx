@@ -14,7 +14,7 @@ const categories = [
   {
     name: "Bridal Lehenga",
     subtitle: "Heavy hand-embroidery & classic royal motifs",
-    image: "/images/categories/bridal_hero.png",
+    image: "/images/categories/bridal-poster.png",
     link: "/catalog?category=Bridal+Lehenga",
     count: "01",
     translateClass: "md:translate-y-0",
@@ -22,7 +22,7 @@ const categories = [
   {
     name: "Sider Lehenga",
     subtitle: "Intricate modern designs for bridesmaids & festivals",
-    image: "/images/categories/Sider.png",
+    image: "/images/categories/sider-poster.png",
     link: "/catalog?category=Sider+Lehenga",
     count: "02",
     translateClass: "md:translate-y-8",
@@ -30,7 +30,7 @@ const categories = [
   {
     name: "Farsi Lehenga",
     subtitle: "Graceful trail and traditional vintage textures",
-    image: "/images/categories/farsi.png",
+    image: "/images/categories/farsi-poster.png",
     link: "/catalog?category=Farsi+Lehenga",
     count: "03",
     translateClass: "md:-translate-y-4",
@@ -38,7 +38,7 @@ const categories = [
   {
     name: "Indo Western",
     subtitle: "Contemporary cuts and fusion bridal aesthetics",
-    image: "/images/categories/Indo-Western.png",
+    image: "/images/categories/indowestern-poster.png",
     link: "/catalog?category=Indo+Western",
     count: "04",
     translateClass: "md:translate-y-4",

@@ -32,9 +32,9 @@ export default function Footer() {
               <Image
                 src="/logo.png"
                 alt="TODI CREATIONS"
-                width={400}
-                height={63}
-                className="h-12 sm:h-16 w-auto object-contain drop-shadow-md"
+                width={320}
+                height={50}
+                className="h-[38px] sm:h-[51px] w-auto object-contain drop-shadow-md"
               />
             </Link>
             <p className="text-xs leading-relaxed text-ivory/70 font-light max-w-sm">

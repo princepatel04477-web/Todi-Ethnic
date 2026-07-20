@@ -16,26 +16,26 @@ interface Slide {
 
 const slides: Slide[] = [
   {
-    desktopImage: "/images/hero/Carousel_1_.png",
-    mobileImage: "/images/hero/mobile_bridal.jpeg",
-    link: "/catalog",
+    desktopImage: "/images/hero/bridal_hero_upscaled.png",
+    mobileImage: "/images/hero/mobile_bridal_v2.png",
+    link: "/catalog?category=Bridal+Lehenga",
     title: "Todi Creation Signature Collection",
   },
   {
-    desktopImage: "/images/hero/indowestern_with_logo.jpg",
-    mobileImage: "/images/hero/indowestern_with_logo_mobile.jpg",
+    desktopImage: "/images/hero/indowestern_hero_upscaled.png",
+    mobileImage: "/images/hero/mobile_indowestern_v2.png",
     link: "/catalog?category=Indo+Western",
     title: "Indo Western Catalog",
   },
   {
-    desktopImage: "/images/hero/sider_with_logo.jpg",
-    mobileImage: "/images/hero/sider_with_logo_mobile.jpg",
+    desktopImage: "/images/hero/sider_hero_upscaled.png",
+    mobileImage: "/images/hero/mobile_sider_v2.png",
     link: "/catalog?category=Sider+Lehenga",
     title: "Sider Lehenga Collections",
   },
   {
-    desktopImage: "/images/hero/farsi_with_logo.jpg",
-    mobileImage: "/images/hero/farsi_with_logo_mobile.jpg",
+    desktopImage: "/images/hero/farsi_hero_upscaled.png",
+    mobileImage: "/images/hero/mobile_farsi_v2.png",
     link: "/catalog?category=Farsi+Lehenga",
     title: "Farsi Lehenga Custom Designs",
   },
@@ -145,7 +145,7 @@ export default function LuxuryHero() {
     <div
       ref={containerRef}
       tabIndex={0}
-      className="group/hero relative w-full aspect-[1536/2752] sm:aspect-[1536/1024] bg-aubergine-black overflow-hidden select-none focus:outline-none focus:ring-1 focus:ring-antique-gold/30"
+      className="group/hero relative w-full aspect-[1536/2752] sm:aspect-[6144/3604] bg-aubergine-black overflow-hidden select-none focus:outline-none focus:ring-1 focus:ring-antique-gold/30"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}

@@ -160,6 +160,21 @@ h1, h2, h3, h4, h5, h6 {
   font-variant-numeric: lining-nums tabular-nums !important;
 }
 
+/* 60 FPS GPU Accelerated Custom Cursor States */
+.custom-cursor-ring.hovered {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-color: #C9A14A !important;
+  background-color: rgba(201, 161, 74, 0.12) !important;
+}
+
+.custom-cursor-ring.clicked {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  border-color: #5C0E1D !important;
+  background-color: rgba(92, 14, 29, 0.15) !important;
+}
+
 /* Custom Glassmorphism Utility Classes using Tailwind v4 @utility directive */
 @utility glass {
   background: var(--glass-bg);

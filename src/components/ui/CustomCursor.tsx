@@ -1,75 +1,112 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 export default function CustomCursor() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
-
-  // DOM node references
   const dotRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Disable custom cursor on mobile/touch screens
-    const isTouchDevice = 
-      "ontouchstart" in window || 
-      navigator.maxTouchPoints > 0 || 
+    // Disable custom cursor on touch/mobile devices
+    const isTouchDevice =
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0 ||
       window.matchMedia("(pointer: coarse)").matches;
 
     if (isTouchDevice) {
       return;
     }
 
-    // Show cursor when mouse starts moving
-    setIsVisible(true);
+    let mouseX = -100;
+    let mouseY = -100;
+    let currentX = -100;
+    let currentY = -100;
+    let animFrameId: number | null = null;
+    let isVisible = false;
 
+    // Passive listener for locked 60 FPS mouse coordinates capture
     const onMouseMove = (e: MouseEvent) => {
-      // Update both dot and circle position instantly to the exact same coordinates (no lag/lerp)
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isVisible) {
+        isVisible = true;
+        if (dotRef.current) dotRef.current.style.opacity = "1";
+        if (circleRef.current) circleRef.current.style.opacity = "1";
+      }
+    };
+
+    // requestAnimationFrame tick loop for 60 FPS smooth compositor rendering
+    const renderLoop = () => {
+      // Lerp for 60 FPS smooth follow
+      currentX += (mouseX - currentX) * 0.75;
+      currentY += (mouseY - currentY) * 0.75;
+
+      const transformStr = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
       }
       if (circleRef.current) {
-        circleRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        circleRef.current.style.transform = transformStr;
       }
+
+      animFrameId = requestAnimationFrame(renderLoop);
     };
 
-    const onMouseDown = () => setIsClicked(true);
-    const onMouseUp = () => setIsClicked(false);
-    
-    const onMouseLeaveDoc = () => setIsVisible(false);
-    const onMouseEnterDoc = () => setIsVisible(true);
-
-    // Event delegation for link/button hovers
+    // Hover detection via direct DOM manipulation (no React re-renders)
     const onMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (
-        target && (
-          target.tagName === "A" ||
-          target.tagName === "BUTTON" ||
-          target.closest("a") ||
-          target.closest("button") ||
-          target.closest('[role="button"]') ||
-          target.style.cursor === "pointer"
-        )
-      ) {
-        setIsHovered(true);
+      if (!target || !circleRef.current) return;
+
+      const isInteractive =
+        target.tagName === "A" ||
+        target.tagName === "BUTTON" ||
+        target.closest("a") ||
+        target.closest("button") ||
+        target.closest('[role="button"]') ||
+        window.getComputedStyle(target).cursor === "pointer";
+
+      if (isInteractive) {
+        circleRef.current.classList.add("hovered");
       } else {
-        setIsHovered(false);
+        circleRef.current.classList.remove("hovered");
       }
     };
 
-    // Listeners
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("mouseup", onMouseUp);
-    window.addEventListener("mouseover", onMouseOver);
-    document.addEventListener("mouseleave", onMouseLeaveDoc);
-    document.addEventListener("mouseenter", onMouseEnterDoc);
+    const onMouseDown = () => {
+      if (circleRef.current) circleRef.current.classList.add("clicked");
+    };
 
-    // Hide original browser cursor on body/interactive elements
+    const onMouseUp = () => {
+      if (circleRef.current) circleRef.current.classList.remove("clicked");
+    };
+
+    const onMouseLeaveDoc = () => {
+      isVisible = false;
+      if (dotRef.current) dotRef.current.style.opacity = "0";
+      if (circleRef.current) circleRef.current.style.opacity = "0";
+    };
+
+    const onMouseEnterDoc = () => {
+      isVisible = true;
+      if (dotRef.current) dotRef.current.style.opacity = "1";
+      if (circleRef.current) circleRef.current.style.opacity = "1";
+    };
+
+    // Attach passive event listeners
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    window.addEventListener("mousedown", onMouseDown, { passive: true });
+    window.addEventListener("mouseup", onMouseUp, { passive: true });
+    window.addEventListener("mouseover", onMouseOver, { passive: true });
+    document.addEventListener("mouseleave", onMouseLeaveDoc, { passive: true });
+    document.addEventListener("mouseenter", onMouseEnterDoc, { passive: true });
+
+    // Start 60 FPS animation loop
+    animFrameId = requestAnimationFrame(renderLoop);
+
+    // Hide native cursor
     const styleNode = document.createElement("style");
+    styleNode.id = "custom-cursor-style";
     styleNode.innerHTML = `
       body, a, button, [role="button"], input, select, textarea {
         cursor: none !important;
@@ -77,49 +114,41 @@ export default function CustomCursor() {
     `;
     document.head.appendChild(styleNode);
 
-    // Cleanup
     return () => {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
       window.removeEventListener("mouseover", onMouseOver);
       document.removeEventListener("mouseleave", onMouseLeaveDoc);
       document.removeEventListener("mouseenter", onMouseEnterDoc);
-      if (document.head.contains(styleNode)) {
-        document.head.removeChild(styleNode);
+      const existingStyle = document.getElementById("custom-cursor-style");
+      if (existingStyle && existingStyle.parentNode) {
+        existingStyle.parentNode.removeChild(existingStyle);
       }
     };
   }, []);
 
-  if (!isVisible) return null;
-
-  // Render both elements with absolute positioning. Sizing & color transitions are handled inline.
-  // The 'transform' property is purposely omitted from transition lists so it updates instantly.
   return (
     <>
-      {/* Center Dot (Instantly centered under hardware pointer) */}
+      {/* Center Dot (GPU Hardware Accelerated) */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-[#C9A14A] rounded-full pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2"
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-[#C9A14A] rounded-full pointer-events-none z-[99999] opacity-0 transition-opacity duration-200"
         style={{
+          willChange: "transform",
           transform: "translate3d(-100px, -100px, 0)",
         }}
       />
-      
-      {/* Outer Circle (Concentric with dot at all times - no transform lag) */}
+
+      {/* Outer Ring (GPU Compositor Layered, Smooth 60 FPS) */}
       <div
         ref={circleRef}
-        className={`fixed top-0 left-0 rounded-full pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2
-          ${isHovered 
-            ? "w-10 h-10 border border-[#C9A14A] bg-[#C9A14A]/10" 
-            : isClicked 
-              ? "w-6 h-6 border border-[#5C0E1D] bg-[#5C0E1D]/10" 
-              : "w-8 h-8 border border-[#C9A14A]/80"
-          }
-        `}
+        className="custom-cursor-ring fixed top-0 left-0 w-8 h-8 border border-[#C9A14A]/80 rounded-full pointer-events-none z-[99999] opacity-0 transition-opacity duration-200"
         style={{
+          willChange: "transform, width, height, background-color, border-color",
           transform: "translate3d(-100px, -100px, 0)",
-          transition: "width 0.15s ease-out, height 0.15s ease-out, border-color 0.15s ease-out, background-color 0.15s ease-out"
+          transition: "width 0.15s ease-out, height 0.15s ease-out, border-color 0.15s ease-out, background-color 0.15s ease-out",
         }}
       />
     </>

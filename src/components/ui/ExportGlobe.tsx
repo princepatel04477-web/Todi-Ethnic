@@ -15,20 +15,22 @@ export interface Destination {
 const ORIGIN_SURAT = { lat: 21.1702, lng: 72.8311, name: "Surat (HQ)" };
 
 const DESTINATIONS: Destination[] = [
-  { name: "Dubai", lat: 25.2048, lng: 55.2708, label: "UAE Gateway", details: "Direct boutique exports to Dubai showrooms." },
-  { name: "London", lat: 51.5074, lng: -0.1278, label: "UK Hub", details: "Premium zardozi lehenga supply to retail networks." },
+  { name: "Dubai (UAE)", lat: 25.2048, lng: 55.2708, label: "UAE Gateway", details: "Direct boutique exports to Dubai showrooms." },
+  { name: "London (UK)", lat: 51.5074, lng: -0.1278, label: "UK Hub", details: "Premium zardozi lehenga supply to retail networks." },
   { name: "Singapore", lat: 1.3521, lng: 103.8198, label: "South East Asia", details: "Direct distribution to bridal styling boutiques." },
   { name: "Mauritius", lat: -20.3484, lng: 57.5522, label: "East Africa", details: "Custom bridal catalog exports." },
   { name: "South Africa", lat: -30.5595, lng: 22.9375, label: "Southern Africa", details: "Supply to showrooms in Johannesburg." },
   { name: "New Zealand", lat: -40.9006, lng: 174.8860, label: "Oceania Region", details: "Weekly express cargo deliveries." },
-  { name: "Barbados", lat: 13.1939, lng: -59.5432, label: "West Indies", details: "Traditional silk trail collections." },
+  { name: "Western Europe", lat: 48.8566, lng: 2.3522, label: "European Hub", details: "Bespoke bridal distribution in Paris & Western Europe." },
   { name: "Sri Lanka", lat: 7.8731, lng: 80.7718, label: "South Asia", details: "Handloom fabrics and heavy georgettes." },
   { name: "Bangladesh", lat: 23.6850, lng: 90.3563, label: "East Bengal Hub", details: "Direct merchant distributions." },
-  { name: "Fiji", lat: -17.7134, lng: 178.0650, label: "Pacific Region", details: "Couture custom lehenga exports." }
+  { name: "Fiji Islands", lat: -17.7134, lng: 178.0650, label: "Pacific Region", details: "Couture custom lehenga exports." },
+  { name: "USA & Canada", lat: 40.7128, lng: -74.0060, label: "North America", details: "Express air freight delivery to US boutiques." },
+  { name: "Australia", lat: -33.8688, lng: 151.2093, label: "Australia Hub", details: "Direct wholesale deliveries across Australia." }
 ];
 
 const EXPORT_COUNTRY_CODES = [
-  "IND", "ARE", "GBR", "SGP", "MUS", "ZAF", "NZL", "BRB", "LKA", "BGD", "FJI"
+  "IND", "ARE", "GBR", "SGP", "MUS", "ZAF", "NZL", "BRB", "LKA", "BGD", "FJI", "FRA", "DEU", "USA", "CAN", "AUS"
 ];
 
 // Country Data — ISO numeric → [ISO3, name]
@@ -1305,25 +1307,23 @@ export default function ExportGlobe() {
                         <circle r={isHovered ? 5.5 : 4.5} fill={isHovered ? "#6B1F2A" : "#B29567"} />
                         <circle cx={-0.6} cy={-0.6} r={0.6} fill="#FFF" opacity={0.7} />
 
-                        {/* Constant Text Labels for Top Locations */}
-                        {["Dubai", "London", "Singapore", "Mauritius"].includes(dest.name) && (
-                          <text
-                            x={10}
-                            y={3}
-                            fill="#6B1F2A"
-                            fontSize={9}
-                            fontWeight={700}
-                            className="select-none pointer-events-none opacity-80"
-                            style={{
-                              paintOrder: "stroke",
-                              stroke: "#FCF9F5",
-                              strokeWidth: 3,
-                              strokeLinejoin: "round"
-                            }}
-                          >
-                            {dest.name}
-                          </text>
-                        )}
+                        {/* Constant Text Label for every location dot */}
+                        <text
+                          x={10}
+                          y={3}
+                          fill="#6B1F2A"
+                          fontSize={8.5}
+                          fontWeight={700}
+                          className="select-none pointer-events-none opacity-90"
+                          style={{
+                            paintOrder: "stroke",
+                            stroke: "#FCF9F5",
+                            strokeWidth: 3,
+                            strokeLinejoin: "round"
+                          }}
+                        >
+                          {dest.name}
+                        </text>
                       </g>
                     );
                   })}
