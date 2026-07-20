@@ -53,7 +53,7 @@ export default function Header() {
             </button>
           </div>
 
-          {/* Navigation Links - Desktop */}
+          {/* Navigation Links - Desktop (Left Corner) */}
           <nav className="hidden md:flex space-x-8 items-center">
             <Link
               href="/"
@@ -73,16 +73,9 @@ export default function Header() {
             >
               Contact
             </Link>
-            <a
-              href="tel:+918141014006"
-              className="relative text-[12px] font-number tracking-wider text-charcoal/80 hover:text-deep-maroon transition-colors py-1 flex items-center gap-1.5 font-medium"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              <span>+91 81410 14006</span>
-            </a>
           </nav>
 
-          {/* Brand Logo */}
+          {/* Brand Logo (Center) */}
           <div className="flex-1 flex justify-center md:absolute md:left-1/2 md:-translate-x-1/2">
             <Link href="/" className="flex flex-col items-center group py-1">
               <Image
@@ -96,8 +89,16 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Icons Actions */}
+          {/* Icons & Phone Action (Right Corner) */}
           <div className="flex items-center space-x-4">
+            <a
+              href="tel:+918141014006"
+              className="hidden sm:flex items-center gap-1.5 text-xs font-number tracking-wider text-charcoal hover:text-deep-maroon transition-colors py-1 px-2.5 rounded-full border border-antique-gold/30 bg-antique-gold/5 font-medium"
+            >
+              <Phone className="w-3.5 h-3.5 text-[#8C6D3B]" />
+              <span>+91 81410 14006</span>
+            </a>
+
             <Link
               href="/catalog"
               className="p-2 text-charcoal hover:text-deep-maroon transition-colors"

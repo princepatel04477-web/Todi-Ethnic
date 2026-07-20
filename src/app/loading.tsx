@@ -6,12 +6,12 @@ import { motion } from "framer-motion";
 
 export default function Loading() {
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#FAF8F5]/95 dark:bg-aubergine-black/95 backdrop-blur-md transition-colors duration-300">
+    <div className="flex-grow flex flex-col items-center justify-center min-h-[60vh] py-16 text-center select-none bg-[#FAF8F5] dark:bg-aubergine-black transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="flex flex-col items-center space-y-6 max-w-sm px-4 text-center select-none"
+        className="flex flex-col items-center space-y-6 max-w-sm px-4"
       >
         {/* Logo container with subtle glowing aura */}
         <div className="relative flex items-center justify-center p-4">
