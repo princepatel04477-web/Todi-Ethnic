@@ -109,7 +109,7 @@ export default function TrendingGrid() {
                 </span>
               </div>
               
-              <h3 className="text-base font-number font-medium text-charcoal line-clamp-1 group-hover:text-deep-maroon transition-colors mb-2">
+              <h3 className="text-lg font-heading font-normal text-charcoal line-clamp-1 group-hover:text-deep-maroon transition-colors mb-2">
                 <Link href={`/product/${product.slug}`}>{product.title}</Link>
               </h3>
               
