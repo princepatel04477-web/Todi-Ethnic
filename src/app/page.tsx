@@ -14,7 +14,7 @@ const categories = [
   {
     name: "Bridal Lehenga",
     subtitle: "Heavy hand-embroidery & classic royal motifs",
-    image: "/images/categories/Bridal-cc.png",
+    image: "/images/categories/bridal_hero.png",
     link: "/catalog?category=Bridal+Lehenga",
     count: "01",
     translateClass: "md:translate-y-0",
