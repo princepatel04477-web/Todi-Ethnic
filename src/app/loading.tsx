@@ -30,8 +30,8 @@ export default function Loading() {
           <Image
             src="/logo.png"
             alt="TODI CREATIONS"
-            width={450}
-            height={64}
+            width={400}
+            height={63}
             className="h-14 sm:h-20 w-auto object-contain relative z-10 drop-shadow-sm"
             priority
           />

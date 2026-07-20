@@ -32,8 +32,8 @@ export default function Footer() {
               <Image
                 src="/logo.png"
                 alt="TODI CREATIONS"
-                width={450}
-                height={64}
+                width={400}
+                height={63}
                 className="h-12 sm:h-16 w-auto object-contain drop-shadow-md"
               />
             </Link>
