@@ -155,6 +155,11 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.01em;
 }
 
+.font-number {
+  font-family: var(--font-cinzel), "Cinzel", serif !important;
+  font-variant-numeric: lining-nums tabular-nums !important;
+}
+
 /* Custom Glassmorphism Utility Classes using Tailwind v4 @utility directive */
 @utility glass {
   background: var(--glass-bg);
