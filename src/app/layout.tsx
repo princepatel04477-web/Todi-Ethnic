@@ -26,16 +26,21 @@ const cinzel = Cinzel({
   display: "swap",
 });
 
+import InitialWebLoader from "@/components/ui/InitialWebLoader";
+
 export const metadata: Metadata = {
-  title: "Todi Creation | Wholesale Ethnic Wear Manufacturer, Surat",
+  title: "Todi Creation | Wholesale Ethnic Wear & Bridal Lehenga Manufacturer",
   description: "B2B manufacturer and exporter of premium bridal lehengas, Farsi trails, and designer ethnic wear. Based in Surat since 2011. Trusted by 1700+ boutique partners across 17+ countries.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="en"
@@ -44,6 +49,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <BagProvider>
+          <InitialWebLoader />
           <CustomCursor />
           {children}
           <Suspense fallback={null}>
