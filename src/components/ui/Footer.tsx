@@ -105,9 +105,14 @@ export default function Footer() {
             <ul className="space-y-3 text-xs font-light text-ivory/70">
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-antique-gold shrink-0 mt-0.5" />
-                <span className="leading-relaxed whitespace-pre-line">
+                <a
+                  href={config.googleMapSearchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="leading-relaxed whitespace-pre-line hover:text-antique-gold transition-colors"
+                >
                   {config.address}
-                </span>
+                </a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-antique-gold shrink-0" />
